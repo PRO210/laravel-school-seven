@@ -36,8 +36,8 @@ git init
  git add --all
  git commit -m "Update do .env.example";
  git remote add origin https://github.com/PRO210/laravel-school-seven.git
+ git push -u origin master
  git remote
- nome do remote: laravel-school-seven
 
  git push origin master (Enviar do branch local para ao remoto)
  git push origin master --force (Força o envio do branch local para ao remoto)
