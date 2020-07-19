@@ -32,6 +32,7 @@
         text-transform: uppercase;
     }
 </style>
+
 @section('js')
 <!-- jQuery -->
 <script src='{{url("js/jquery-3.5.1.js")}}' type="text/javascript"></script>
@@ -45,8 +46,8 @@
 
 @section('css')
 <!-- DataTables CSS-->
-<link rel="stylesheet" href="{{url('css/datatables/bootstrap.css')}}">
-<link rel="stylesheet" href="{{url('css/datatables/dataTables/bootstrap4.min.css')}}">
+<link rel="stylesheet" href="{{url('css/datatables/alunos/bootstrap.css')}}">
+<link rel="stylesheet" href="{{url('css/datatables/alunos/dataTables/bootstrap4.min.css')}}">
 <link rel="stylesheet" href="{{url('css/datatables/responsive.bootstrap4.min.css')}}">
 <link rel="stylesheet" href="{{url('css/alunos/index.css')}}">
 @stop

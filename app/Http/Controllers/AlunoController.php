@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\AlunosExport;
 use App\Http\Requests\StoreUpdateAluno;
 use App\Models\Aluno;
 use App\Models\Classificacao;
@@ -10,6 +11,8 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+
 
 class AlunoController extends Controller
 {
@@ -98,7 +101,7 @@ class AlunoController extends Controller
 
         $documentos = $this->documento->all();
 
-        return view('alunos.edit', compact('aluno', 'documentos', 'alunoLogs','users'));
+        return view('alunos.edit', compact('aluno', 'documentos', 'alunoLogs', 'users'));
     }
 
     /**
@@ -153,8 +156,13 @@ class AlunoController extends Controller
 
         return redirect()->route('alunos.index')->with('message', 'Operações Realizadas com Sucesso!');
     }
+
     public function search(Request $request)
     {
+        if ($request->botao == "excel") {
+            return Excel::download(new AlunosExport($request->aluno_selecionado), 'Alunos.xlsx');
+        }
+
         $filters = $request->except('_token');
 
         $alunos = $this->repository->search($request->filter);

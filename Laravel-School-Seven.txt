@@ -97,7 +97,7 @@ https://github.com/barryvdh/laravel-debugbar
 composer require barryvdh/laravel-debugbar --dev
 
 <script src="{{url('./vendor/jquery/jquery.min.js')}}" type="text/javascript"></script>
-@include('includes.alerts')
+@include('alerts')
 //
 //
 composer require laravel/ui
@@ -169,6 +169,12 @@ php artisan make:controller AlunoController --resource
 php artisan make:observer AlunoObserver --model=Models\\Aluno
 php artisan make:model Models\\Log -m
 php artisan make:migration create_aluno_log_table
+php artisan make:export AlunosExport --model=Models\\Aluno
+//
+php artisan route:cache
+php artisan route:clear
+
+
 //
 php artisan make:model Models\\Documento -m
 //

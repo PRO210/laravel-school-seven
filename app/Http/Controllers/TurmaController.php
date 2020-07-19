@@ -39,7 +39,7 @@ class TurmaController extends Controller
         $categories = Category::all();
         $shifts = Shift::all();
 
-        return view('turmas.create', compact(['categories','shifts']));
+        return view('turmas.create', compact(['categories', 'shifts']));
     }
 
     /**
@@ -78,7 +78,7 @@ class TurmaController extends Controller
         $shifts = Shift::all();
         $categories = Category::all();
 
-        return view('turmas.edit', compact('turmas', 'categories','shifts'));
+        return view('turmas.edit', compact('turmas', 'categories', 'shifts'));
     }
 
     /**
@@ -125,9 +125,8 @@ class TurmaController extends Controller
 
         $turmas = $this->repository->search($request->filter);
 
-        return view('turmas.index', [
-            'turmas' => $turmas,
-            'filters' => $filters,
-        ]);
+        $categories = Category::all();
+
+        return view('turmas.index', ['turmas' => $turmas,'filters' => $filters,'categories' => $categories]);
     }
 }
