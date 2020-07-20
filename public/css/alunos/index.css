@@ -14,7 +14,7 @@ tfoot input {
     box-sizing: border-box;
 }
 #thTfoot{
-    max-width: 50px;
+    max-width: 80px !important;
 }
 
 .checkbox {
