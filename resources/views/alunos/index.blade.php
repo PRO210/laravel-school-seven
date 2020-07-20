@@ -150,13 +150,7 @@
                                         </svg>
                                         &nbsp;&nbsp; <b>Deletar o Aluno(a)</b>
                                     </a>
-
-
-
-
-
                                 </div>
-
                                 &nbsp;<span><input type='checkbox' name='aluno_selecionado[]' class='checkbox' value='{{$aluno->uuid}}'></span>
                                 &nbsp;<span>{{ $aluno->NOME }}</span>
                             </div>

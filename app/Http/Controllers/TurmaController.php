@@ -52,7 +52,7 @@ class TurmaController extends Controller
     {
         $turma = $this->repository->create($request->all());
 
-        return redirect()->route('turmas.index');
+        return redirect()->route('turmas.index')->with('message', 'Operação Realizada com Sucesso!');
     }
 
     /**
@@ -110,9 +110,9 @@ class TurmaController extends Controller
     {
         $turma = $this->repository->with('alunos')->where('id', $id)->first();
 
-        if ($turma->alunos->count() > 0) {
-            return redirect()->back()->with('error', 'Existem Alunos vinculados a essa Turma, portanto não permitido Deletar');
-        }
+        // if ($turma->alunos->count() > 0) {
+        //     return redirect()->back()->with('error', 'Existem Alunos vinculados a essa Turma, portanto não permitido Deletar');
+        // }
 
         $turma->delete();
 

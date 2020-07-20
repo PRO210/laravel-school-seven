@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\AlunosFiltradosExport;
 use Illuminate\Http\Request;
 use App\Models\Aluno;
 use App\Models\Classificacao;
 use App\Models\Turma;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class TurmaAlunoController extends Controller
 {
@@ -82,6 +84,18 @@ class TurmaAlunoController extends Controller
     {
         //
     }
+    //
+    //
+    public function preUpdate(Request $request)
+    {
+        if ($request->botao == "excel") {
+            return Excel::download(new AlunosFiltradosExport($request->aluno_selecionado), 'Alunos.xlsx');
+        }
+        // dd($request);
+    }
+
+
+
 
     /**
      * Update the specified resource in storage.
@@ -122,7 +136,6 @@ class TurmaAlunoController extends Controller
             $detach = $this->aluno->detach($request, $aluno);
             // return redirect()->route('turmas.index')->with('message', 'Operação Realizada com Sucesso!');
             return redirect()->action('TurmaAlunoController@show', ['uuid' => $uuid])->with('message', 'Operação Realizada com Sucesso!');
-
         }
     }
 }

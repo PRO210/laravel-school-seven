@@ -45,12 +45,12 @@ Route::prefix('turmas')
         /*
          Turmas Alunos
          */
-Route::prefix('alunos')
+Route::prefix('turma/alunos')
     ->group(function () {
 
-
-        Route::post('/turmas/{uuid}', 'TurmaAlunoController@attachTurmasAluno')->name('turmas.aluno.attach');
-        Route::get('/turmas/{uuid}/show', 'TurmaAlunoController@show')->name('turmas.aluno.show');
+        Route::put('/update', 'TurmaAlunoController@preUpdate')->name('turmas.alunos.update');
+        Route::post('/{uuid}', 'TurmaAlunoController@attachTurmasAluno')->name('turmas.aluno.attach');
+        Route::get('/{uuid}/show', 'TurmaAlunoController@show')->name('turmas.aluno.show');
     });
 
 

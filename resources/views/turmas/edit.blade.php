@@ -8,11 +8,25 @@
 @section('content_header')
 <h1>Alterar Cadastro</h1>
 @stop
-<style>
-    input {
-        text-transform: uppercase;
+
+
+
+
+@section('js')
+<script>
+    //Confirmar se pode salvar
+    function confirmar() {
+        var u = $('#usuario').val();
+        var r = confirm("Já Posso Enviar " + u + "?");
+        if (r == true) {
+            return true;
+        } else {
+            return false;
+        }
     }
-</style>
+</script>
+@stop
+
 @section('content')
 <div class="container-fluid">
     <form action="{{route('turmas.update',$turmas->id)}}" method="post">
@@ -98,8 +112,10 @@
                 </div>
             </div>
         </div>
-
     </form>
+    <div style="margin-bottom: 60px;">
+        <input type="hidden" id="usuario" value="{{ Auth::user()->name }}">
+    </div>
 </div>
 
 @endsection

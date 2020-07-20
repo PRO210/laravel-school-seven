@@ -18,11 +18,11 @@ class Turma extends Model
     /*
      Traz os alunos cadastrados na turma
     */
-    // public function alunos()
-    // {
-    //     return $this->belongsToMany(Aluno::class, 'aluno_turma')->withPivot([
-    //         'OUVINTE', 'classificacao_id', 'turma_id', 'aluno_id', 'DECLARACAO',
-    //         'DECLARACAO_DATA', 'DECLARACAO_RESPONSAVEL', 'TRANSFERENCIA', 'TRANSFERENCIA_DATA', 'TRANSFERENCIA_RESPONSAVEL'
-    //     ]);
-    // }
+    public function alunos()
+    {
+        return $this->belongsToMany(Aluno::class, 'aluno_turma')->withPivot([
+            'OUVINTE', 'classificacao_id', 'turma_id', 'aluno_id', 'DECLARACAO',
+            'DECLARACAO_DATA', 'DECLARACAO_RESPONSAVEL', 'TRANSFERENCIA', 'TRANSFERENCIA_DATA', 'TRANSFERENCIA_RESPONSAVEL'
+        ]);
+    }
 }

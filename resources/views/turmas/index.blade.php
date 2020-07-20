@@ -19,7 +19,7 @@
         <form action="{{ route('turmas.search') }}" method="POST" class="form form-inline">
             @csrf
             <input type="text" name="filter" placeholder="Nome" class="form-control" value="{{ $filters['filter'] ?? '' }}">
-            <button type="submit" class="btn btn-success">Filtrar</button>
+           &nbsp; <button type="submit" class="btn btn-outline-success">Filtrar</button>
         </form>
     </div>
     <div class="card-body">

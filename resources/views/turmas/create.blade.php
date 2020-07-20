@@ -1,3 +1,6 @@
+
+@include('alerts')
+
 @extends('adminlte::page')
 
 @section('title', 'Cadastrar Nova Turma')
@@ -6,11 +9,24 @@
 <h1>Cadastrar Nova Turma</h1>
 @stop
 
-<style>
-    input {
-        text-transform: uppercase;
+
+
+@section('js')
+<script>
+    //Confirmar se pode salvar
+    function confirmar() {
+        var u = $('#usuario').val();
+        var r = confirm("Já Posso Enviar " + u + "?\n\nLembre-se que isso apagara todos os registros do Aluno(a)!");
+        if (r == true) {
+            return true;
+        } else {
+            return false;
+        }
     }
-</style>
+
+</script>
+@stop
+
 @section('content')
 <div class="container-fluid">
     <form action="{{route('turmas.store')}}" method="post">
@@ -71,10 +87,13 @@
         <div class="row">
             <div class="form-group row ">
                 <div class="col-sm-5">
-                    <button type="submit" class="btn btn-outline-success">Salvar</button>
+                    <button type="submit" class="btn btn-outline-success" onclick="confirmar()">Salvar</button>
                 </div>
             </div>
         </div>
     </form>
+    <div style="margin-bottom: 60px;">
+        <input type="hidden" id="usuario" value="{{ Auth::user()->name }}">
+    </div>
 </div>
 @endsection
