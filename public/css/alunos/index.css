@@ -13,8 +13,9 @@ tfoot input {
     padding: 3px;
     box-sizing: border-box;
 }
-#thTfoot{
-    max-width: 80px !important;
+
+#thTfoot {
+    max-width: 90px !important;
 }
 
 .checkbox {
@@ -24,4 +25,17 @@ tfoot input {
 @media (max-width: 720px) {
     #NOME {
         white-space: normal;
+
     }
+}
+
+@media (min-width:720px) {
+    #example_filter {
+        float: right;
+        /* color: blue; */
+
+    }
+    #example_paginate{
+        float: right;
+    }
+}

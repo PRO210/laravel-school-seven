@@ -35,10 +35,6 @@
         padding: 3px 5px 3px 7px;
         width: auto;
     }
-
-    input {
-        text-transform: uppercase;
-    }
 </style>
 
 <div class="card">

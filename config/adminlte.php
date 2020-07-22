@@ -253,7 +253,7 @@ return [
             'submenu' => [
                 [
                     'text' => 'Cadastradas',
-                    'url'  => 'turmas',
+                    'url'  => 'turma',
                     // 'can'  =>  'users',
                 ],
                 [

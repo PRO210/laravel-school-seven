@@ -1,5 +1,3 @@
-@include('alerts')
-
 @extends('adminlte::page')
 
 @section('title', 'turmas/alunos')
@@ -17,12 +15,37 @@
 
 @section('content')
 
+@if(\Session::has('message'))
+
+<div class="alert alert-success" id="vc" style="display: block;">
+    <ul>
+        <li>{!! \Session::get('message') !!}</li>
+    </ul>
+</div>
+
+@endif
+
 <style>
     .bi-tools {
         color: #8a6d3b !important;
+    }
 
+    .botao {
+        margin: 6px;
+        min-width: 180px;
+    }
+
+    .table td,
+    .table th {
+        padding: 8px;
+    }
+
+    .paddingButton {
+        border-color: aliceblue;
+        padding: 0px;
     }
 </style>
+
 
 @section('js')
 
@@ -33,30 +56,23 @@
 <script src='{{url("js/dataTables/dataTables.bootstrap4.min.js")}}'></script>
 <script src='{{url("js/dataTables/dataTables.responsive.min.js")}}'></script>
 <script src='{{url("js/dataTables/responsive.bootstrap4.min.js")}}'></script>
-<script src='{{url("js/alunos/index.js")}}'></script>
-<script>
-    //Valida o botão salvar com excel para não ir vázio
-    $('input[type=checkbox]').on('change', function() {
-        var total = $('input[type=checkbox]:checked').length;
-        if (total > 0) {
-            $('#btEditBloc').removeAttr('disabled');
-        } else {
-            $('#btEditBloc').attr('disabled', 'disabled');
-        }
-    });
-</script>
+<script src='{{url("js/turmas/alunos/index.js")}}'></script>
 
 @stop
 
 @section('css')
+
 <!-- DataTables CSS-->
-<link rel="stylesheet" href="{{url('css/datatables/alunos/bootstrap.css')}}">
-<link rel="stylesheet" href="{{url('css/datatables/alunos/dataTables/bootstrap4.min.css')}}">
-<link rel="stylesheet" href="{{url('css/datatables/responsive.bootstrap4.min.css')}}">
 <link rel="stylesheet" href="{{url('css/alunos/index.css')}}">
+<link rel="stylesheet" href="{{url('https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css')}}">
+<link rel="stylesheet" href="{{url('https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css')}}">
+<link rel="stylesheet" href="{{url('https://cdn.datatables.net/responsive/2.2.5/css/responsive.bootstrap4.min.css')}}">
+
 @stop
 
-<form action="{{route('turmas.alunos.update')}}" method="POST" class="form" name="form">
+
+
+<form action="{{route('turmas.alunos.edit')}}" method="POST" class="form" name="form">
     @csrf
     @method('PUT')
     <section class="content">
@@ -76,7 +92,9 @@
                                                 </svg>
                                             </button>
                                             <div class="dropdown-menu">
-                                                &nbsp; &nbsp;<button type="submit" class="btn btn-outline-success" name="botao" value="excel" id="btEditBloc" disabled title="Marque ao menos uma caixinha">Salvar em Excel</button>
+                                                <button type="submit" class="btn btn-outline-success botao" name="botao" value="excel" id="btEditBloc" disabled title="Marque ao menos uma caixinha"><b>Salvar em Excel</b></button>
+                                                <br>
+                                                <button type="submit" class="btn btn-outline-primary botao" name="botao" value="update" id="" disabled title="Marque ao menos uma caixinha"><b>Edição em Bloco</b></button>
                                             </div>
                                             &nbsp;
                                             <span><input type="checkbox" name="" class="checkbox selecionar" id="selecionar"></span>
@@ -163,5 +181,6 @@
     </div> -->
 
 </form>
+
 
 @stop

@@ -80,22 +80,22 @@ class TurmaAlunoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
-        //
-    }
-    //
-    //
-    public function preUpdate(Request $request)
+    public function edit(Request $request)
     {
         if ($request->botao == "excel") {
             return Excel::download(new AlunosFiltradosExport($request->aluno_selecionado), 'Alunos.xlsx');
         }
-        // dd($request);
+
+        $alunos = $this->aluno->alunosFiltrados($request);
+
+        $turmas = $this->turma->get();
+
+        $classificacoes = $this->classificacao->get();
+
+        return view('turmas.alunos.edit', compact('turmas', 'alunos', 'classificacoes'));
     }
-
-
-
+    //
+    //
 
     /**
      * Update the specified resource in storage.
@@ -104,9 +104,13 @@ class TurmaAlunoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $upAttach = $this->aluno->upAttach($request);
+
+       // return redirect()->action('TurmaAlunoController@index')->with('message', 'Operação Realizada com Sucesso!');
+        return redirect()->route('turmas.alunos')->with('message', 'Operação Realizada com Sucesso!');
+
     }
 
     /**
@@ -138,4 +142,5 @@ class TurmaAlunoController extends Controller
             return redirect()->action('TurmaAlunoController@show', ['uuid' => $uuid])->with('message', 'Operação Realizada com Sucesso!');
         }
     }
+
 }

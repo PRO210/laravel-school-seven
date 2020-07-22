@@ -2,6 +2,7 @@ sudo service docker status
 sudo service docker stop
 sudo service docker restart
 //
+cd /home/casa/Workspace/laradock/
 docker-compose up -d nginx mysql phpmyadmin (Subindo)
 docker-compose down (Baixando)
 //Entrando do Contaniners
@@ -24,6 +25,9 @@ composer update
 ll public
 php artisan key:generate
 php artisan storage:link
+  //DB::enableQueryLog();
+          // dd(DB::getQueryLog());
+
 //
 php artisan migrate
 
@@ -227,3 +231,4 @@ https://github.com/RobinHerbots/Inputmask
 
 
 
+http://jsfiddle.net/zuul/sf6heyk6/

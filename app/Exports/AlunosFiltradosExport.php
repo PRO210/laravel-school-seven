@@ -9,15 +9,19 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\WithEvents;
+use Maatwebsite\Excel\Events\AfterSheet;
 
 class AlunosFiltradosExport implements FromCollection, WithMapping, ShouldAutoSize, WithHeadings
 {
+
     //Recebe os dados do controler (uuid)
     public function __construct(array $array)
     {
         $this->array = $array;
         return $this;
     }
+
 
     //A consulta no Banco é feita Aqui.
     public function collection()
@@ -163,4 +167,15 @@ class AlunosFiltradosExport implements FromCollection, WithMapping, ShouldAutoSi
                 'URBANO', 'CIDADE', 'CIDADE_ESTADO', 'TRANSPORTE', 'PONTO_ONIBUS', 'MOTORISTA', 'MOTORISTA_II', 'OBSERVACOES'
             ];
     }
+    //
+    // public function registerEvents(): array
+    // {
+    //     return [
+    //         AfterSheet::class    => function (AfterSheet $event) {
+    //             $cellRange = 'A1:W1'; // All headers
+    //             $event->sheet->getDelegate()->getStyle($cellRange)->getFont()->setSize(14);
+    //         },
+    //     ];
+    // }
+    //
 }

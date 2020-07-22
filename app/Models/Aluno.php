@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use App\Models\Turma;
 
 class Aluno extends Model
 {
@@ -36,9 +37,13 @@ class Aluno extends Model
     public function turmas()
     {
         return $this->belongsToMany(Turma::class, 'aluno_turma')->withPivot([
-            'OUVINTE', 'classificacao_id', 'turma_id', 'aluno_id', 'DECLARACAO','id',
+            'OUVINTE', 'classificacao_id', 'turma_id', 'aluno_id', 'DECLARACAO', 'id',
             'DECLARACAO_DATA', 'DECLARACAO_RESPONSAVEL', 'TRANSFERENCIA', 'TRANSFERENCIA_DATA', 'TRANSFERENCIA_RESPONSAVEL'
         ]);
+    }
+    public function classificacaos()
+    {
+        return $this->belongsToMany(Classificacao::class, 'aluno_turma');
     }
 
     /*
@@ -46,7 +51,8 @@ class Aluno extends Model
      */
     public function correntTurmas()
     {
-        $alunos = DB::table('aluno_turma')
+        $ano = date('Y');
+        $alunos = DB::table('aluno_turma')->where('turma_ano', 'LIKE', '%' . "$ano" . '%')
             ->where('aluno_turma.EXCLUIDO', 'LIKE', 'NAO')
             ->whereIn('aluno_turma.classificacao_id', [1, 2])
             ->join('alunos', 'aluno_turma.aluno_id', '=', 'alunos.id')
@@ -105,6 +111,7 @@ class Aluno extends Model
     */
     public function attach($request, $aluno)
     {
+
         if (isset($request->turma_id)) {
             foreach ($request->turma_id as $turma) {
                 $posionId = explode('/', $turma);
@@ -126,6 +133,7 @@ class Aluno extends Model
                 $posionId = explode('/', $turma);
                 $posion = $posionId[0];
                 $turma_id = $posionId[1];
+
                 $aluno->turmas()->attach($turma_id, [
                     'classificacao_id' => $request->classificacao_id_02[$posion], 'OUVINTE' => $request->OUVINTE_02[$posion],
                     'DECLARACAO' => $request->DECLARACAO_02[$posion], 'DECLARACAO_DATA' => $request->DECLARACAO_DATA_02[$posion],
@@ -149,4 +157,87 @@ class Aluno extends Model
             }
         }
     }
+    /*
+     *Edit em bloco na tabela aluno_turma
+     */
+    public function alunosFiltrados($request)
+    {
+        $ids[] = "";
+
+        foreach ($request->aluno_selecionado as $turma) {
+            $posionId = explode('/', $turma);
+            $id = $posionId[2];
+            array_push($ids, $id);
+        }
+        array_shift($ids);
+
+        $alunos = DB::table('aluno_turma')->whereIn('aluno_turma.id', $ids)
+            ->join('alunos', 'aluno_turma.aluno_id', '=', 'alunos.id')
+            ->join('turmas', 'aluno_turma.turma_id', '=', 'turmas.id')
+            ->join('classificacaos', 'aluno_turma.classificacao_id', '=', 'classificacaos.id')
+            ->select('aluno_turma.turma_id', 'aluno_turma.aluno_id', 'alunos.NOME', 'aluno_turma.classificacao_id')
+            ->orderBy('aluno_turma.turma_id', 'ASC')->orderBy('alunos.NOME', 'ASC')
+            ->get();
+
+        $alunos_id[] = "";
+        $turmas_id[] = "";
+        $classificacos_id[] = "";
+
+        foreach ($alunos as $dados) {
+            foreach ($dados as $key => $value) {
+                if ($key == "aluno_id") {
+                    array_push($alunos_id, $value);
+                }
+                if ($key == "turma_id") {
+                    array_push($turmas_id, $value);
+                }
+                if ($key == "classificacao_id") {
+                    array_push($classificacos_id, $value);
+                }
+            }
+        }
+        array_shift($alunos_id);
+        array_shift($turmas_id);
+        array_shift($classificacos_id);
+
+        $alunoTurmas = collect([]);
+
+        foreach ($alunos_id as $key => $nulo) {
+            $alunoTurmas = $alunoTurmas->concat(Aluno::with(['turmas' => function ($query) use ($turmas_id, $key) {
+                $query->where('turma_id', $turmas_id[$key]);
+            }, 'classificacaos' => function ($query) use ($classificacos_id, $key) {
+                $query->where('classificacao_id', $classificacos_id[$key]);
+            }])->where('id', $alunos_id[$key])->get());
+        }
+
+        return $alunoTurmas;
+    }
+    /*
+    * Atualiza os vínculos das turmas e alunos em bloco, pelo update.
+    */
+    public function upAttach($request)
+    {
+        foreach ($request->aluno_selecionado as $value) {
+
+
+            $posionId = explode('/', $value);
+            $turma_id = $posionId[1];
+            $id = $posionId[2];
+
+
+            $alunoTurmas = DB::table('aluno_turma')->where('id', $id)->update(['turma_id' => $request->turma_id, 'classificacao_id' => $request->classificacao_id]);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+    //
+    //
 }

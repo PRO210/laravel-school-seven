@@ -77,3 +77,15 @@
         });
 
     });
+    /*
+     *Fecha a message
+     */
+    $(document).ready(function () {
+        $("#vc").delay(5000).fadeOut("slow");
+
+    });
+    // $(".logo_1")
+    //     .delay(2000)
+    //     .queue(function (next) {
+    //         $(this).css('display', 'none');
+    //     });
