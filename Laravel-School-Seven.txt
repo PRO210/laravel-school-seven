@@ -202,6 +202,10 @@ php artisan migrate:refresh --step=1
 php artisan make:migration create_aluno_turma_table
 php artisan make:controller TurmaAlunoController --resource
 php artisan make:export AlunosFiltradosExport --model=Models\\Aluno
+//
+//AlunoSolicitacao       //AlunoSolicitacao      //AlunoSolicitacao
+php artisan make:migration create_aluno_solicitacao_table
+
 
 //
 php artisan make:migration create_aluno_log_table
@@ -214,7 +218,9 @@ php artisan make:seeder CategoriesTableSeeder
 php artisan make:model Models\\Shift -m
 php artisan make:seeder ShiftsTableSeeder
 php artisan make:seeder CategoriesTableSeeder
+php artisan make:seeder SolicitacaosTableSeeder
 php artisan db:seed
+php artisan db:seed --class=SolicitacaosTableSeeder
 
 
 
@@ -231,4 +237,3 @@ https://github.com/RobinHerbots/Inputmask
 
 
 
-http://jsfiddle.net/zuul/sf6heyk6/

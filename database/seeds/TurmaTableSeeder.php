@@ -16,13 +16,13 @@ class TurmaTableSeeder extends Seeder
         'UNICO' => 'A','ANO' => '2020-02-01','TURMA_IDADE_MINIMA' => '6',]);
 
         Turma::create(['TURMA' => '2 ANO','CATEGORIA' => '1° GRAU','TURMA_EXTRA' => 'NAO','TURNO' => 'MATUTINO',
-        'UNICO' => 'B','ANO' => '2020-02-01','TURMA_IDADE_MINIMA' => '6',]);
+        'UNICO' => 'B','ANO' => '2020-02-01','TURMA_IDADE_MINIMA' => '7',]);
 
         Turma::create(['TURMA' => '3 ANO','CATEGORIA' => '1° GRAU','TURMA_EXTRA' => 'NAO','TURNO' => 'VESPERTINO',
-        'UNICO' => 'C','ANO' => '2020-02-01','TURMA_IDADE_MINIMA' => '7',]);
+        'UNICO' => 'C','ANO' => '2020-02-01','TURMA_IDADE_MINIMA' => '8',]);
 
         Turma::create(['TURMA' => '4 ANO','CATEGORIA' => '1° GRAU','TURMA_EXTRA' => 'NAO','TURNO' => 'VESPERTINO',
-        'UNICO' => 'D','ANO' => '2020-02-01','TURMA_IDADE_MINIMA' => '8',]);
+        'UNICO' => 'D','ANO' => '2020-02-01','TURMA_IDADE_MINIMA' => '9',]);
 
     }
 }
