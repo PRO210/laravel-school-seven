@@ -205,6 +205,8 @@ php artisan make:export AlunosFiltradosExport --model=Models\\Aluno
 //
 //AlunoSolicitacao       //AlunoSolicitacao      //AlunoSolicitacao
 php artisan make:migration create_aluno_solicitacao_table
+php artisan make:controller SolicitacaoAlunoController --resource
+
 
 
 //
@@ -221,6 +223,8 @@ php artisan make:seeder CategoriesTableSeeder
 php artisan make:seeder SolicitacaosTableSeeder
 php artisan db:seed
 php artisan db:seed --class=SolicitacaosTableSeeder
+php artisan migrate:refresh --step=1
+
 
 
 
@@ -234,6 +238,8 @@ https://icons.getbootstrap.com/
 //
 //
 https://github.com/RobinHerbots/Inputmask
+//
+https://github.com/jquery-form/form
 
 
 

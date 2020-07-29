@@ -47,18 +47,144 @@
 </style>
 
 
-@section('js')
-
 <!-- jQuery -->
-<script src='{{url("js/jquery-3.5.1.js")}}' type="text/javascript"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
 <!-- DataTables -->
 <script src='{{url("js/dataTables/jquery.dataTables.min.js")}}'></script>
 <script src='{{url("js/dataTables/dataTables.bootstrap4.min.js")}}'></script>
 <script src='{{url("js/dataTables/dataTables.responsive.min.js")}}'></script>
 <script src='{{url("js/dataTables/responsive.bootstrap4.min.js")}}'></script>
-<script src='{{url("js/turmas/alunos/index.js")}}'></script>
 
-@stop
+<script>
+    $(function() {
+        $('form[name= "form"]').submit(function() {
+            event.preventDefault();
+            $.ajax({
+                url: "{{route('turmas.aluno.solicicao.edit')}}",
+                type: "post",
+                data: $(this).serialize(),
+                dataType: 'json',
+
+                beforeSend: function() {
+
+                    $("#divCorpo").html("<img src='{{URL('imgs/ajax-loader.gif')}}'>");
+                },
+
+                success: function(response) {
+
+                    $("#SOLICITANTE").val(response.SOLICITANTE)
+                    $("#TRANSFERENCIA_STATUS").val(response.TRANSFERENCIA_STATUS)
+                    $("#DATA_TRANSFERENCIA_STATUS").val(response.DATA_TRANSFERENCIA_STATUS)
+
+                    $('#myModal').delay(1000).queue(function(next) {
+                        $(this).modal('show');
+                    })
+
+                    // $("#divCorpo")
+                    //     .delay(3000)
+                    //     .queue(function(next) {
+                    //         // $(this).css('display', 'none');
+                    //         $("#divCorpo").html("");
+                    //     });
+
+                    // $("#teste").delay(4000).queue(function(next) {
+
+                    // });
+
+                },
+                error: function() {
+                    console.log("erro");
+                }
+
+            })
+        })
+    });
+</script>
+<script>
+    //Deixa os checkbox mais bonitos
+    $(document).ready(function() {
+        $(":checkbox").wrap("<span style='background-color:burlywood;padding: 4px; border-radius: 3px;padding-bottom: 4px;'>");
+    });
+
+    //Marcar ou Desmarcar todos os checkbox
+    $(document).ready(function() {
+        $('#selecionar').click(function() {
+            if (this.checked) {
+                $('.checkbox').each(function() {
+                    this.checked = true;
+                });
+            } else {
+                $('.checkbox').each(function() {
+                    this.checked = false;
+                });
+            }
+        });
+    });
+    //Valida o botão salvar com excel para não ir vázio
+    $(document).ready(function() {
+        $('input[type=checkbox]').on('change', function() {
+            var total = $('input[type=checkbox]:checked').length;
+            if (total > 0) {
+                $('.botao').removeAttr('disabled');
+            } else {
+                $('.botao').attr('disabled', 'disabled');
+            }
+        });
+    });
+    /* Datatable */
+    $(document).ready(function() {
+
+        // Setup - add a text input to each footer cell
+        $('#example tfoot th').each(function() {
+            var title = $(this).text();
+            $(this).html('<input type="text" placeholder="' + title + '" />');
+        });
+        var table = $('#example').DataTable({
+
+            "columnDefs": [{
+                "targets": 0,
+                "orderable": false
+            }],
+            "lengthMenu": [
+                [5, 10, 15, 20, 100, -1],
+                [5, 10, 15, 20, 100, "All"]
+            ],
+            "language": {
+                "lengthMenu": "_MENU_ ",
+                "zeroRecords": "Nenhum aluno encontrado",
+                "info": "Mostrando pagina _PAGE_ de _PAGES_",
+                "infoEmpty": "Sem registros",
+                "search": "Busca:",
+                "infoFiltered": "(filtrado de _MAX_ total de alunos)",
+                "paginate": {
+                    "first": "Primeira",
+                    "last": "Ultima",
+                    "next": "Proxima",
+                    "previous": "Anterior"
+                },
+                "aria": {
+                    "sortAscending": ": ative a ordenação cressente",
+                    "sortDescending": ": ative a ordenação decressente"
+                }
+            },
+
+        });
+        // Apply the search
+        table.columns().every(function() {
+            var that = this;
+            $('input', this.footer()).on('keyup change', function() {
+                if (that.search() !== this.value) {
+                    that
+                        .search(this.value)
+                        .draw();
+                }
+            });
+        });
+
+    });
+</script>
+
+
 
 @section('css')
 
@@ -70,14 +196,20 @@
 
 @stop
 
-<form action="{{route('turmas.alunos.edit')}}" method="POST" class="form" name="form">
+<form action="{{route('turmas.aluno.solicicao.update')}}" method="POST" class="form" name="form">
     @csrf
-    @method('PUT')
     <section class="content">
         <div class="row">
             <div class="col-12">
                 <div class="card">
-                    {{-- <div class="card-header">Turmas Disponíveis</div> --}}
+                    <div class="card-header">
+                        <button type="submit" class="btn btn-outline-secondary" data-toggle="modal" data-target="">Atualizar a Transferência</button>
+                        <button type="button" class="btn btn-outline-success">Success</button>
+                        <button type="button" class="btn btn-outline-danger">Danger</button>
+                        <button type="button" class="btn btn-outline-warning">Warning</button>
+                        <button type="button" class="btn btn-outline-info">Info</button>
+                        <button type="submit" class="btn btn-outline-dark">Dark</button>
+                    </div>
                     <div class="card-body">
                         <table id="example" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
                             <thead>
@@ -101,13 +233,18 @@
                                     </th>
                                     <th>ALUNO</th>
                                     <th>TURMA</th>
-                                    <!-- <th>OUVINTE</th> -->
                                     <th>STATUS</th>
-                                    <th>MÃE</th>
+                                    <!-- <th>STATUS DA TRANSFERÊNCIA</th>
+                                    <th>ENTREGUE/PRONTA</th>
+                                    <th>SOLICITANTE</th>
+                                    <th>DATA SOLICITAÇÃO</th>
+                                    <th>DECLARAÇÃO</th>
+                                    <th>RESPONSÁVEL DA DECLARAÇÃO</th>
+                                    <th>TRANSFERÊNCIA</th> -->
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($alunoTurmas as $aluno)
+                                @foreach ($solicitacoesAluno as $aluno)
                                 @foreach ($aluno->turmas as $Key => $turma)
                                 @endforeach
                                 <tr>
@@ -125,24 +262,9 @@
                                                         <path fill-rule="evenodd" d="M11.293 1.293a1 1 0 0 1 1.414 0l2 2a1 1 0 0 1 0 1.414l-9 9a1 1 0 0 1-.39.242l-3 1a1 1 0 0 1-1.266-1.265l1-3a1 1 0 0 1 .242-.391l9-9zM12 2l2 2-9 9-3 1 1-3 9-9z" />
                                                         <path fill-rule="evenodd" d="M12.146 6.354l-2.5-2.5.708-.708 2.5 2.5-.707.708zM3 10v.5a.5.5 0 0 0 .5.5H4v.5a.5.5 0 0 0 .5.5H5v.5a.5.5 0 0 0 .5.5H6v-1.5a.5.5 0 0 0-.5-.5H5v-.5a.5.5 0 0 0-.5-.5H3z" />
                                                     </svg><b>&nbsp;&nbsp;&nbsp;&nbsp;Alterar o Cadastro</b></a>
-                                                <a class="dropdown-item" href="{{route('turmas.aluno.show',['uuid' => $aluno->uuid])}}" target='_self' title='Incluir/Retirar na Turma'>
-                                                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-tools" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                                        <path fill-rule="evenodd" d="M0 1l1-1 3.081 2.2a1 1 0 0 1 .419.815v.07a1 1 0 0 0 .293.708L10.5 9.5l.914-.305a1 1 0 0 1 1.023.242l3.356 3.356a1 1 0 0 1 0 1.414l-1.586 1.586a1 1 0 0 1-1.414 0l-3.356-3.356a1 1 0 0 1-.242-1.023L9.5 10.5 3.793 4.793a1 1 0 0 0-.707-.293h-.071a1 1 0 0 1-.814-.419L0 1zm11.354 9.646a.5.5 0 0 0-.708.708l3 3a.5.5 0 0 0 .708-.708l-3-3z" />
-                                                        <path fill-rule="evenodd" d="M15.898 2.223a3.003 3.003 0 0 1-3.679 3.674L5.878 12.15a3 3 0 1 1-2.027-2.027l6.252-6.341A3 3 0 0 1 13.778.1l-2.142 2.142L12 4l1.757.364 2.141-2.141zm-13.37 9.019L3.001 11l.471.242.529.026.287.445.445.287.026.529L5 13l-.242.471-.026.529-.445.287-.287.445-.529.026L3 15l-.471-.242L2 14.732l-.287-.445L1.268 14l-.026-.529L1 13l.242-.471.026-.529.445-.287.287-.445.529-.026z" />
-                                                    </svg><b>&nbsp;&nbsp;&nbsp;&nbsp;
-                                                        Gerenciar Turmas
-                                                </a>
-                                                <a class="dropdown-item" href="{{route('turmas.aluno.solicitacao',['uuid' => $aluno->uuid,'turma_id' => $turma->id])}}" target='_self' title='Transferências'>
-                                                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-left-right" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                                        <path fill-rule="evenodd" d="M10.146 7.646a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L12.793 11l-2.647-2.646a.5.5 0 0 1 0-.708z" />
-                                                        <path fill-rule="evenodd" d="M2 11a.5.5 0 0 1 .5-.5H13a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 11zm3.854-9.354a.5.5 0 0 1 0 .708L3.207 5l2.647 2.646a.5.5 0 1 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 0 1 .708 0z" />
-                                                        <path fill-rule="evenodd" d="M2.5 5a.5.5 0 0 1 .5-.5h10.5a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z" />
-                                                    </svg><b>&nbsp;&nbsp;&nbsp;&nbsp;
-                                                    Transferências
-                                                </a>
 
                                             </div>
-                                            &nbsp;<span><input type='checkbox' name='aluno_selecionado[]' for='NOME' class='checkbox' value='{{$aluno->uuid}}/{{$turma->id}}/{{$turma->pivot->id}}'></span>
+                                            &nbsp;<span><input type='checkbox' name='aluno_selecionado[]' for='NOME' class='checkbox' value='{{$aluno->uuid}}/{{$turma->id}}/{{$aluno->solicitacaos[$Key]->pivot->id}}}}'></span>
                                             &nbsp;<span id="NOME">{{ $aluno->NOME }}</span>
                                         </div>
                                     </td>
@@ -154,7 +276,13 @@
                                         @endif
                                         @endforeach
                                     </td>
-                                    <td>{{$aluno->MAE}}</td>
+                                    <!-- <td>{{$aluno->solicitacaos[$Key]->pivot->TRANSFERENCIA_STATUS}}</td> -->
+                                    <!-- <td>{{\Carbon\Carbon::parse($aluno->solicitacaos[$Key]->pivot->DATA_SOLICITACAO )->format('d-m-Y')}}</td>
+                                    <td>{{$aluno->solicitacaos[$Key]->pivot->SOLICITANTE}}</td>
+                                    <td>{{\Carbon\Carbon::parse($aluno->solicitacaos[$Key]->pivot->DATA_TRANSFERENCIA_STATUS )->format('d-m-Y')}}</td>
+                                    <td>{{$aluno->solicitacaos[$Key]->pivot->DECLARACAO}}</td>
+                                    <td>{{$aluno->solicitacaos[$Key]->pivot->RESPONSAVEL_DECLARACAO}}</td> -->
+
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -163,9 +291,14 @@
                                     <th id="thTfoot"></th>
                                     <th>ALUNO</th>
                                     <th>TURMA</th>
-                                    <!-- <th>OUVINTE</th> -->
                                     <th>STATUS</th>
-                                    <th>MÃE</th>
+                                    <!-- <th>STATUS DA TRANSFERÊNCIA</th>
+                                    <th>ENTREGUE/PRONTA</th>
+                                    <th>SOLICITANTE</th>
+                                    <th>DATA SOLICITAÇÃO</th>
+                                    <th>DECLARAÇÃO</th>
+                                    <th>RESPONSÁVEL DA DECLARAÇÃO</th>
+                                    <th>TRANSFERÊNCIA</th> -->
                                 </tr>
                             </tfoot>
                         </table>
@@ -185,6 +318,7 @@
             </div>
         </div>
     </div> -->
+    @include('turmas.alunos.solicitacoes.showModal')
 
 </form>
 

@@ -41,18 +41,30 @@ Route::prefix('turma')
         Route::get('create', 'TurmaController@create')->name('turmas.create');
         Route::get('/{id}/delete', 'TurmaController@delete')->name('turmas.delete');
     });
-        /*
+/*
          Turmas Alunos
          */
 Route::prefix('turmas/alunos')
     ->group(function () {
 
+        Route::get('/{uuid}/solicitações/create/{turma_id}', 'SolicitacaoAlunoController@create')->name('turmas.aluno.solicitacao');
         Route::put('/update', 'TurmaAlunoController@update')->name('turmas.alunos.update');
         Route::put('/edit', 'TurmaAlunoController@edit')->name('turmas.alunos.edit');
         Route::post('/{uuid}', 'TurmaAlunoController@attachTurmasAluno')->name('turmas.aluno.attach');
         Route::get('/{uuid}/show', 'TurmaAlunoController@show')->name('turmas.aluno.show');
         Route::get('', 'TurmaAlunoController@index')->name('turmas.alunos');
+    });
+/*
+         Turmas Alunos Solicitalções
+         */
+Route::prefix('turmas/alunos/solicitações')
+    ->group(function () {
 
+
+        Route::post('/solicicao.update', 'SolicitacaoAlunoController@update')->name('turmas.aluno.solicicao.update');
+        Route::post('/solicicao.edit', 'SolicitacaoAlunoController@edit')->name('turmas.aluno.solicicao.edit');
+        Route::get('/{uuid}/show', 'SolicitacaoAlunoController@show')->name('turmas.aluno.solicicao.show');
+        Route::post('/store', 'SolicitacaoAlunoController@store')->name('turmas.aluno.solicicao.store');
     });
 
 

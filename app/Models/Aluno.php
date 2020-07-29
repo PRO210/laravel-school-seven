@@ -46,6 +46,14 @@ class Aluno extends Model
         return $this->belongsToMany(Classificacao::class, 'aluno_turma');
     }
 
+    public function solicitacaos()
+    {
+        return $this->belongsToMany(Solicitacao::class, 'aluno_solicitacao')->withPivot([
+            'aluno_id', 'SOLICITANTE', 'solicitacao_id', 'turma_id', 'aluno_id', 'id', 'TRANSFERENCIA_STATUS',
+            'DATA_TRANSFERENCIA_STATUS', 'RESPONSAVEL_TRANSFERENCIA', 'DATA_TRANSFERENCIA', 'DATA_DECLARACAO',
+            'DECLARACAO', 'RESPONSAVEL_DECLARACAO'
+        ]);
+    }
     /*
     Listar as turmas do ano corrente
      */
@@ -86,7 +94,6 @@ class Aluno extends Model
         }
         return $alunoTurmas;
     }
-
     /*
     Recupera as turmas em que o aluno não está matriculado
     */
@@ -111,7 +118,6 @@ class Aluno extends Model
     */
     public function attach($request, $aluno)
     {
-
         if (isset($request->turma_id)) {
             foreach ($request->turma_id as $turma) {
                 $posionId = explode('/', $turma);
@@ -219,25 +225,84 @@ class Aluno extends Model
     {
         foreach ($request->aluno_selecionado as $value) {
 
-
             $posionId = explode('/', $value);
             $turma_id = $posionId[1];
             $id = $posionId[2];
 
-
             $alunoTurmas = DB::table('aluno_turma')->where('id', $id)->update(['turma_id' => $request->turma_id, 'classificacao_id' => $request->classificacao_id]);
         }
     }
+    /*
+    *Coloca a solicitação do aluno na tabela de transferencias
+    */
+    public function solicitacaoAttach($request, $aluno)
+    {
+        $aluno->solicitacaos()->attach('1', [
+            'DATA_SOLICITACAO' => $request->DATA_SOLICITACAO, 'SOLICITANTE' => $request->SOLICITANTE, 'turma_id' => $request->turma_id
+        ]);
+    }
+    /*
+    Solicitações de transferência que o aluno pediu e estão pendentes
+    */
+    public function solicitacoesAvailable($aluno_id)
+    {
+        $alunoSolicitacaoCont = DB::table('aluno_solicitacao')->where('aluno_id', $aluno_id)->where('TRANSFERENCIA_STATUS', 'LIKE', 'PENDENTE')
+            ->join('alunos', 'aluno_solicitacao.aluno_id', '=', 'alunos.id')
+            ->join('turmas', 'aluno_solicitacao.turma_id', '=', 'turmas.id')
+            ->select('aluno_solicitacao.turma_id', 'aluno_solicitacao.aluno_id', 'alunos.NOME', 'aluno_solicitacao.id')
+            ->orderBy('aluno_solicitacao.created', 'DESC')->count();
 
+        return $alunoSolicitacaoCont;
+    }
+    /*
+    Solicitações de transferência que o aluno pediu
+    */
+    public function solicitacoesAluno($uuid)
+    {
+        $aluno = DB::table('alunos')->where('uuid', $uuid)->first();
 
+        $alunos = DB::table('aluno_solicitacao')->where('aluno_id', $aluno->id)
+            ->join('alunos', 'aluno_solicitacao.aluno_id', '=', 'alunos.id')
+            ->join('turmas', 'aluno_solicitacao.turma_id', '=', 'turmas.id')
+            ->select(
+                'alunos.NOME',
+                'aluno_solicitacao.turma_id',
+                'aluno_solicitacao.aluno_id',
+                'aluno_solicitacao.solicitacao_id'
+            )
+            ->orderBy('aluno_solicitacao.created_at', 'DESC')->get();
 
+        $alunos_id[] = "";
+        $turmas_id[] = "";
+        $solicitacao_id[] = "";
 
+        foreach ($alunos as $dados) {
+            foreach ($dados as $key => $value) {
+                if ($key == "aluno_id") {
+                    array_push($alunos_id, $value);
+                }
+                if ($key == "turma_id") {
+                    array_push($turmas_id, $value);
+                }
+                if ($key == "solicitacao_id") {
+                    array_push($solicitacao_id, $value);
+                }
+            }
+        }
+        array_shift($alunos_id);
+        array_shift($turmas_id);
+        array_shift($solicitacao_id);
 
+        $solicitacoesAluno = collect([]);
 
+        foreach ($alunos_id as $key => $nulo) {
+            $solicitacoesAluno = $solicitacoesAluno->concat(Aluno::with(['turmas' => function ($query) use ($turmas_id, $key) {
+                $query->where('turma_id', $turmas_id[$key]);
+            }, 'solicitacaos' => function ($query) use ($solicitacao_id, $key) {
+                $query->where('solicitacao_id', $solicitacao_id[$key]);
+            }])->where('id', $alunos_id[$key])->get());
+        }
 
-
-
-
-    //
-    //
+        return $solicitacoesAluno;
+    }
 }
