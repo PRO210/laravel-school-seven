@@ -1,8 +1,9 @@
 @extends('adminlte::page')
 
-@section('title', 'turmas/alunos')
+@section('title', 'turmas/alunos/solicitações')
 
 @section('content_header')
+<meta name="csrf-token" content="{{ csrf_token() }}">
 
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
@@ -11,6 +12,7 @@
         <li class="breadcrumb-item active"><a href="{{ route('turmas.index') }}" class="active">Turmas</a></li>
     </ol>
 </nav>
+
 @stop
 
 @section('content')
@@ -22,6 +24,14 @@
         <li>{!! \Session::get('message') !!}</li>
     </ul>
 </div>
+
+@if ($errors->any())
+<div class="alert alert-warning">
+    @foreach ($errors->all() as $error)
+    <p>{{ $error }}</p>
+    @endforeach
+</div>
+@endif
 
 @endif
 
@@ -56,50 +66,80 @@
 <script src='{{url("js/dataTables/responsive.bootstrap4.min.js")}}'></script>
 
 <script>
-    $(function() {
-        $('form[name= "form"]').submit(function() {
-            event.preventDefault();
-            $.ajax({
-                url: "{{route('turmas.aluno.solicicao.edit')}}",
-                type: "post",
-                data: $(this).serialize(),
-                dataType: 'json',
+    function json() {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        //
+        camposMarcados = new Array();
+        $("input[type=checkbox][name='aluno_selecionado[]']:checked").each(function() {
+            camposMarcados.push($(this).val());
+        });
+        $.ajax({
+            type: 'POST',
+            url: "{{route('turmas.aluno.solicicao.edit')}}",
+            dataType: 'html',
+            data: {
+                'aluno_selecionado': camposMarcados,
+                _token: $('#signup-token').val()
+            },
+            success: function(data) {
 
-                beforeSend: function() {
+                $txt = JSON.parse(data);
 
-                    $("#divCorpo").html("<img src='{{URL('imgs/ajax-loader.gif')}}'>");
-                },
+                for (var i in $txt) {
 
-                success: function(response) {
+                    var SOLICITANTE = $txt[i]["SOLICITANTE"];
 
-                    $("#SOLICITANTE").val(response.SOLICITANTE)
-                    $("#TRANSFERENCIA_STATUS").val(response.TRANSFERENCIA_STATUS)
-                    $("#DATA_TRANSFERENCIA_STATUS").val(response.DATA_TRANSFERENCIA_STATUS)
+                    //  var DATA_SOLICITACAO = $txt[i]["DATA_SOLICITACAO"];
+                    var TRANSFERENCIA_STATUS = $txt[i]["TRANSFERENCIA_STATUS"];
+                    var DATA_TRANSFERENCIA_STATUS = $txt[i]["DATA_TRANSFERENCIA_STATUS"];
 
-                    $('#myModal').delay(1000).queue(function(next) {
-                        $(this).modal('show');
-                    })
+                    var DECLARACAO = $txt[i]["DECLARACAO"];
+                    var RESPONSAVEL_DECLARACAO = $txt[i]["RESPONSAVEL_DECLARACAO"];
+                    var DATA_DECLARACAO = $txt[i]["DATA_DECLARACAO"];
 
-                    // $("#divCorpo")
-                    //     .delay(3000)
-                    //     .queue(function(next) {
-                    //         // $(this).css('display', 'none');
-                    //         $("#divCorpo").html("");
-                    //     });
+                    var TRANSFERENCIA = $txt[i]["TRANSFERENCIA"];
+                    var RESPONSAVEL_TRANSFERENCIA = $txt[i]["RESPONSAVEL_TRANSFERENCIA"];
+                    var DATA_TRANSFERENCIA = $txt[i]["DATA_TRANSFERENCIA"];
 
-                    // $("#teste").delay(4000).queue(function(next) {
+                    var classificacao_id = $txt[i]["classificacao_id"];
 
-                    // });
-
-                },
-                error: function() {
-                    console.log("erro");
                 }
+                $("#SOLICITANTE").val(SOLICITANTE)
+                // $("#DATA_SOLICITACAO").val(DATA_SOLICITACAO)
+                $("#TRANSFERENCIA_STATUS").val(TRANSFERENCIA_STATUS)
+                $("#DATA_TRANSFERENCIA_STATUS").val(DATA_TRANSFERENCIA_STATUS)
+                $("#DECLARACAO").val(DECLARACAO)
+                $("#RESPONSAVEL_DECLARACAO").val(RESPONSAVEL_DECLARACAO)
+                $("#DATA_DECLARACAO").val(DATA_DECLARACAO)
+                $("#TRANSFERENCIA").val(TRANSFERENCIA)
+                $("#RESPONSAVEL_TRANSFERENCIA").val(RESPONSAVEL_TRANSFERENCIA)
+                $("#DATA_TRANSFERENCIA").val(DATA_TRANSFERENCIA)
 
-            })
-        })
-    });
+                $("#classificacao_id").val(classificacao_id)
+
+
+                $('#myModal').delay(0).queue(function(next) {
+                    $(this).modal('show');
+                })
+
+
+
+            },
+            error: function() {
+                alert('Erro');
+            }
+        });
+    };
 </script>
+
+
+
+
+
 <script>
     //Deixa os checkbox mais bonitos
     $(document).ready(function() {
@@ -131,60 +171,17 @@
             }
         });
     });
-    /* Datatable */
-    $(document).ready(function() {
-
-        // Setup - add a text input to each footer cell
-        $('#example tfoot th').each(function() {
-            var title = $(this).text();
-            $(this).html('<input type="text" placeholder="' + title + '" />');
-        });
-        var table = $('#example').DataTable({
-
-            "columnDefs": [{
-                "targets": 0,
-                "orderable": false
-            }],
-            "lengthMenu": [
-                [5, 10, 15, 20, 100, -1],
-                [5, 10, 15, 20, 100, "All"]
-            ],
-            "language": {
-                "lengthMenu": "_MENU_ ",
-                "zeroRecords": "Nenhum aluno encontrado",
-                "info": "Mostrando pagina _PAGE_ de _PAGES_",
-                "infoEmpty": "Sem registros",
-                "search": "Busca:",
-                "infoFiltered": "(filtrado de _MAX_ total de alunos)",
-                "paginate": {
-                    "first": "Primeira",
-                    "last": "Ultima",
-                    "next": "Proxima",
-                    "previous": "Anterior"
-                },
-                "aria": {
-                    "sortAscending": ": ative a ordenação cressente",
-                    "sortDescending": ": ative a ordenação decressente"
-                }
-            },
-
-        });
-        // Apply the search
-        table.columns().every(function() {
-            var that = this;
-            $('input', this.footer()).on('keyup change', function() {
-                if (that.search() !== this.value) {
-                    that
-                        .search(this.value)
-                        .draw();
-                }
-            });
-        });
-
-    });
+    //Confirmar se pode salvar
+    function confirmar() {
+        var u = $('#usuario').val();
+        var r = confirm("Já Posso Enviar " + u + "? ");
+        if (r == true) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 </script>
-
-
 
 @section('css')
 
@@ -197,13 +194,13 @@
 @stop
 
 <form action="{{route('turmas.aluno.solicicao.update')}}" method="POST" class="form" name="form">
-    @csrf
+    <input type="hidden" name="_token" value="{{csrf_token()}}">
     <section class="content">
         <div class="row">
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <button type="submit" class="btn btn-outline-secondary" data-toggle="modal" data-target="">Atualizar a Transferência</button>
+                        <button type="button" class="btn btn-outline-secondary" id="transferencia" onclick="return json()">Atualizar a Transferência</button>
                         <button type="button" class="btn btn-outline-success">Success</button>
                         <button type="button" class="btn btn-outline-danger">Danger</button>
                         <button type="button" class="btn btn-outline-warning">Warning</button>
@@ -308,19 +305,11 @@
             </div>
         </div>
     </section>
-    <!-- <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm">
-                <button type="submit" name="salvar" value="salvar" class="btn btn-outline-success btn-block"><b>Adicionar / Salvar</b></button>
-            </div>
-            <div class="col-sm">
-                <button type="submit" name="salvar" value="excluir" class="btn btn-outline-danger btn-block"><b>Excluir</b></button>
-            </div>
-        </div>
-    </div> -->
+
     @include('turmas.alunos.solicitacoes.showModal')
-
+    <div style="margin-bottom: 60px;">
+        <input type="hidden" id="usuario" value="{{ Auth::user()->name }}">
+    </div>
 </form>
-
 
 @stop

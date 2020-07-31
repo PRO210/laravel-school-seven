@@ -7,6 +7,7 @@ use App\Models\Aluno;
 use App\Models\Turma;
 use App\Models\Classificacao;
 use App\Models\Solicitacao;
+use Facade\FlareClient\Http\Response;
 use Illuminate\Support\Facades\DB;
 
 class SolicitacaoAlunoController extends Controller
@@ -93,20 +94,25 @@ class SolicitacaoAlunoController extends Controller
     {
         foreach ($request->aluno_selecionado as $id) {
             $posionId = explode('/', $id);
+            $turma_id = $posionId[1];
             $pivot_id = $posionId[2];
         }
+        // $solicitacoesAluno = DB::table('aluno_solicitacao')->where('id', $pivot_id)->get();
+        $solicitacoesAluno = DB::table('aluno_solicitacao')->where('aluno_solicitacao.id', $pivot_id)
+            ->join('aluno_turma', 'aluno_solicitacao.turma_id', '=', 'aluno_turma.turma_id')
+            ->select('aluno_turma.classificacao_id', 'aluno_solicitacao.*')
+            ->get();
 
-        $solicitacoesAluno = DB::table('aluno_solicitacao')->where('id', $pivot_id)->get();
+        // foreach ($solicitacoesAluno as $value) {
+        //     foreach ($value as $key => $value02) {
+        //         $html[$key][] = $value02;
+        //         // echo "$value02" . ' , ';
+        //     }
+        // }
+        // echo json_encode($html);
+        // $("#SOLICITANTE").val(response.SOLICITANTE)
 
-        foreach ($solicitacoesAluno as $value) {
-
-            foreach ($value as $key => $value02) {
-                $html[$key][] = $value02;
-                // echo "$value02" . ' , ';
-            }
-        }
-
-        echo json_encode($html);
+        return response()->json($solicitacoesAluno);
     }
 
     /**
@@ -118,8 +124,33 @@ class SolicitacaoAlunoController extends Controller
      */
     public function update(Request $request)
     {
-        dd($request);
+        if (!isset($request->aluno_selecionado)) {
+            return redirect()->back()->with('error', 'Falha em Salvar os Dados!');
+        }
+
+        foreach ($request->aluno_selecionado as $id) {
+            $posionId = explode('/', $id);
+            $aluno_uuid = $posionId[0];
+            $turma_id = $posionId[1];
+            $pivot_id = $posionId[2];
+        }
+        $aluno = $this->aluno->where('uuid', $aluno_uuid)->first();
+
+        $aluno_solicitacao = DB::table('aluno_solicitacao')
+            ->where('id', $pivot_id)
+            ->update([
+                'TRANSFERENCIA_STATUS' => $request->TRANSFERENCIA_STATUS, 'DATA_TRANSFERENCIA_STATUS' => "$request->DATA_TRANSFERENCIA_STATUS",
+                'DECLARACAO' => "$request->DECLARACAO", 'RESPONSAVEL_DECLARACAO' => "$request->RESPONSAVEL_DECLARACAO",
+                'SOLICITANTE' => "$request->SOLICITANTE", 'DATA_DECLARACAO' => "$request->DATA_DECLARACAO", 'TRANSFERENCIA' => "$request->TRANSFERENCIA",
+                'RESPONSAVEL_TRANSFERENCIA' => "$request->RESPONSAVEL_TRANSFERENCIA", 'DATA_TRANSFERENCIA' => "$request->DATA_TRANSFERENCIA"
+            ]);
+        $aluno_turma = DB::table('aluno_turma')
+            ->where('turma_id', $turma_id)->where('aluno_id', $aluno->id)
+            ->update(['classificacao_id' => $request->classificacao_id, 'updated_at' => NOW()]);
+
+        return redirect()->action('SolicitacaoAlunoController@show', ['uuid' => $aluno_uuid])->with('message', 'Operação Realizada com Sucesso!');
     }
+
 
     /**
      * Remove the specified resource from storage.
