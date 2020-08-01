@@ -8,6 +8,7 @@ use App\Models\Turma;
 use App\Models\Classificacao;
 use App\Models\Solicitacao;
 use Facade\FlareClient\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class SolicitacaoAlunoController extends Controller
@@ -28,7 +29,11 @@ class SolicitacaoAlunoController extends Controller
      */
     public function index()
     {
-        //
+        $alunoTurmasTransfridos = $this->aluno->transferidos();
+        //dd($alunoTurmasTransfridos);
+        $classificacoes = $this->classificacao->get();
+
+        return view('turmas.alunos.solicitacoes.index', compact('alunoTurmasTransfridos', 'classificacoes'));
     }
 
     /**
@@ -41,7 +46,7 @@ class SolicitacaoAlunoController extends Controller
         $aluno = $this->aluno->where('uuid', $uuid)->first();
 
         $alunoSolicitacaoCont = $this->aluno->solicitacoesAvailable($aluno->id);
-
+        //dd($alunoSolicitacaoCont);
         $turma = $this->turma->where('id', $turma_id)->first();
 
         $alunoSolicitacao = $this->aluno->with(['solicitacaos'])->where('uuid', $uuid)->get()->count();
@@ -66,7 +71,7 @@ class SolicitacaoAlunoController extends Controller
 
         $solicitacaoAttach = $this->aluno->solicitacaoAttach($request, $aluno);
 
-        return redirect()->action('SolicitacaoAlunoController@show', ['id' => $aluno->id])->with('message', 'Operação Realizada com Sucesso!');
+        return redirect()->action('SolicitacaoAlunoController@show', ['uuid' => $request->aluno_id])->with('message', 'Operação Realizada com Sucesso!');
     }
 
     /**
@@ -128,38 +133,38 @@ class SolicitacaoAlunoController extends Controller
             return redirect()->back()->with('error', 'Falha em Salvar os Dados!');
         }
 
+        $solicitacoesUpdate = $this->aluno->solicitacoesUpdate($request);
+
         foreach ($request->aluno_selecionado as $id) {
             $posionId = explode('/', $id);
             $aluno_uuid = $posionId[0];
-            $turma_id = $posionId[1];
-            $pivot_id = $posionId[2];
         }
-        $aluno = $this->aluno->where('uuid', $aluno_uuid)->first();
-
-        $aluno_solicitacao = DB::table('aluno_solicitacao')
-            ->where('id', $pivot_id)
-            ->update([
-                'TRANSFERENCIA_STATUS' => $request->TRANSFERENCIA_STATUS, 'DATA_TRANSFERENCIA_STATUS' => "$request->DATA_TRANSFERENCIA_STATUS",
-                'DECLARACAO' => "$request->DECLARACAO", 'RESPONSAVEL_DECLARACAO' => "$request->RESPONSAVEL_DECLARACAO",
-                'SOLICITANTE' => "$request->SOLICITANTE", 'DATA_DECLARACAO' => "$request->DATA_DECLARACAO", 'TRANSFERENCIA' => "$request->TRANSFERENCIA",
-                'RESPONSAVEL_TRANSFERENCIA' => "$request->RESPONSAVEL_TRANSFERENCIA", 'DATA_TRANSFERENCIA' => "$request->DATA_TRANSFERENCIA"
-            ]);
-        $aluno_turma = DB::table('aluno_turma')
-            ->where('turma_id', $turma_id)->where('aluno_id', $aluno->id)
-            ->update(['classificacao_id' => $request->classificacao_id, 'updated_at' => NOW()]);
 
         return redirect()->action('SolicitacaoAlunoController@show', ['uuid' => $aluno_uuid])->with('message', 'Operação Realizada com Sucesso!');
     }
-
-
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($uuid, $turma_id)
     {
-        //
+        $aluno = $this->aluno->where('uuid', $uuid)->first();
+
+
+
+        $aluno_solicitacao = DB::table('aluno_solicitacao')->where('turma_id', $turma_id)->where('aluno_id', $aluno->id)->delete();
+
+        /* LOG DO ALUNO */
+        $usuario = Auth::user()->id;
+        DB::table('aluno_log')->insert([
+            'aluno_id' => $aluno->id, 'ACAO' => 'DELETAR',
+            'ACAO_DETALHES' => 'EXCLUÍU A SOLICITAÇÃO DE TRANSFERÊNCIA', 'log_id' => '3', 'user_id' => $usuario,
+        ]);
+
+        return redirect()->action('SolicitacaoAlunoController@index')->with('message', 'Operação Realizada com Sucesso!');
     }
+    //
+    //
 }

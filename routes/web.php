@@ -61,10 +61,14 @@ Route::prefix('turmas/alunos/solicitações')
     ->group(function () {
 
 
+        Route::get('/{uuid}/arquivo/{turma_id}/destroy', 'SolicitacaoAlunoController@destroy')->name('turmas.aluno.solicicao.destroy');
+        Route::get('/{uuid}/arquivo/{turma_id}', 'TurmaAlunoController@arquivar')->name('turmas.aluno.arquivo');
         Route::post('/solicicao.update', 'SolicitacaoAlunoController@update')->name('turmas.aluno.solicicao.update');
         Route::post('/solicicao.edit', 'SolicitacaoAlunoController@edit')->name('turmas.aluno.solicicao.edit');
         Route::get('/{uuid}/show', 'SolicitacaoAlunoController@show')->name('turmas.aluno.solicicao.show');
         Route::post('/store', 'SolicitacaoAlunoController@store')->name('turmas.aluno.solicicao.store');
+        Route::get('', 'SolicitacaoAlunoController@index')->name('turmas.alunos.solicicaos');
+
     });
 
 

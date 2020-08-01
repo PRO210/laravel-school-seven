@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use App\Models\Turma;
+use Illuminate\Support\Facades\Auth;
 
 class Aluno extends Model
 {
@@ -41,6 +42,7 @@ class Aluno extends Model
             'DECLARACAO_DATA', 'DECLARACAO_RESPONSAVEL', 'TRANSFERENCIA', 'TRANSFERENCIA_DATA', 'TRANSFERENCIA_RESPONSAVEL'
         ]);
     }
+
     public function classificacaos()
     {
         return $this->belongsToMany(Classificacao::class, 'aluno_turma');
@@ -50,8 +52,8 @@ class Aluno extends Model
     {
         return $this->belongsToMany(Solicitacao::class, 'aluno_solicitacao')->withPivot([
             'aluno_id', 'SOLICITANTE', 'solicitacao_id', 'turma_id', 'aluno_id', 'id', 'TRANSFERENCIA_STATUS',
-            'DATA_TRANSFERENCIA_STATUS', 'RESPONSAVEL_TRANSFERENCIA', 'DATA_TRANSFERENCIA', 'DATA_DECLARACAO',
-            'DECLARACAO', 'RESPONSAVEL_DECLARACAO'
+            'DATA_TRANSFERENCIA_STATUS', 'RESPONSAVEL_TRANSFERENCIA', 'DATA_TRANSFERENCIA', 'TRANSFERENCIA',
+            'DATA_DECLARACAO', 'DECLARACAO', 'RESPONSAVEL_DECLARACAO'
         ]);
     }
     /*
@@ -240,6 +242,11 @@ class Aluno extends Model
         $aluno->solicitacaos()->attach('1', [
             'DATA_SOLICITACAO' => $request->DATA_SOLICITACAO, 'SOLICITANTE' => $request->SOLICITANTE, 'turma_id' => $request->turma_id
         ]);
+        /* LOG DO ALUNO */
+        $usuario = Auth::user()->id;
+        DB::table('aluno_log')->insert(
+            ['aluno_id' => $aluno->id, 'ACAO' => 'INSERIR', 'ACAO_DETALHES' => 'SOLICITAÇÃO DE TRANSFERÊNCIA', 'log_id' => '1', 'user_id' => $usuario,]
+        );
     }
     /*
     Solicitações de transferência que o aluno pediu e estão pendentes
@@ -304,5 +311,86 @@ class Aluno extends Model
         }
 
         return $solicitacoesAluno;
+    }
+    /*
+    Listar os alunos transferidos
+     */
+    public function transferidos()
+    {
+        $alunos = DB::table('aluno_solicitacao')
+            ->join('alunos', 'aluno_solicitacao.aluno_id', '=', 'alunos.id')
+            ->join('turmas', 'aluno_solicitacao.turma_id', '=', 'turmas.id')
+            ->select('aluno_solicitacao.aluno_id', 'alunos.NOME', 'aluno_solicitacao.turma_id', 'aluno_solicitacao.solicitacao_id')
+            ->orderBy('aluno_solicitacao.turma_id', 'ASC')->orderBy('alunos.NOME', 'ASC')
+            // ->toSql();
+            ->get();
+        //dd($alunos);
+
+        $alunos_id[] = "";
+        $turmas_id[] = "";
+        $solicitacao_id[] = "";
+
+        foreach ($alunos as $dados) {
+            foreach ($dados as $key => $value) {
+                if ($key == "aluno_id") {
+                    array_push($alunos_id, $value);
+                }
+                if ($key == "turma_id") {
+                    array_push($turmas_id, $value);
+                }
+                if ($key == "solicitacao_id") {
+                    array_push($solicitacao_id, $value);
+                }
+            }
+        }
+        array_shift($alunos_id);
+        array_shift($turmas_id);
+        array_shift($solicitacao_id);
+
+        $alunoTurmasTransfridos = collect([]);
+
+        foreach ($alunos_id as $key => $nulo) {
+            $alunoTurmasTransfridos = $alunoTurmasTransfridos->concat(Aluno::with(['turmas' => function ($query) use ($turmas_id, $key) {
+                $query->where('turma_id', $turmas_id[$key]);
+            }, 'solicitacaos' => function ($query) use ($solicitacao_id, $key) {
+                $query->where('solicitacao_id', $solicitacao_id[$key]);
+            }])->where('id', $alunos_id[$key])->get());
+        }
+        return $alunoTurmasTransfridos;
+    }
+    /*
+    *Atualiza o pedido de transferência do aluno
+    */
+    public function solicitacoesUpdate($request)
+    {
+        foreach ($request->aluno_selecionado as $id) {
+            $posionId = explode('/', $id);
+            $aluno_uuid = $posionId[0];
+            $turma_id = $posionId[1];
+            $pivot_id = $posionId[2];
+        }
+        $aluno = Aluno::where('uuid', $aluno_uuid)->first();
+
+        if ($request->DATA_TRANSFERENCIA == "") {
+            $request->DATA_TRANSFERENCIA = date('Y-m-d');
+        }
+        if ($request->DATA_DECLARACAO == "") {
+            $request->DATA_DECLARACAO = date('Y-m-d');
+        }
+        if ($request->DATA_TRANSFERENCIA_STATUS == "") {
+            $request->DATA_TRANSFERENCIA_STATUS = date('Y-m-d');
+        }
+
+        $aluno_solicitacao = DB::table('aluno_solicitacao')
+            ->where('id', $pivot_id)
+            ->update([
+                'TRANSFERENCIA_STATUS' => $request->TRANSFERENCIA_STATUS, 'DATA_TRANSFERENCIA_STATUS' => "$request->DATA_TRANSFERENCIA_STATUS",
+                'DECLARACAO' => "$request->DECLARACAO", 'RESPONSAVEL_DECLARACAO' => "$request->RESPONSAVEL_DECLARACAO",
+                'SOLICITANTE' => "$request->SOLICITANTE", 'DATA_DECLARACAO' => "$request->DATA_DECLARACAO", 'TRANSFERENCIA' => "$request->TRANSFERENCIA",
+                'RESPONSAVEL_TRANSFERENCIA' => "$request->RESPONSAVEL_TRANSFERENCIA", 'DATA_TRANSFERENCIA' => "$request->DATA_TRANSFERENCIA"
+            ]);
+        $aluno_turma = DB::table('aluno_turma')
+            ->where('turma_id', $turma_id)->where('aluno_id', $aluno->id)
+            ->update(['classificacao_id' => $request->classificacao_id, 'updated_at' => NOW()]);
     }
 }

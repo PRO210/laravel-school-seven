@@ -8,7 +8,7 @@ docker-compose down (Baixando)
 //Entrando do Contaniners
 docker container exec -it laradock_workspace_1 bash
 //Sai do Contaniners
-Ctrl + p +q
+Ctrl + p + q
 //
 cd /home/casa/Workspace/laravel-school-seven/
 

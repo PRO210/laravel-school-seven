@@ -9,7 +9,8 @@
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">Dashboard</a></li>
         <li class="breadcrumb-item "><a href="{{ route('alunos.index') }}" class="active">Alunos</a></li>
-        <li class="breadcrumb-item active"><a href="{{ route('turmas.index') }}" class="active">Turmas</a></li>
+        <li class="breadcrumb-item "><a href="{{ route('turmas.index') }}" class="active">Turmas</a></li>
+        <li class="breadcrumb-item "><a href="{{ route('turmas.alunos.solicicaos') }}" class="active">Transferências</a></li>
     </ol>
 </nav>
 
@@ -25,19 +26,16 @@
     </ul>
 </div>
 
-@if ($errors->any())
-<div class="alert alert-warning">
-    @foreach ($errors->all() as $error)
-    <p>{{ $error }}</p>
-    @endforeach
-</div>
-@endif
+
 
 @endif
 
 <style>
     .bi-tools {
         color: #8a6d3b !important;
+    }
+    .bi-trash {
+        color: red;
     }
 
     .botao {
@@ -121,12 +119,9 @@
 
                 $("#classificacao_id").val(classificacao_id)
 
-
                 $('#myModal').delay(0).queue(function(next) {
                     $(this).modal('show');
                 })
-
-
 
             },
             error: function() {
@@ -135,10 +130,6 @@
         });
     };
 </script>
-
-
-
-
 
 <script>
     //Deixa os checkbox mais bonitos
@@ -200,12 +191,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <button type="button" class="btn btn-outline-secondary" id="transferencia" onclick="return json()">Atualizar a Transferência</button>
-                        <button type="button" class="btn btn-outline-success">Success</button>
-                        <button type="button" class="btn btn-outline-danger">Danger</button>
-                        <button type="button" class="btn btn-outline-warning">Warning</button>
-                        <button type="button" class="btn btn-outline-info">Info</button>
-                        <button type="submit" class="btn btn-outline-dark">Dark</button>
+                        <button type="button" class="btn btn-outline-secondary botao" id="transferencia" onclick="return json()" disabled title="Selecione alguma caixinha">Atualizar a Transferência</button>
                     </div>
                     <div class="card-body">
                         <table id="example" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
@@ -255,11 +241,36 @@
                                             </button>
                                             <div class="dropdown-menu">
                                                 <a class="dropdown-item" href="{{route('alunos.edit',['uuid' => $aluno->uuid])}}" target='_self' title='Alterar o Cadastro'>
-                                                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-pencil " fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                    <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-pencil " fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                                         <path fill-rule="evenodd" d="M11.293 1.293a1 1 0 0 1 1.414 0l2 2a1 1 0 0 1 0 1.414l-9 9a1 1 0 0 1-.39.242l-3 1a1 1 0 0 1-1.266-1.265l1-3a1 1 0 0 1 .242-.391l9-9zM12 2l2 2-9 9-3 1 1-3 9-9z" />
                                                         <path fill-rule="evenodd" d="M12.146 6.354l-2.5-2.5.708-.708 2.5 2.5-.707.708zM3 10v.5a.5.5 0 0 0 .5.5H4v.5a.5.5 0 0 0 .5.5H5v.5a.5.5 0 0 0 .5.5H6v-1.5a.5.5 0 0 0-.5-.5H5v-.5a.5.5 0 0 0-.5-.5H3z" />
                                                     </svg><b>&nbsp;&nbsp;&nbsp;&nbsp;Alterar o Cadastro</b></a>
 
+                                                @if($turma->pivot->classificacao_id == 3)
+                                                <a class="dropdown-item" href="{{route('turmas.aluno.arquivo',['uuid' => $aluno->uuid,'turma_id' => $turma->id])}}" target='_self' title='Mover para o Arquivo'>
+                                                    <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-folder-plus" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                        <path fill-rule="evenodd" d="M9.828 4H2.19a1 1 0 0 0-.996 1.09l.637 7a1 1 0 0 0 .995.91H9v1H2.826a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31L.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3h3.982a2 2 0 0 1 1.992 2.181L15.546 8H14.54l.265-2.91A1 1 0 0 0 13.81 4H9.828zm-2.95-1.707L7.587 3H2.19c-.24 0-.47.042-.684.12L1.5 2.98a1 1 0 0 1 1-.98h3.672a1 1 0 0 1 .707.293z" />
+                                                        <path fill-rule="evenodd" d="M13.5 10a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1H13v-1.5a.5.5 0 0 1 .5-.5z" />
+                                                        <path fill-rule="evenodd" d="M13 12.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0v-2z" />
+                                                    </svg><b>&nbsp;&nbsp;&nbsp;&nbsp;Mover para o Arquivo</b>
+                                                </a>
+                                                @else
+                                                <a class="dropdown-item" href="#" target='_self' title='Não transferido ainda'>
+                                                    <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-folder-plus" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                        <path fill-rule="evenodd" d="M9.828 4H2.19a1 1 0 0 0-.996 1.09l.637 7a1 1 0 0 0 .995.91H9v1H2.826a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31L.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3h3.982a2 2 0 0 1 1.992 2.181L15.546 8H14.54l.265-2.91A1 1 0 0 0 13.81 4H9.828zm-2.95-1.707L7.587 3H2.19c-.24 0-.47.042-.684.12L1.5 2.98a1 1 0 0 1 1-.98h3.672a1 1 0 0 1 .707.293z" />
+                                                        <path fill-rule="evenodd" d="M13.5 10a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1H13v-1.5a.5.5 0 0 1 .5-.5z" />
+                                                        <path fill-rule="evenodd" d="M13 12.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0v-2z" />
+                                                    </svg>
+                                                    <b>&nbsp;&nbsp;&nbsp;&nbsp;Aluno não transferido ainda</b>
+                                                </a>
+                                                @endif
+                                                <a class="dropdown-item" href="{{route('turmas.aluno.solicicao.destroy',['uuid' => $aluno->uuid,'turma_id' => $turma->id])}}" target='_self' title='Deletar o Aluno(a)' onclick="return confirmar()">
+                                                    <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
+                                                        <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
+                                                    </svg>
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;<b>Deletar o Aluno(a)</b>
+                                                </a>
                                             </div>
                                             &nbsp;<span><input type='checkbox' name='aluno_selecionado[]' for='NOME' class='checkbox' value='{{$aluno->uuid}}/{{$turma->id}}/{{$aluno->solicitacaos[$Key]->pivot->id}}}}'></span>
                                             &nbsp;<span id="NOME">{{ $aluno->NOME }}</span>
@@ -273,12 +284,6 @@
                                         @endif
                                         @endforeach
                                     </td>
-                                    <!-- <td>{{$aluno->solicitacaos[$Key]->pivot->TRANSFERENCIA_STATUS}}</td> -->
-                                    <!-- <td>{{\Carbon\Carbon::parse($aluno->solicitacaos[$Key]->pivot->DATA_SOLICITACAO )->format('d-m-Y')}}</td>
-                                    <td>{{$aluno->solicitacaos[$Key]->pivot->SOLICITANTE}}</td>
-                                    <td>{{\Carbon\Carbon::parse($aluno->solicitacaos[$Key]->pivot->DATA_TRANSFERENCIA_STATUS )->format('d-m-Y')}}</td>
-                                    <td>{{$aluno->solicitacaos[$Key]->pivot->DECLARACAO}}</td>
-                                    <td>{{$aluno->solicitacaos[$Key]->pivot->RESPONSAVEL_DECLARACAO}}</td> -->
 
                                 </tr>
                                 @endforeach

@@ -245,6 +245,12 @@ return [
                     'url'  => 'turmas/alunos',
                     // 'can'  =>  'users',
                 ],
+                [
+                    'text' => 'Transferidos',
+                    'url'  => 'turmas/alunos/solicitações',
+                    // 'can'  =>  'users',
+                    'icon_color' => 'red',
+                ],
             ],
         ],
         [

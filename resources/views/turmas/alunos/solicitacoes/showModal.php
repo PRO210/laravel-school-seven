@@ -4,7 +4,7 @@
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
+               <!--  <button type="button" class="close" data-dismiss="modal">&times;</button> -->
                 <h4 class="modal-title">Atualizar Pedido</h4>
             </div>
             <div class="modal-body">
@@ -54,10 +54,10 @@
                     </div>
                     <br>
                     <div class="row">
-                        <div class="col-sm-3">
+                        <div class="col-sm-4">
                             <label for="" class="control-label">Responsável/Parente</label>
                         </div>
-                        <div class="col-sm-9">
+                        <div class="col-sm-8">
                             <input type="text" placeholder="DIGITE O NOME DO RESPONSÁVEL" class="form-control" id="RESPONSAVEL_DECLARACAO" name="RESPONSAVEL_DECLARACAO" value="" onkeyup="maiuscula(this)">
                         </div>
                     </div>
@@ -84,10 +84,10 @@
                     </div>
                     <br>
                     <div class="row">
-                        <div class="col-sm-3">
+                        <div class="col-sm-4">
                             <label for="" class="control-label">Responsável/Parente</label>
                         </div>
-                        <div class="col-sm-9">
+                        <div class="col-sm-8">
                             <input type="text" placeholder="DIGITE O NOME DO RESPONSÁVEL" class="form-control" id="RESPONSAVEL_TRANSFERENCIA" name="RESPONSAVEL_TRANSFERENCIA" onkeyup="maiuscula(this)">
                         </div>
                     </div>
@@ -110,9 +110,9 @@
                                 <option value="0" disabled="">ESCOLHA UMA DAS OPÇÕES ABAIXO</option>
                                 <option value="5" disabled="">APROVADO</option>
                                 <option value="1">CURSANDO</option>
-                                <option value="3">DESISTENTE</option>
+                                <option value="4">DESISTENTE</option>
                                 <option value="2">ADIMITIDO DEPOIS</option>
-                                <option value="4">TRANSFERIDO</option>
+                                <option value="3">TRANSFERIDO</option>
                                 <option value="6" disabled="">REPROVADO</option>
                             </select>
                         </div>

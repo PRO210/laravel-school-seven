@@ -108,9 +108,8 @@ class TurmaAlunoController extends Controller
     {
         $upAttach = $this->aluno->upAttach($request);
 
-       // return redirect()->action('TurmaAlunoController@index')->with('message', 'Operação Realizada com Sucesso!');
+        // return redirect()->action('TurmaAlunoController@index')->with('message', 'Operação Realizada com Sucesso!');
         return redirect()->route('turmas.alunos')->with('message', 'Operação Realizada com Sucesso!');
-
     }
 
     /**
@@ -142,5 +141,13 @@ class TurmaAlunoController extends Controller
             return redirect()->action('TurmaAlunoController@show', ['uuid' => $uuid])->with('message', 'Operação Realizada com Sucesso!');
         }
     }
+    /*
+    *Arquivar os alunos
+    */
+    public function arquivar($uuid, $turma_id)
+    {
+        dd($turma_id);
 
+
+    }
 }
