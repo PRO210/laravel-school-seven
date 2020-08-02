@@ -7,6 +7,7 @@ use App\Http\Requests\StoreUpdateAluno;
 use App\Models\Aluno;
 use App\Models\Classificacao;
 use App\Models\Documento;
+use App\Models\Log;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -79,6 +80,32 @@ class AlunoController extends Controller
     {
         //
     }
+    /*
+    *dataTable
+     */
+    public function dataTable()
+    {
+        // $alunoTurmas = $this->repository->correntTurmas();
+
+        $aluno = $this->repository->where('id', 1)->first();
+
+        $logAlunos = $this->repository->with('atualizacoes')->where('id', $aluno->id)->get();
+
+        foreach ($logAlunos as $logAluno) {
+            foreach ($logAluno->atualizacoes as $atualizacao) {
+                echo $atualizacao->pivot->ACAO . ' - ' . $atualizacao->pivot->ACAO_DETALHES;
+                echo "<br>";
+            }
+        }
+        // dd($logAlunos);
+
+        $classificacoes = $this->classificacao->get();
+
+        $users = $this->user->all();
+
+
+        return view('alunos.table', compact('logAlunos', 'classificacoes','users'));
+    }
 
     /**
      * Show the form for editing the specified resource.
@@ -90,18 +117,21 @@ class AlunoController extends Controller
     {
         $aluno = $this->repository->where('uuid', $uuid)->first();
 
-        $alunoLogs = DB::table('aluno_log')->where('aluno_id', $aluno->id)->get()->count();
+        $logAlunos = $this->repository->with('atualizacoes')->where('id',$aluno->id)->paginate(5);
 
-        if ($alunoLogs > 0) {
-            $alunoLogs = $this->repository->with(['atualizacoes'])->where('id', $aluno->id)->get();
-        } else {
-            $alunoLogs = null;
-        }
+        // foreach ($logAlunos as $alunoLog) {
+        //     foreach ($alunoLog->atualizacoes as $atualizacao) {
+        //         echo $atualizacao->pivot->ACAO;
+        //         echo "<br>";
+        //     }
+        // }
+        // dd($logAlunos);
+
         $users = $this->user->all();
 
         $documentos = $this->documento->all();
 
-        return view('alunos.edit', compact('aluno', 'documentos', 'alunoLogs', 'users'));
+        return view('alunos.edit', compact('aluno', 'documentos', 'logAlunos', 'users'));
     }
 
     /**

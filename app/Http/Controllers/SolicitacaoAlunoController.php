@@ -83,8 +83,8 @@ class SolicitacaoAlunoController extends Controller
     public function show($uuid)
     {
         $solicitacoesAluno = $this->aluno->solicitacoesAluno($uuid);
-        $classificacoes = $this->classificacao->get();
 
+        $classificacoes = $this->classificacao->get();
 
         return view('turmas.alunos.solicitacoes.show', compact('solicitacoesAluno', 'classificacoes'));
     }
@@ -150,11 +150,22 @@ class SolicitacaoAlunoController extends Controller
      */
     public function destroy($uuid, $turma_id)
     {
+        $hoje = date('d-m-Y');
+        $ano = date('Y');
+
+        if ($hoje > 31-05-"$ano") {
+            $classificacao = '2';
+        }else{
+            $classificacao = '1';
+        }
+
         $aluno = $this->aluno->where('uuid', $uuid)->first();
 
-
-
         $aluno_solicitacao = DB::table('aluno_solicitacao')->where('turma_id', $turma_id)->where('aluno_id', $aluno->id)->delete();
+
+        $aluno_turma = DB::table('aluno_turma')->where('turma_id', $turma_id)->where('aluno_id', $aluno->id)->update([
+            'classificacao_id' => $classificacao,
+        ]);
 
         /* LOG DO ALUNO */
         $usuario = Auth::user()->id;

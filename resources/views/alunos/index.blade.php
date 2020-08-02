@@ -171,6 +171,7 @@
         @endif
     </div>
 </div>
+
 <div style="margin-bottom: 60px;">
     <input type="hidden" id="usuario" value="{{ Auth::user()->name }}">
 </div>

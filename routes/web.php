@@ -19,6 +19,7 @@ Route::prefix('alunos')
     ->group(function () {
 
 
+        Route::get('/table', 'AlunoController@dataTable')->name('alunos.table');
         Route::get('/{uuid}/destroy', 'AlunoController@destroy')->name('alunos.destroy');
         Route::put('/{uuid}/update', 'AlunoController@update')->name('aluno.update');
         Route::any('/{uuid}/edit', 'AlunoController@edit')->name('alunos.edit');

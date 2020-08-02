@@ -3,6 +3,7 @@
 @section('title', 'Cadastrar Novo Aluno(a)')
 
 @section('content_header')
+
 <h3>Editaro cadastro de: {{$aluno->NOME}}</h3>
 
 @stop
@@ -33,26 +34,25 @@
     }
 </style>
 
-@section('js')
-<!-- jQuery -->
-<script src='{{url("js/jquery-3.5.1.js")}}' type="text/javascript"></script>
-<!-- DataTables -->
-<script src='{{url("js/dataTables/jquery.dataTables.min.js")}}'></script>
-<script src='{{url("js/dataTables/dataTables.bootstrap4.min.js")}}'></script>
-<script src='{{url("js/dataTables/dataTables.responsive.min.js")}}'></script>
-<script src='{{url("js/dataTables/responsive.bootstrap4.min.js")}}'></script>
-<script src='{{url("js/alunos/index.js")}}'></script>
-@stop
-
 @section('css')
 <!-- DataTables CSS-->
-<link rel="stylesheet" href="{{url('css/datatables/alunos/bootstrap.css')}}">
-<link rel="stylesheet" href="{{url('css/datatables/alunos/dataTables/bootstrap4.min.css')}}">
-<link rel="stylesheet" href="{{url('css/datatables/responsive.bootstrap4.min.css')}}">
+
 <link rel="stylesheet" href="{{url('css/alunos/index.css')}}">
 @stop
 
+@section('js')
+<!-- jQuery -->
+<script src='{{url("js/jquery-3.5.1.js")}}' type="text/javascript"></script>
+
+
+<script src='{{url("js/alunos/maskedInput.js")}}'></script>
+<script src='{{url("/js/alunos/edit.js")}}'></script>
+@stop
+
+
+
 <div class="card">
+    <!-- <div class="card-header"></div> -->
     <div class="card-body">
         <form action="{{route('aluno.update',$aluno->uuid)}}" method="post" class="">
             @csrf
@@ -358,67 +358,52 @@
                     </div>
                 </div>
             </div>
-            <div style="margin-bottom: 60px;">
+            <div style="margin-bottom: 24px;">
                 <input type="hidden" id="usuario" value="{{ Auth::user()->name }}">
             </div>
+
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Usuário</th>
+                        <th>Ação</th>
+                        <th>Detalhes</th>
+                        <th>Data</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($logAlunos as $logAluno)
+                    @foreach ($logAluno->atualizacoes as $atualizacao)
+                    @endforeach
+                    <tr>
+                        <td style="white-space:nowrap">
+                            &nbsp;<span><input type='checkbox' name='aluno_selecionada[]' class='checkbox' value=''></span> &nbsp;
+                            <span>
+                                @foreach($users as $user)
+                                @if($atualizacao->pivot->user_id == "$user->id")
+                                {{$user->name}}
+                                @endif
+                                @endforeach
+                            </span>
+                        </td>
+                        <td>{{$atualizacao->pivot->ACAO}} - {{$atualizacao->pivot->aluno_id}}</td>
+                        <td>{{$atualizacao->pivot->ACAO_DETALHES}}</td>
+                        <td style="white-space:nowrap">{{\Carbon\Carbon::parse($atualizacao->created_at)->format('d-m-Y')}}</td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </form>
-        <table id="example" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
-            <thead>
-                <tr>
-                    <th>
-                        <span><input type='checkbox' name='' for='' class='' value='' id="selecionar"></span>
-                    </th>
-                    <th>USUÁRIO</th>
-                    <th>AÇÃO</th>
-                    <th>DETALHES</th>
-                    <th>DATA</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if(isset($alunoLogs))
-                @foreach ($alunoLogs as $alunoLog)
-                @foreach ($alunoLog->atualizacoes as $atualizacao)
-                @endforeach
-                <tr>
-                    <th></th>
-                    <td>
-                        <span><input type='checkbox' name='aluno_selecionado[]' for='NOME' class='checkbox' value='{{$atualizacao->pivot->aluno_id}}'></span>
-                        @foreach($users as $user)
-                        @if($atualizacao->pivot->user_id == "$user->id")
-                        {{$user->name}}
-                        @endif
-                        @endforeach
-                    </td>
-                    <td>{{$atualizacao->pivot->ACAO}}</td>
-                    <td>{{$atualizacao->pivot->ACAO_DETALHES}}</td>
-                    <td>{{\Carbon\Carbon::parse($atualizacao->created_at)->format('d-m-Y')}}</td>
-                </tr>
-                @endforeach
-
-                @endif
-            </tbody>
-            <tfoot>
-                <tr>
-                    <th id="thTfoot"></th>
-                    <th>USUÁRIO</th>
-                    <th>AÇÃO</th>
-                    <th>DETALHES</th>
-                    <th>DATA</th>
-
-                </tr>
-            </tfoot>
-        </table>
-
-
-
-
-
-
-
-
-
-
+    </div>
+    <div class="card-footer">
+        @if (isset($filters))
+        {!! $logAlunos->appends($filters)->links() !!}
+        @else
+        {!! $logAlunos->links() !!}
+        @endif
     </div>
 </div>
+
+
 
 @stop
