@@ -33,8 +33,8 @@ class AlunoController extends Controller
      */
     public function index()
     {
-        // $alunos = $this->repository->latest()->paginate(8);
-        $alunos = DB::table('alunos')->orderBy('NOME', 'ASC')->paginate(8);
+       //  $alunos = $this->repository->latest()->paginate(5);
+        $alunos = DB::table('alunos')->orderBy('NOME', 'ASC')->latest()->paginate(8);
 
         return view('alunos.index', compact('alunos'));
     }
@@ -104,7 +104,7 @@ class AlunoController extends Controller
         $users = $this->user->all();
 
 
-        return view('alunos.table', compact('logAlunos', 'classificacoes','users'));
+        return view('alunos.table', compact('logAlunos', 'classificacoes', 'users'));
     }
 
     /**
@@ -117,15 +117,7 @@ class AlunoController extends Controller
     {
         $aluno = $this->repository->where('uuid', $uuid)->first();
 
-        $logAlunos = $this->repository->with('atualizacoes')->where('id',$aluno->id)->paginate(5);
-
-        // foreach ($logAlunos as $alunoLog) {
-        //     foreach ($alunoLog->atualizacoes as $atualizacao) {
-        //         echo $atualizacao->pivot->ACAO;
-        //         echo "<br>";
-        //     }
-        // }
-        // dd($logAlunos);
+        $logAlunos = $this->repository->with('atualizacoes')->where('id',$aluno->id)->latest()->paginate(5);
 
         $users = $this->user->all();
 

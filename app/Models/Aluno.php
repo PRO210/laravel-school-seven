@@ -126,12 +126,14 @@ class Aluno extends Model
                 $posion = $posionId[0];
                 $turma_id = $posionId[1];
 
+                $turma = Turma::find($turma_id);
+
                 $aluno->turmas()->updateExistingPivot($turma_id, [
                     'classificacao_id' => $request->classificacao_id[$posion], 'OUVINTE' => $request->OUVINTE[$posion],
                     'DECLARACAO' => $request->DECLARACAO[$posion], 'DECLARACAO_DATA' => $request->DECLARACAO_DATA[$posion],
                     'DECLARACAO_RESPONSAVEL' => $request->DECLARACAO_RESPONSAVEL[$posion], 'TRANSFERENCIA' => $request->TRANSFERENCIA[$posion],
                     'TRANSFERENCIA_DATA' => $request->TRANSFERENCIA_DATA[$posion], 'TRANSFERENCIA_RESPONSAVEL' => $request->TRANSFERENCIA_RESPONSAVEL[$posion],
-                    'TURMA_ANO' => '2020-02-02', 'updated_at' => NOW()
+                    'TURMA_ANO' => $turma->ANO, 'updated_at' => NOW()
                 ]);
             }
         }
@@ -142,13 +144,22 @@ class Aluno extends Model
                 $posion = $posionId[0];
                 $turma_id = $posionId[1];
 
+                $turma = Turma::find($turma_id);
+
                 $aluno->turmas()->attach($turma_id, [
                     'classificacao_id' => $request->classificacao_id_02[$posion], 'OUVINTE' => $request->OUVINTE_02[$posion],
                     'DECLARACAO' => $request->DECLARACAO_02[$posion], 'DECLARACAO_DATA' => $request->DECLARACAO_DATA_02[$posion],
                     'DECLARACAO_RESPONSAVEL' => $request->DECLARACAO_RESPONSAVEL_02[$posion], 'TRANSFERENCIA' => $request->TRANSFERENCIA_02[$posion],
                     'TRANSFERENCIA_DATA' => $request->TRANSFERENCIA_DATA_02[$posion], 'TRANSFERENCIA_RESPONSAVEL' => $request->TRANSFERENCIA_RESPONSAVEL_02[$posion],
-                    'TURMA_ANO' => '2020-02-02', 'updated_at' => NOW()
+                    'TURMA_ANO' => $turma->ANO, 'updated_at' => NOW()
                 ]);
+
+                $campo_final = "Vinculado(a)" .  " na Turma: " . " $turma->TURMA " . ' - ' . " $turma->UNICO" . '  (' . substr("$turma->ANO", 0, -6) . ')';
+
+                $usuario = Auth::user()->id;
+                DB::table('aluno_log')->insert(
+                    ['aluno_id' => $aluno->id, 'ACAO' => 'INSERIR', 'log_id' => '1', 'ACAO_DETALHES' => $campo_final, 'user_id' => $usuario,]
+                );
             }
         }
     }
@@ -162,6 +173,14 @@ class Aluno extends Model
                 $posionId = explode('/', $turma);
                 $turma_id = $posionId[1];;
                 $aluno->turmas()->detach($turma_id);
+
+                $turma = Turma::find($turma_id);
+                $campo_final = "Desvinculado(a)" .  " da Turma: " . " $turma->TURMA " . ' - ' . " $turma->UNICO" . '  (' . substr("$turma->ANO", 0, -6) . ')';
+
+                $usuario = Auth::user()->id;
+                DB::table('aluno_log')->insert(
+                    ['aluno_id' => $aluno->id, 'ACAO' => 'DELETE', 'log_id' => '3', 'ACAO_DETALHES' => $campo_final, 'user_id' => $usuario,]
+                );
             }
         }
     }

@@ -69,7 +69,8 @@ class TurmaAlunoController extends Controller
 
         $turmas = $aluno->turmasAvailable();
 
-        $classificacoes = $this->classificacao->get();
+        $classificacoes = $this->classificacao->where('ORDEM_I','LIKE','SIM')->get();
+      // dd($classificacoes);
 
         return view('turmas.alunos.show', compact('turmas', 'alunoTurmas', 'aluno', 'classificacoes'));
     }

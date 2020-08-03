@@ -36,19 +36,25 @@
 
 @section('css')
 <!-- DataTables CSS-->
-
 <link rel="stylesheet" href="{{url('css/alunos/index.css')}}">
+<link rel="stylesheet" href="{{url('css/alunos/index.css')}}">
+<link rel="stylesheet" href="{{url('css/bootstrap.css')}}">
+<link rel="stylesheet" href="{{url('css/dataTables.bootstrap4.min.css')}}">
+<link rel="stylesheet" href="{{url('css/responsive.bootstrap4.min.css')}}">
 @stop
 
 @section('js')
 <!-- jQuery -->
 <script src='{{url("js/jquery-3.5.1.js")}}' type="text/javascript"></script>
-
-
 <script src='{{url("js/alunos/maskedInput.js")}}'></script>
 <script src='{{url("/js/alunos/edit.js")}}'></script>
+<!-- DataTable -->
+<script src='{{url("js/dataTables/jquery.dataTables.min.js")}}'></script>
+<script src='{{url("js/dataTables/dataTables.bootstrap4.min.js")}}'></script>
+<script src='{{url("js/dataTables/dataTables.responsive.min.js")}}'></script>
+<script src='{{url("js/dataTables/responsive.bootstrap4.min.js")}}'></script>
+<script src='{{url("js/turmas/alunos/index.js")}}'></script>
 @stop
-
 
 
 <div class="card">
@@ -76,9 +82,9 @@
                             <select name="CERTIDAO_CIVIL" id="" class="form-control">
                                 @foreach($documentos as $documento)
                                 @if($documento->NAME =="$aluno->CERTIDAO_CIVIL")
-                                <option value="{{$documento->NOME}}" selected>{{$documento->NAME}}</option>
+                                <option value="{{$documento->NAME}}" selected>{{$documento->NAME}}</option>
                                 @else
-                                <option value="{{$documento->NOME}}">{{$documento->NAME}}</option>
+                                <option value="{{$documento->NAME}}">{{$documento->NAME}}</option>
                                 @endif
                                 @endforeach
                             </select>
@@ -362,46 +368,45 @@
                 <input type="hidden" id="usuario" value="{{ Auth::user()->name }}">
             </div>
 
-            <table class="table table-striped table-bordered">
+            <table class="table table-striped table-bordered dt-responsive nowrap" style="width:100%" id="example">
                 <thead>
                     <tr>
                         <th>Usuário</th>
                         <th>Ação</th>
-                        <th>Detalhes</th>
                         <th>Data</th>
+                        <th>Detalhes</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($logAlunos as $logAluno)
-                    @foreach ($logAluno->atualizacoes as $atualizacao)
-                    @endforeach
+                    @foreach ($logAluno->atualizacoes as $key => $atualizacoes)
                     <tr>
-                        <td style="white-space:nowrap">
-                            &nbsp;<span><input type='checkbox' name='aluno_selecionada[]' class='checkbox' value=''></span> &nbsp;
-                            <span>
-                                @foreach($users as $user)
-                                @if($atualizacao->pivot->user_id == "$user->id")
-                                {{$user->name}}
-                                @endif
-                                @endforeach
-                            </span>
+                        <td style="white-space: nowrap; ">
+                            @foreach($users as $user)
+                            @if($user->id == $atualizacoes->pivot->user_id)
+                            {{$user->name}}
+                            @endif
+                            @endforeach
                         </td>
-                        <td>{{$atualizacao->pivot->ACAO}} - {{$atualizacao->pivot->aluno_id}}</td>
-                        <td>{{$atualizacao->pivot->ACAO_DETALHES}}</td>
-                        <td style="white-space:nowrap">{{\Carbon\Carbon::parse($atualizacao->created_at)->format('d-m-Y')}}</td>
+                        <td>{{$atualizacoes->pivot->ACAO}}</td>
+                        <td>{{\Carbon\Carbon::parse($atualizacoes->pivot->DATA)->format('Y')}}</td>
+                        <td>{{$atualizacoes->pivot->ACAO_DETALHES}}</td>
+                        @endforeach
                     </tr>
                     @endforeach
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <th id="thTfoot">Usuário</th>
+                        <th>Ação</th>
+                        <th>Detalhes</th>
+                        <th>Data</th>
+                    </tr>
+                </tfoot>
             </table>
         </form>
     </div>
-    <div class="card-footer">
-        @if (isset($filters))
-        {!! $logAlunos->appends($filters)->links() !!}
-        @else
-        {!! $logAlunos->links() !!}
-        @endif
-    </div>
+
 </div>
 
 
