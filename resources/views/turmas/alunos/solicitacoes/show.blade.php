@@ -34,6 +34,7 @@
     .bi-tools {
         color: #8a6d3b !important;
     }
+
     .bi-trash {
         color: red;
     }
@@ -87,25 +88,23 @@
 
                 $txt = JSON.parse(data);
 
-                for (var i in $txt) {
+                var classificacao_id = $txt[0]["classificacao_id"];
+                var SOLICITANTE = $txt[0]["SOLICITANTE"];
 
-                    var SOLICITANTE = $txt[i]["SOLICITANTE"];
+                //  var DATA_SOLICITACAO = $txt[i]["DATA_SOLICITACAO"];
+                var TRANSFERENCIA_STATUS = $txt[0]["TRANSFERENCIA_STATUS"];
+                var DATA_TRANSFERENCIA_STATUS = $txt[0]["DATA_TRANSFERENCIA_STATUS"];
 
-                    //  var DATA_SOLICITACAO = $txt[i]["DATA_SOLICITACAO"];
-                    var TRANSFERENCIA_STATUS = $txt[i]["TRANSFERENCIA_STATUS"];
-                    var DATA_TRANSFERENCIA_STATUS = $txt[i]["DATA_TRANSFERENCIA_STATUS"];
+                var DECLARACAO = $txt[0]["DECLARACAO"];
+                var RESPONSAVEL_DECLARACAO = $txt[0]["RESPONSAVEL_DECLARACAO"];
+                var DATA_DECLARACAO = $txt[0]["DATA_DECLARACAO"];
 
-                    var DECLARACAO = $txt[i]["DECLARACAO"];
-                    var RESPONSAVEL_DECLARACAO = $txt[i]["RESPONSAVEL_DECLARACAO"];
-                    var DATA_DECLARACAO = $txt[i]["DATA_DECLARACAO"];
+                var TRANSFERENCIA = $txt[0]["TRANSFERENCIA"];
+                var RESPONSAVEL_TRANSFERENCIA = $txt[0]["RESPONSAVEL_TRANSFERENCIA"];
+                var DATA_TRANSFERENCIA = $txt[0]["DATA_TRANSFERENCIA"];
 
-                    var TRANSFERENCIA = $txt[i]["TRANSFERENCIA"];
-                    var RESPONSAVEL_TRANSFERENCIA = $txt[i]["RESPONSAVEL_TRANSFERENCIA"];
-                    var DATA_TRANSFERENCIA = $txt[i]["DATA_TRANSFERENCIA"];
+                // for (var i in $txt) {}
 
-                    var classificacao_id = $txt[i]["classificacao_id"];
-
-                }
                 $("#SOLICITANTE").val(SOLICITANTE)
                 // $("#DATA_SOLICITACAO").val(DATA_SOLICITACAO)
                 $("#TRANSFERENCIA_STATUS").val(TRANSFERENCIA_STATUS)
@@ -119,9 +118,16 @@
 
                 $("#classificacao_id").val(classificacao_id)
 
-                $('#myModal').delay(0).queue(function(next) {
+                function abreModal() {
+                    $("#myModal").modal({
+                        show: true
+                    });
+                }
+                setTimeout(abreModal, 1000);
+
+                /* $('#myModal').delay().queue(function(next) {
                     $(this).modal('show');
-                })
+                }) */
 
             },
             error: function() {
@@ -157,6 +163,11 @@
             var total = $('input[type=checkbox]:checked').length;
             if (total > 0) {
                 $('.botao').removeAttr('disabled');
+                var ch = $(this).val();
+
+                var retorno = ch.split("/");
+                // alert(retorno[0]);
+
             } else {
                 $('.botao').attr('disabled', 'disabled');
             }
@@ -246,13 +257,23 @@
                                                         <path fill-rule="evenodd" d="M12.146 6.354l-2.5-2.5.708-.708 2.5 2.5-.707.708zM3 10v.5a.5.5 0 0 0 .5.5H4v.5a.5.5 0 0 0 .5.5H5v.5a.5.5 0 0 0 .5.5H6v-1.5a.5.5 0 0 0-.5-.5H5v-.5a.5.5 0 0 0-.5-.5H3z" />
                                                     </svg><b>&nbsp;&nbsp;&nbsp;&nbsp;Alterar o Cadastro</b></a>
 
-                                                @if($turma->pivot->classificacao_id == 3)
-                                                <a class="dropdown-item" href="{{route('turmas.aluno.arquivo',['uuid' => $aluno->uuid,'turma_id' => $turma->id])}}" target='_self' title='Mover para o Arquivo'>
+                                                @if($turma->pivot->classificacao_id == 3 || $turma->pivot->classificacao_id == 4)
+                                                <a class="dropdown-item" href="{{route('turmas.aluno.arquivo',['uuid' => $aluno->uuid,'turma_id' => $turma->id])}}" target='_self' title='Mover para o Arquivo' data-toggle="modal" data-target="#myModal_02">
                                                     <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-folder-plus" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                                         <path fill-rule="evenodd" d="M9.828 4H2.19a1 1 0 0 0-.996 1.09l.637 7a1 1 0 0 0 .995.91H9v1H2.826a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31L.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3h3.982a2 2 0 0 1 1.992 2.181L15.546 8H14.54l.265-2.91A1 1 0 0 0 13.81 4H9.828zm-2.95-1.707L7.587 3H2.19c-.24 0-.47.042-.684.12L1.5 2.98a1 1 0 0 1 1-.98h3.672a1 1 0 0 1 .707.293z" />
                                                         <path fill-rule="evenodd" d="M13.5 10a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1H13v-1.5a.5.5 0 0 1 .5-.5z" />
                                                         <path fill-rule="evenodd" d="M13 12.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0v-2z" />
                                                     </svg><b>&nbsp;&nbsp;&nbsp;&nbsp;Mover para o Arquivo</b>
+                                                </a>
+                                                @else
+                                                @if($turma->pivot->classificacao_id == 8)
+                                                <a class="dropdown-item" href="#" target='_self' title='Aluno Arquivado'>
+                                                    <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-folder-plus" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                        <path fill-rule="evenodd" d="M9.828 4H2.19a1 1 0 0 0-.996 1.09l.637 7a1 1 0 0 0 .995.91H9v1H2.826a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31L.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3h3.982a2 2 0 0 1 1.992 2.181L15.546 8H14.54l.265-2.91A1 1 0 0 0 13.81 4H9.828zm-2.95-1.707L7.587 3H2.19c-.24 0-.47.042-.684.12L1.5 2.98a1 1 0 0 1 1-.98h3.672a1 1 0 0 1 .707.293z" />
+                                                        <path fill-rule="evenodd" d="M13.5 10a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1H13v-1.5a.5.5 0 0 1 .5-.5z" />
+                                                        <path fill-rule="evenodd" d="M13 12.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0v-2z" />
+                                                    </svg>
+                                                    <b>&nbsp;&nbsp;&nbsp;&nbsp;Aluno Arquivado</b>
                                                 </a>
                                                 @else
                                                 <a class="dropdown-item" href="#" target='_self' title='Não transferido ainda'>
@@ -261,9 +282,11 @@
                                                         <path fill-rule="evenodd" d="M13.5 10a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1H13v-1.5a.5.5 0 0 1 .5-.5z" />
                                                         <path fill-rule="evenodd" d="M13 12.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0v-2z" />
                                                     </svg>
-                                                    <b>&nbsp;&nbsp;&nbsp;&nbsp;Aluno não transferido ainda</b>
+                                                    <b>&nbsp;&nbsp;&nbsp;&nbsp;Aluno não Transferido</b>
                                                 </a>
                                                 @endif
+                                                @endif
+
                                                 <a class="dropdown-item" href="{{route('turmas.aluno.solicicao.destroy',['uuid' => $aluno->uuid,'turma_id' => $turma->id])}}" target='_self' title='Deletar o Aluno(a)' onclick="return confirmar()">
                                                     <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                                         <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
@@ -271,20 +294,23 @@
                                                     </svg>
                                                     &nbsp;&nbsp;&nbsp;&nbsp;<b>Deletar o Pedido de Transferência</b>
                                                 </a>
+
+
                                             </div>
-                                            &nbsp;<span><input type='checkbox' name='aluno_selecionado[]' for='NOME' class='checkbox' value='{{$aluno->uuid}}/{{$turma->id}}/{{$aluno->solicitacaos[$Key]->pivot->id}}}}'></span>
+                                            &nbsp;<span><input type='checkbox' name='aluno_selecionado[]' for='NOME' class='checkbox' value='{{$aluno->uuid}}/{{$turma->id}}/{{$aluno->solicitacaos[$Key]->pivot->id}}'></span>
                                             &nbsp;<span id="NOME">{{ $aluno->NOME }}</span>
                                         </div>
                                     </td>
                                     <td>{{$turma->TURMA}} {{$turma->UNICO}} ({{$turma->TURNO}}) - {{\Carbon\Carbon::parse($turma->ANO)->format('Y')}}</td>
                                     <td>
                                         @foreach($classificacoes as $classificacao)
-                                        @if($turma->pivot->classificacao_id == "$classificacao->id")
+
+                                        @if($classificacao->id == $turma->pivot->classificacao_id)
                                         {{$classificacao->STATUS}}
+                                        @else
                                         @endif
                                         @endforeach
                                     </td>
-
                                 </tr>
                                 @endforeach
                             </tbody>

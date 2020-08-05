@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Aluno;
 use App\Models\Classificacao;
 use App\Models\Turma;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -69,8 +70,8 @@ class TurmaAlunoController extends Controller
 
         $turmas = $aluno->turmasAvailable();
 
-        $classificacoes = $this->classificacao->where('ORDEM_I','LIKE','SIM')->get();
-      // dd($classificacoes);
+        $classificacoes = $this->classificacao->where('ORDEM_I', 'LIKE', 'SIM')->get();
+        //dd($classificacoes);
 
         return view('turmas.alunos.show', compact('turmas', 'alunoTurmas', 'aluno', 'classificacoes'));
     }
@@ -147,8 +148,16 @@ class TurmaAlunoController extends Controller
     */
     public function arquivar($uuid, $turma_id)
     {
-        dd($turma_id);
 
+        $aluno = $this->aluno->where('uuid', $uuid)->first();
+        $aluno->turmas()->updateExistingPivot($turma_id, ['classificacao_id' => '8', 'updated_at' => NOW()]);
 
+        /* LOG DOS ALUNOS */
+        $usuario = Auth::user()->id;
+        DB::table('aluno_log')->insert(
+            ['aluno_id' => $aluno->id, 'ACAO' => 'DELETE', 'log_id' => '3', 'ACAO_DETALHES' => 'ARQUIVADO', 'user_id' => $usuario,]
+        );
+
+        return redirect()->route('alunos.index')->with('message', 'Operações Realizadas com Sucesso!');
     }
 }

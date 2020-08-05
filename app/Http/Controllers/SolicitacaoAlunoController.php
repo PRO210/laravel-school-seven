@@ -73,7 +73,6 @@ class SolicitacaoAlunoController extends Controller
 
         return redirect()->action('SolicitacaoAlunoController@show', ['uuid' => $request->aluno_id])->with('message', 'Operação Realizada com Sucesso!');
     }
-
     /**
      * Display the specified resource.
      *
@@ -86,7 +85,9 @@ class SolicitacaoAlunoController extends Controller
 
         $classificacoes = $this->classificacao->get();
 
-        return view('turmas.alunos.solicitacoes.show', compact('solicitacoesAluno', 'classificacoes'));
+        $arquivo_passivo =array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','Y','Z');
+
+        return view('turmas.alunos.solicitacoes.show', compact('solicitacoesAluno', 'classificacoes','arquivo_passivo'));
     }
 
     /**
@@ -105,8 +106,9 @@ class SolicitacaoAlunoController extends Controller
         // $solicitacoesAluno = DB::table('aluno_solicitacao')->where('id', $pivot_id)->get();
         $solicitacoesAluno = DB::table('aluno_solicitacao')->where('aluno_solicitacao.id', $pivot_id)
             ->join('aluno_turma', 'aluno_solicitacao.turma_id', '=', 'aluno_turma.turma_id')
-            ->select('aluno_turma.classificacao_id', 'aluno_solicitacao.*')
+            ->select('aluno_turma.*', 'aluno_solicitacao.*')
             ->get();
+
 
         // foreach ($solicitacoesAluno as $value) {
         //     foreach ($value as $key => $value02) {

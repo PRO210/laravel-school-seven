@@ -225,10 +225,6 @@ php artisan db:seed
 php artisan db:seed --class=SolicitacaosTableSeeder
 php artisan migrate:refresh --step=1
 
-
-
-
-
 //
 // Cidades e Estados
 https://packagist.org/packages/blitsoftwares/laravel-states-and-cities
@@ -240,6 +236,9 @@ https://icons.getbootstrap.com/
 https://github.com/RobinHerbots/Inputmask
 //
 https://github.com/jquery-form/form
+//
+//
+php artisan make:migration create_arquivo_passivo_table
 
 
 

@@ -53,13 +53,17 @@
                             <label for="" class="col-sm-2 control-label">Status:</label>
                             <div class="col-sm-4">
                                 <select name="classificacao_id[]" id="" class=" form-control">
-                                    @foreach($classificacoes as $classificacao)
-                                    @if($classificacao->id == $turma->pivot->classificacao_id)
-                                    <option value="{{$classificacao->id}}" selected>{{$classificacao->STATUS}}</option>
+                                    @if($turma->pivot->classificacao_id == 3)
+                                    <option value="3" selected="">TRANSFERIDO </option>
                                     @else
-                                    <option value="{{$classificacao->id}}">{{$classificacao->STATUS}}</option>
+                                        @foreach($classificacoes as $classificacao)
+                                        @if($classificacao->id == $turma->pivot->classificacao_id)
+                                        <option value="{{$classificacao->id}}" selected="">{{$classificacao->STATUS}}</option>
+                                        @else
+                                        <option value="{{$classificacao->id}}">{{$classificacao->STATUS}} </option>
+                                        @endif
+                                        @endforeach
                                     @endif
-                                    @endforeach
                                 </select>
                             </div>
                         </div>

@@ -108,12 +108,13 @@
                         <div class="col-sm-9">
                             <select class="form-control" name="classificacao_id" id="classificacao_id">
                                 <option value="0" disabled="">ESCOLHA UMA DAS OPÇÕES ABAIXO</option>
-                                <option value="5" disabled="">APROVADO</option>
+                                <option value="9" disabled="">APROVADO</option>
                                 <option value="1">CURSANDO</option>
                                 <option value="4">DESISTENTE</option>
                                 <option value="2">ADIMITIDO DEPOIS</option>
                                 <option value="3">TRANSFERIDO</option>
-                                <option value="6" disabled="">REPROVADO</option>
+                                <option value="10" disabled="">REPROVADO</option>
+                                <option value="8" >ARQUIVADO</option>
                             </select>
                         </div>
                     </div>
@@ -135,4 +136,43 @@
         </div>
     </div>
 </div>
-<!-- Modal -->
+
+<!-- Modal  Arquivo Passivo--><!-- Modal  Arquivo Passivo--><!-- Modal  Arquivo Passivo-->
+<div class="modal fade" id="myModal_02" role="dialog" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+               <!--  <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label for="" class="control-label">Pastas</label>
+                        </div>
+                        <div class="col-sm-9">
+                            <select class="form-control" name="DECLARACAO" id="DECLARACAO">
+                                @foreach($arquivo_passivo as pastas)
+                                <option value="{{$pastas}}">{{$pastas}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <button type="submit" name="botao" value="arquivo_passivo" class="btn btn-success btn-block" onclick="return confirmar()">Salvar as Alterações </button>
+                        </div>
+                        <div class="col-sm-6">
+                            <button type="button" class="btn btn-warning btn-block" data-dismiss="modal">Voltar para as Solicitações</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

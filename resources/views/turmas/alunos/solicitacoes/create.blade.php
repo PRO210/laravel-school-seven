@@ -58,7 +58,7 @@
                     <button type="submit" name="botao" value="salvar" id="" class="btn btn-outline-success btn-block" title="Informe o Solicitante" onclick="return confirmar()"><b>Adicionar</b></button>
                 </div>
                 <div class="col-sm">
-                    <button type="submit" name="botao" value="pesquisar" class="btn btn-outline-danger btn-block" disabled><b>Pesquisar</b></button>
+                    <button type="submit" name="botao" value="pesquisar" class="btn btn-outline-danger btn-block" ><b>Pesquisar</b></button>
                 </div>
                 @endif
             </div>
