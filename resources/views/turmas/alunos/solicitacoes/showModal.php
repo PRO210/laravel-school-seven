@@ -4,7 +4,7 @@
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
-               <!--  <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+                <!--  <button type="button" class="close" data-dismiss="modal">&times;</button> -->
                 <h4 class="modal-title">Atualizar Pedido</h4>
             </div>
             <div class="modal-body">
@@ -106,7 +106,11 @@
                             <label for="" class="control-label">Status Atual do Aluno</label>
                         </div>
                         <div class="col-sm-9">
+                            <!-- <select class="form-control" name="classificacao_id" id="classificacao_id">
+                                <option value="8">ARQUIVADO</option>
+                            </select> -->
                             <select class="form-control" name="classificacao_id" id="classificacao_id">
+                                <option value="8">ARQUIVADO</option>
                                 <option value="0" disabled="">ESCOLHA UMA DAS OPÇÕES ABAIXO</option>
                                 <option value="9" disabled="">APROVADO</option>
                                 <option value="1">CURSANDO</option>
@@ -114,7 +118,6 @@
                                 <option value="2">ADIMITIDO DEPOIS</option>
                                 <option value="3">TRANSFERIDO</option>
                                 <option value="10" disabled="">REPROVADO</option>
-                                <option value="8" >ARQUIVADO</option>
                             </select>
                         </div>
                     </div>
@@ -127,7 +130,6 @@
                             <button type="button" class="btn btn-warning btn-block" data-dismiss="modal">Voltar para as Solicitações</button>
                         </div>
                     </div>
-
                 </div>
                 <div class="modal-footer">
 
@@ -136,14 +138,15 @@
         </div>
     </div>
 </div>
-
-<!-- Modal  Arquivo Passivo--><!-- Modal  Arquivo Passivo--><!-- Modal  Arquivo Passivo-->
+<!-- Modal  Arquivo Passivo-->
+<!-- Modal  Arquivo Passivo-->
+<!-- Modal  Arquivo Passivo-->
 <div class="modal fade" id="myModal_02" role="dialog" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
-               <!--  <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+                <!--  <button type="button" class="close" data-dismiss="modal">&times;</button> -->
                 <h4 class="modal-title"></h4>
             </div>
             <div class="modal-body">

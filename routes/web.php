@@ -55,16 +55,22 @@ Route::prefix('turmas/alunos')
         Route::get('/{uuid}/show', 'TurmaAlunoController@show')->name('turmas.aluno.show');
         Route::get('', 'TurmaAlunoController@index')->name('turmas.alunos');
     });
-/*
-         Turmas Alunos Solicitalções
-         */
+    /*
+    Turmas Alunos Solicitalções
+    */
 Route::prefix('turmas/alunos/solicitações')
     ->group(function () {
 
 
         Route::get('/{uuid}/arquivo/{turma_id}/destroy', 'SolicitacaoAlunoController@destroy')->name('turmas.aluno.solicicao.destroy');
 
+
+
         Route::get('/{uuid}/arquivo/{turma_id}', 'TurmaAlunoController@arquivar')->name('turmas.aluno.arquivo');
+
+        Route::any('/{uuid}/arquivo/{turma_id}', 'SolicitacaoAlunoController@retirar')->name('turmas.aluno.arquivo.retirar');
+
+
 
         Route::post('/solicicao.update', 'SolicitacaoAlunoController@update')->name('turmas.aluno.solicicao.update');
         Route::post('/solicicao.edit', 'SolicitacaoAlunoController@edit')->name('turmas.aluno.solicicao.edit');

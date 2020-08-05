@@ -81,13 +81,15 @@ class SolicitacaoAlunoController extends Controller
      */
     public function show($uuid)
     {
-        $solicitacoesAluno = $this->aluno->solicitacoesAluno($uuid);
+        $aluno = $this->aluno->where('uuid', $uuid)->first();
+
+        $solicitacoesAluno = $this->aluno->with(['turmas', 'solicitacaos'])->where('id', $aluno->id)->get();
 
         $classificacoes = $this->classificacao->get();
 
-        $arquivo_passivo =array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','Y','Z');
+        $arquivo_passivo = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'Y', 'Z');
 
-        return view('turmas.alunos.solicitacoes.show', compact('solicitacoesAluno', 'classificacoes','arquivo_passivo'));
+        return view('turmas.alunos.solicitacoes.show', compact('solicitacoesAluno', 'classificacoes', 'arquivo_passivo'));
     }
 
     /**
@@ -100,11 +102,13 @@ class SolicitacaoAlunoController extends Controller
     {
         foreach ($request->aluno_selecionado as $id) {
             $posionId = explode('/', $id);
+            $aluno_uuid = $posionId[0];
             $turma_id = $posionId[1];
-            $pivot_id = $posionId[2];
         }
+        $aluno = $this->aluno->where('uuid', $aluno_uuid)->first();
+
         // $solicitacoesAluno = DB::table('aluno_solicitacao')->where('id', $pivot_id)->get();
-        $solicitacoesAluno = DB::table('aluno_solicitacao')->where('aluno_solicitacao.id', $pivot_id)
+        $solicitacoesAluno = DB::table('aluno_solicitacao')->where('aluno_solicitacao.turma_id', $turma_id)->where('aluno_solicitacao.aluno_id', $aluno->id)
             ->join('aluno_turma', 'aluno_solicitacao.turma_id', '=', 'aluno_turma.turma_id')
             ->select('aluno_turma.*', 'aluno_solicitacao.*')
             ->get();
@@ -155,9 +159,9 @@ class SolicitacaoAlunoController extends Controller
         $hoje = date('d-m-Y');
         $ano = date('Y');
 
-        if ($hoje > 31-05-"$ano") {
+        if ($hoje > 31 - 05 - "$ano") {
             $classificacao = '2';
-        }else{
+        } else {
             $classificacao = '1';
         }
 
@@ -178,6 +182,13 @@ class SolicitacaoAlunoController extends Controller
 
         return redirect()->action('SolicitacaoAlunoController@index')->with('message', 'Operação Realizada com Sucesso!');
     }
-    //
-    //
+    /*
+    *Remover do Arquivo Passivo
+    */
+    public function retirar($uuid, $turma_id)
+    {
+        $aluno = $this->aluno->retirar($uuid, $turma_id);
+
+        return redirect()->action('TurmaAlunoController@index')->with('message', 'Operação Realizada com Sucesso!');
+    }
 }

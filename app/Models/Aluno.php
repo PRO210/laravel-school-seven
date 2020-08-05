@@ -281,57 +281,6 @@ class Aluno extends Model
         return $alunoSolicitacaoCont;
     }
     /*
-    Solicitações de transferência que o aluno pediu
-    */
-    public function solicitacoesAluno($uuid)
-    {
-        $aluno = DB::table('alunos')->where('uuid', $uuid)->first();
-
-        $alunos = DB::table('aluno_solicitacao')->where('aluno_id', $aluno->id)
-            ->join('alunos', 'aluno_solicitacao.aluno_id', '=', 'alunos.id')
-            ->join('turmas', 'aluno_solicitacao.turma_id', '=', 'turmas.id')
-            ->select(
-                'alunos.NOME',
-                'aluno_solicitacao.turma_id',
-                'aluno_solicitacao.aluno_id',
-                'aluno_solicitacao.solicitacao_id'
-            )
-            ->orderBy('aluno_solicitacao.created_at', 'DESC')->get();
-
-        $alunos_id[] = "";
-        $turmas_id[] = "";
-        $solicitacao_id[] = "";
-
-        foreach ($alunos as $dados) {
-            foreach ($dados as $key => $value) {
-                if ($key == "aluno_id") {
-                    array_push($alunos_id, $value);
-                }
-                if ($key == "turma_id") {
-                    array_push($turmas_id, $value);
-                }
-                if ($key == "solicitacao_id") {
-                    array_push($solicitacao_id, $value);
-                }
-            }
-        }
-        array_shift($alunos_id);
-        array_shift($turmas_id);
-        array_shift($solicitacao_id);
-
-        $solicitacoesAluno = collect([]);
-
-        foreach ($alunos_id as $key => $nulo) {
-            $solicitacoesAluno = $solicitacoesAluno->concat(Aluno::with(['turmas' => function ($query) use ($turmas_id, $key) {
-                $query->where('turma_id', $turmas_id[$key]);
-            }, 'solicitacaos' => function ($query) use ($solicitacao_id, $key) {
-                $query->where('solicitacao_id', $solicitacao_id[$key]);
-            }])->where('id', $alunos_id[$key])->get());
-        }
-
-        return $solicitacoesAluno;
-    }
-    /*
     Listar os alunos transferidos
      */
     public function transferidos()
@@ -386,7 +335,6 @@ class Aluno extends Model
             $posionId = explode('/', $id);
             $aluno_uuid = $posionId[0];
             $turma_id = $posionId[1];
-            $pivot_id = $posionId[2];
         }
         $aluno = Aluno::where('uuid', $aluno_uuid)->first();
 
@@ -401,7 +349,7 @@ class Aluno extends Model
         }
 
         $aluno_solicitacao = DB::table('aluno_solicitacao')
-            ->where('id', $pivot_id)
+            ->where('aluno_solicitacao.turma_id', $turma_id)->where('aluno_solicitacao.aluno_id', $aluno->id)
             ->update([
                 'TRANSFERENCIA_STATUS' => $request->TRANSFERENCIA_STATUS, 'DATA_TRANSFERENCIA_STATUS' => "$request->DATA_TRANSFERENCIA_STATUS",
                 'DECLARACAO' => "$request->DECLARACAO", 'RESPONSAVEL_DECLARACAO' => "$request->RESPONSAVEL_DECLARACAO",
@@ -411,5 +359,32 @@ class Aluno extends Model
         $aluno_turma = DB::table('aluno_turma')
             ->where('turma_id', $turma_id)->where('aluno_id', $aluno->id)
             ->update(['classificacao_id' => $request->classificacao_id, 'updated_at' => NOW()]);
+    }
+    /*
+   *Remover do Arquivo Passivo
+    */
+    public function retirar($uuid, $turma_id)
+    {
+        $hoje = date('d-m-Y');
+        $ano = date('Y');
+
+        if ($hoje > 31 - 05 - "$ano") {
+            $classificacao = '2';
+        } else {
+            $classificacao = '1';
+        }
+
+        $aluno = Aluno::where('uuid', $uuid)->first();
+
+        $aluno_turma = DB::table('aluno_turma')
+            ->where('turma_id', $turma_id)->where('aluno_id', $aluno->id)
+            ->update(['classificacao_id' => $classificacao, 'EXCLUIDO_PASTA' => '---', 'updated_at' => NOW()]);
+
+        /* LOG DO ALUNO */
+        $usuario = Auth::user()->id;
+        DB::table('aluno_log')->insert([
+            'aluno_id' => $aluno->id, 'ACAO' => 'INSERIR',
+            'ACAO_DETALHES' => 'RETIRADO DO ARQUIVO', 'log_id' => '1', 'user_id' => $usuario,
+        ]);
     }
 }
