@@ -83,8 +83,9 @@ class SolicitacaoAlunoController extends Controller
     {
         $aluno = $this->aluno->where('uuid', $uuid)->first();
 
-        $solicitacoesAluno = $this->aluno->with(['turmas', 'solicitacaos'])->where('id', $aluno->id)->get();
+        $solicitacoesAluno = $this->aluno->with(['solicitacaos'])->where('id', $aluno->id)->get();
 
+        ///dd($solicitacoesAluno);
         $classificacoes = $this->classificacao->get();
 
         $arquivo_passivo = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'Y', 'Z');
@@ -102,24 +103,17 @@ class SolicitacaoAlunoController extends Controller
     {
         foreach ($request->aluno_selecionado as $id) {
             $posionId = explode('/', $id);
-            $aluno_uuid = $posionId[0];
-            $turma_id = $posionId[1];
+            // $aluno_uuid = $posionId[0];
+            // $turma_id = $posionId[1];
+            $pivot_id = $posionId[2];
         }
-        $aluno = $this->aluno->where('uuid', $aluno_uuid)->first();
+        //  $aluno = $this->aluno->where('uuid', $aluno_uuid)->first();
 
-        // $solicitacoesAluno = DB::table('aluno_solicitacao')->where('id', $pivot_id)->get();
-        $solicitacoesAluno = DB::table('aluno_solicitacao')->where('aluno_solicitacao.turma_id', $turma_id)->where('aluno_solicitacao.aluno_id', $aluno->id)
+        $solicitacoesAluno = DB::table('aluno_solicitacao')->where('aluno_solicitacao.id', $pivot_id)
             ->join('aluno_turma', 'aluno_solicitacao.turma_id', '=', 'aluno_turma.turma_id')
             ->select('aluno_turma.*', 'aluno_solicitacao.*')
             ->get();
 
-
-        // foreach ($solicitacoesAluno as $value) {
-        //     foreach ($value as $key => $value02) {
-        //         $html[$key][] = $value02;
-        //         // echo "$value02" . ' , ';
-        //     }
-        // }
         // echo json_encode($html);
         // $("#SOLICITANTE").val(response.SOLICITANTE)
 
@@ -138,6 +132,7 @@ class SolicitacaoAlunoController extends Controller
         if (!isset($request->aluno_selecionado)) {
             return redirect()->back()->with('error', 'Falha em Salvar os Dados!');
         }
+        // dd($request);
 
         $solicitacoesUpdate = $this->aluno->solicitacoesUpdate($request);
 

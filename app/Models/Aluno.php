@@ -50,7 +50,7 @@ class Aluno extends Model
 
     public function solicitacaos()
     {
-        return $this->belongsToMany(Solicitacao::class, 'aluno_solicitacao')->withPivot([
+        return $this->belongsToMany(Turma::class, 'aluno_solicitacao')->withPivot([
             'aluno_id', 'SOLICITANTE', 'solicitacao_id', 'turma_id', 'aluno_id', 'id', 'TRANSFERENCIA_STATUS',
             'DATA_TRANSFERENCIA_STATUS', 'RESPONSAVEL_TRANSFERENCIA', 'DATA_TRANSFERENCIA', 'TRANSFERENCIA',
             'DATA_DECLARACAO', 'DECLARACAO', 'RESPONSAVEL_DECLARACAO'
@@ -258,13 +258,15 @@ class Aluno extends Model
     */
     public function solicitacaoAttach($request, $aluno)
     {
-        $aluno->solicitacaos()->attach('1', [
-            'DATA_SOLICITACAO' => $request->DATA_SOLICITACAO, 'SOLICITANTE' => $request->SOLICITANTE, 'turma_id' => $request->turma_id
+        $solicitacaoAttach = DB::table('aluno_solicitacao')->insert([
+            'aluno_id' => $aluno->id, 'DATA_SOLICITACAO' => $request->DATA_SOLICITACAO, 'SOLICITANTE' => $request->SOLICITANTE, 'turma_id' => $request->turma_id,
+            'solicitacao_id' => 1
         ]);
+
         /* LOG DO ALUNO */
         $usuario = Auth::user()->id;
         DB::table('aluno_log')->insert(
-            ['aluno_id' => $aluno->id, 'ACAO' => 'INSERIR', 'ACAO_DETALHES' => 'SOLICITAÇÃO DE TRANSFERÊNCIA', 'log_id' => '1', 'user_id' => $usuario,]
+            ['aluno_id' => $aluno->id, 'ACAO' => 'INSERIR', 'ACAO_DETALHES' => 'SOLICITAÇÃO DE TRANSFERÊNCIA', 'log_id' => '1', 'user_id' => $usuario]
         );
     }
     /*

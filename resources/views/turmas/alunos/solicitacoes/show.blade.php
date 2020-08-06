@@ -103,7 +103,7 @@
                 var RESPONSAVEL_TRANSFERENCIA = $txt[0]["RESPONSAVEL_TRANSFERENCIA"];
                 var DATA_TRANSFERENCIA = $txt[0]["DATA_TRANSFERENCIA"];
 
-                // for (var i in $txt) {}
+               // for (var i in $txt) {}
 
                 $("#SOLICITANTE").val(SOLICITANTE)
                 // $("#DATA_SOLICITACAO").val(DATA_SOLICITACAO)
@@ -299,7 +299,7 @@
                                                     &nbsp;&nbsp;&nbsp;&nbsp;<b>Deletar o Pedido de Transferência</b>
                                                 </a>
                                             </div>
-                                            &nbsp;<span><input type='checkbox' name='aluno_selecionado[]' for='NOME' class='checkbox' value='{{$aluno->uuid}}/{{$aluno->turmas[$Key]->id}}'></span>
+                                            &nbsp;<span><input type='checkbox' name='aluno_selecionado[]' for='NOME' class='checkbox' value='{{$aluno->uuid}}/{{$aluno->turmas[$Key]->id}}/{{$solicitacao->pivot->id}}'></span>
                                             &nbsp;<span id="NOME">{{ $aluno->NOME }} </span>
                                         </div>
                                     </td>
@@ -342,6 +342,7 @@
     </section>
 
     @include('turmas.alunos.solicitacoes.showModal')
+
     <div style="margin-bottom: 60px;">
         <input type="hidden" id="usuario" value="{{ Auth::user()->name }}">
     </div>

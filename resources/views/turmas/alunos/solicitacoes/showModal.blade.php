@@ -106,9 +106,6 @@
                             <label for="" class="control-label">Status Atual do Aluno</label>
                         </div>
                         <div class="col-sm-9">
-                            <!-- <select class="form-control" name="classificacao_id" id="classificacao_id">
-                                <option value="8">ARQUIVADO</option>
-                            </select> -->
                             <select class="form-control" name="classificacao_id" id="classificacao_id">
                                 <option value="8">ARQUIVADO</option>
                                 <option value="0" disabled="">ESCOLHA UMA DAS OPÇÕES ABAIXO</option>
@@ -139,8 +136,6 @@
     </div>
 </div>
 <!-- Modal  Arquivo Passivo-->
-<!-- Modal  Arquivo Passivo-->
-<!-- Modal  Arquivo Passivo-->
 <div class="modal fade" id="myModal_02" role="dialog" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <!-- Modal content-->
@@ -156,8 +151,8 @@
                             <label for="" class="control-label">Pastas</label>
                         </div>
                         <div class="col-sm-9">
-                            <select class="form-control" name="DECLARACAO" id="DECLARACAO">
-                                @foreach($arquivo_passivo as pastas)
+                            <select class="form-control" name="EXCLUIDO_PASTA" id="EXCLUIDO_PASTA">
+                                @foreach($arquivo_passivo as $pastas)
                                 <option value="{{$pastas}}">{{$pastas}}</option>
                                 @endforeach
                             </select>
