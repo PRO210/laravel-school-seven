@@ -32,7 +32,7 @@ class Aluno extends Model
     */
     public function atualizacoes()
     {
-        return $this->belongsToMany(Log::class, 'aluno_log')->withPivot(['ACAO', 'ACAO_DETALHES', 'user_id', 'aluno_id']);
+        return $this->belongsToMany(Log::class, 'aluno_log')->withPivot(['ACAO', 'ACAO_DETALHES', 'user_id', 'aluno_id','created_at']);
     }
 
     public function turmas()
@@ -387,6 +387,29 @@ class Aluno extends Model
         DB::table('aluno_log')->insert([
             'aluno_id' => $aluno->id, 'ACAO' => 'INSERIR',
             'ACAO_DETALHES' => 'RETIRADO DO ARQUIVO', 'log_id' => '1', 'user_id' => $usuario,
+        ]);
+    }
+    /*
+   *Colocar no Arquivo Passivo
+    */
+    public function colocar($request)
+    {
+        foreach ($request->aluno_selecionado as $id) {
+            $posionId = explode('/', $id);
+            $aluno_uuid = $posionId[0];
+            $turma_id = $posionId[1];
+        }
+        $aluno = Aluno::where('uuid', $aluno_uuid)->first();
+
+        $aluno_turma = DB::table('aluno_turma')
+            ->where('turma_id', $turma_id)->where('aluno_id', $aluno->id)
+            ->update(['classificacao_id' => '8', 'EXCLUIDO_PASTA' => $request->EXCLUIDO_PASTA, 'updated_at' => NOW()]);
+
+        /* LOG DO ALUNO */
+        $usuario = Auth::user()->id;
+        DB::table('aluno_log')->insert([
+            'aluno_id' => $aluno->id, 'ACAO' => 'INSERIR',
+            'ACAO_DETALHES' => 'ARQUIVADO', 'log_id' => '1', 'user_id' => $usuario,
         ]);
     }
 }

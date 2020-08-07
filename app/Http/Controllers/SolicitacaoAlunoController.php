@@ -133,6 +133,11 @@ class SolicitacaoAlunoController extends Controller
             return redirect()->back()->with('error', 'Falha em Salvar os Dados!');
         }
         // dd($request);
+        if ($request->botao == "arquivo_passivo") {
+
+            $aluno = $this->aluno->colocar($request);
+            return redirect()->route('alunos.index')->with('message', 'Operação Realizada com Sucesso!');
+        }
 
         $solicitacoesUpdate = $this->aluno->solicitacoesUpdate($request);
 

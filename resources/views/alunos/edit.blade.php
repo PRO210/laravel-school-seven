@@ -389,7 +389,7 @@
                             @endforeach
                         </td>
                         <td>{{$atualizacoes->pivot->ACAO}}</td>
-                        <td>{{\Carbon\Carbon::parse($atualizacoes->pivot->DATA)->format('Y')}}</td>
+                        <td>{{\Carbon\Carbon::parse($atualizacoes->pivot->created_at)->format('m/d/Y')}}</td>
                         <td>{{$atualizacoes->pivot->ACAO_DETALHES}}</td>
                         @endforeach
                     </tr>

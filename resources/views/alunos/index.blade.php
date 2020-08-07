@@ -1,8 +1,9 @@
 @extends('adminlte::page')
 
-@section('title', 'alunos')
+@section('title', 'Alunos')
 
 @section('content_header')
+
 <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">Dashboard</a></li>
     <li class="breadcrumb-item active"><a href="{{ route('alunos.index') }}" class="active">Alunos</a></li>
@@ -14,7 +15,14 @@
 
 @section('content')
 
-@include('alerts')
+@section('css')
+<!-- DataTables CSS-->
+<link rel="stylesheet" href="{{url('css/alunos/index.css')}}">
+<link rel="stylesheet" href="{{url('css/alunos/index.css')}}">
+<link rel="stylesheet" href="{{url('css/bootstrap.css')}}">
+<link rel="stylesheet" href="{{url('css/dataTables.bootstrap4.min.css')}}">
+<link rel="stylesheet" href="{{url('css/responsive.bootstrap4.min.css')}}">
+
 <style>
     .paddingButton {
         border-color: aliceblue;
@@ -44,59 +52,30 @@
     }
 </style>
 
+@stop
+
 @section('js')
-
-<script>
-    //Confirmar se pode salvar
-    function confirmar() {
-        var u = $('#usuario').val();
-        var r = confirm("Já Posso Enviar " + u + "?\n\nLembre-se que isso apagara todos os registros do Aluno(a)!");
-        if (r == true) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-    //Marcar ou Desmarcar todos os checkbox
-    $(document).ready(function() {
-        $('.selecionar').click(function() {
-            if (this.checked) {
-                $('.checkbox').each(function() {
-                    this.checked = true;
-                });
-            } else {
-                $('.checkbox').each(function() {
-                    this.checked = false;
-                });
-            }
-        });
-    });
-    //Valida o botão salvar com excel para não ir vázio
-    $('input[type=checkbox]').on('change', function() {
-        var total = $('input[type=checkbox]:checked').length;
-        if (total > 0) {
-            $('#btEditBloc').removeAttr('disabled');
-        } else {
-            $('#btEditBloc').attr('disabled', 'disabled');
-        }
-    });
-    //Deixa os checkbox mais bonitos
-    $(document).ready(function () {
-        $(":checkbox").wrap("<span style='background-color:burlywood;padding: 4px; border-radius: 3px;padding-bottom: 4px;'>");
-    });
-</script>
-
+<!-- jQuery -->
+<script src='{{url("js/jquery-3.5.1.js")}}' type="text/javascript"></script>
+<script src='{{url("js/alunos/maskedInput.js")}}'></script>
+<script src='{{url("/js/alunos/edit.js")}}'></script>
+<!-- DataTable -->
+<script src='{{url("js/dataTables/jquery.dataTables.min.js")}}'></script>
+<script src='{{url("js/dataTables/dataTables.bootstrap4.min.js")}}'></script>
+<script src='{{url("js/dataTables/dataTables.responsive.min.js")}}'></script>
+<script src='{{url("js/dataTables/responsive.bootstrap4.min.js")}}'></script>
+<script src='{{url("js/turmas/alunos/index.js")}}'></script>
 @stop
 
 <div class="card">
-    <!-- <div class="card-header"></div> -->
-    <div class="card-body">
-        <form action="{{ route('alunos.search') }}" method="POST" class="form form-inline" id="form">
-            @csrf
-            <input type="text" name="filter" placeholder="Nome" class="form-control" value="{{ $filters['filter'] ?? '' }}">&nbsp;
+    <form action="{{ route('alunos.search') }}" method="post" class="">
+        @csrf
+        <div class="card-header">
+            <input type="text" name="filter" placeholder="Nome" class="" value="{{ $filters['filter'] ?? '' }}">&nbsp;
             <button type="submit" class="btn btn-dark" name="botao">Filtrar</button>&nbsp;
-
-            <table class="table table-striped table-bordered">
+        </div>
+        <div class="card-body">
+            <table class="table table-striped table-bordered dt-responsive nowrap" style="width:100%" id="example">
                 <thead>
                     <tr>
                         <th>
@@ -107,13 +86,13 @@
                                     </svg>
                                 </button>
                                 <div class="dropdown-menu">
-                                    &nbsp; &nbsp;<button type="submit" class="btn btn-outline-primary" name="botao" value="excel" id="btEditBloc" disabled title="Marque ao menos uma caixinha">Salvar em Excel</button>
+                                    &nbsp; &nbsp;<button type="submit" class="btn btn-outline-primary botao" name="botao" value="excel" id="btEditBloc" disabled title="Marque ao menos uma caixinha">Salvar em Excel</button>
                                 </div>
                                 &nbsp;
-                                <span><input type="checkbox" name="" class="checkbox selecionar" id=""></span>
-                                <span>NOME</span>
+                                <span><input type="checkbox" name="" class="checkbox selecionar" id="selecionar"></span>
                             </div>
                         </th>
+                        <th>ALUNO</th>
                         <th>NASCIMENTO</th>
                         <th>MÃE</th>
                     </tr>
@@ -121,6 +100,7 @@
                 <tbody>
                     @foreach ($alunos as $aluno)
                     <tr>
+                        <th></th>
                         <td>
                             <div class="dropdown">
                                 <button type="button" class="btn btn-outline-success paddingButton" data-toggle="dropdown">
@@ -152,7 +132,7 @@
                                     </a>
                                 </div>
                                 &nbsp;<span><input type='checkbox' name='aluno_selecionado[]' class='checkbox' value='{{$aluno->uuid}}'></span>
-                                &nbsp;<span>{{ $aluno->NOME }}</span>
+                                &nbsp;<span id="NOME">{{$aluno->NOME}}</span>
                             </div>
                         </td>
                         <td>{{\Carbon\Carbon::parse($aluno->NASCIMENTO)->format('d/m/Y')}}</td>
@@ -160,18 +140,18 @@
                     </tr>
                     @endforeach
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <th id="thTfoot"></th>
+                        <th>ALUNO</th>
+                        <th>NASCIMENTO</th>
+                        <th>MÃE</th>
+                    </tr>
+                </tfoot>
             </table>
-        </form>
-    </div>
-    <div class="card-footer">
-        @if (isset($filters))
-        {!! $alunos->appends($filters)->links() !!}
-        @else
-        {!! $alunos->links() !!}
-        @endif
-    </div>
+    </form>
 </div>
-
+</div>
 <div style="margin-bottom: 60px;">
     <input type="hidden" id="usuario" value="{{ Auth::user()->name }}">
 </div>

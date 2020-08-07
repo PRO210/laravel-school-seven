@@ -106,14 +106,15 @@
                             <label for="" class="control-label">Status Atual do Aluno</label>
                         </div>
                         <div class="col-sm-9">
-                            <select class="form-control" name="classificacao_id" id="classificacao_id">
-                                <option value="8">ARQUIVADO</option>
+                            <select class="form-control" name="classificacao_id" id="classificacao_id" >
+
                                 <option value="0" disabled="">ESCOLHA UMA DAS OPÇÕES ABAIXO</option>
-                                <option value="9" disabled="">APROVADO</option>
                                 <option value="1">CURSANDO</option>
-                                <option value="4">DESISTENTE</option>
                                 <option value="2">ADIMITIDO DEPOIS</option>
                                 <option value="3">TRANSFERIDO</option>
+                                <option value="4">DESISTENTE</option>
+                                <option value="8" >ARQUIVADO</option>
+                                <option value="9" disabled="">APROVADO</option>
                                 <option value="10" disabled="">REPROVADO</option>
                             </select>
                         </div>
@@ -161,7 +162,7 @@
                     <br>
                     <div class="row">
                         <div class="col-sm-6">
-                            <button type="submit" name="botao" value="arquivo_passivo" class="btn btn-success btn-block" onclick="return confirmar()">Salvar as Alterações </button>
+                            <button type="submit" name="botao" value="arquivo_passivo" id="arquivo_passivo" class="btn btn-success btn-block" onclick="return confirmar()" disabled title="Marque ao menos uma das caixinhas">Salvar as Alterações </button>
                         </div>
                         <div class="col-sm-6">
                             <button type="button" class="btn btn-warning btn-block" data-dismiss="modal">Voltar para as Solicitações</button>

@@ -39,6 +39,14 @@
         color: red;
     }
 
+    .bi-folder-plus {
+        color: orange;
+    }
+
+    .bi-folder-minus {
+        color: green;
+    }
+
     .botao {
         margin: 6px;
         min-width: 180px;
@@ -103,7 +111,7 @@
                 var RESPONSAVEL_TRANSFERENCIA = $txt[0]["RESPONSAVEL_TRANSFERENCIA"];
                 var DATA_TRANSFERENCIA = $txt[0]["DATA_TRANSFERENCIA"];
 
-               // for (var i in $txt) {}
+                // for (var i in $txt) {}
 
                 $("#SOLICITANTE").val(SOLICITANTE)
                 // $("#DATA_SOLICITACAO").val(DATA_SOLICITACAO)
@@ -118,6 +126,11 @@
 
                 $("#classificacao_id").val(classificacao_id)
 
+                if (classificacao_id === 8) {
+                    for (let index = 0; index < 5; index++) {
+                        $('#classificacao_id option[value="' + index + '"]').attr("disabled", true);
+                    }
+                }
 
                 function abreModal() {
                     $("#myModal").modal({
@@ -164,6 +177,7 @@
             var total = $('input[type=checkbox]:checked').length;
             if (total > 0) {
                 $('.botao').removeAttr('disabled');
+                $('#arquivo_passivo').removeAttr('disabled');
                 var ch = $(this).val();
 
                 var retorno = ch.split("/");
@@ -171,6 +185,7 @@
 
             } else {
                 $('.botao').attr('disabled', 'disabled');
+                $('#arquivo_passivo').attr('disabled', 'disabled');
             }
         });
     });
@@ -269,7 +284,7 @@
 
                                                 @if($aluno->turmas[$Key]->pivot->classificacao_id == 8)
                                                 <a class="dropdown-item" href="{{route('turmas.aluno.arquivo.retirar',['uuid' => $aluno->uuid,'turma_id' => $aluno->turmas[$Key]->id])}}" target='_self' title='Remover do Arquivo'>
-                                                    <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-folder-plus" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                    <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-folder-minus" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                                         <path fill-rule="evenodd" d="M9.828 4H2.19a1 1 0 0 0-.996 1.09l.637 7a1 1 0 0 0 .995.91H9v1H2.826a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31L.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3h3.982a2 2 0 0 1 1.992 2.181L15.546 8H14.54l.265-2.91A1 1 0 0 0 13.81 4H9.828zm-2.95-1.707L7.587 3H2.19c-.24 0-.47.042-.684.12L1.5 2.98a1 1 0 0 1 1-.98h3.672a1 1 0 0 1 .707.293z" />
                                                         <path fill-rule="evenodd" d="M13.5 10a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1H13v-1.5a.5.5 0 0 1 .5-.5z" />
                                                         <path fill-rule="evenodd" d="M13 12.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0v-2z" />
@@ -280,10 +295,10 @@
                                                 @else
 
                                                 <a class="dropdown-item" href="#" target='_self' title='Não transferido ainda'>
-                                                    <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-folder-plus" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                                        <path fill-rule="evenodd" d="M9.828 4H2.19a1 1 0 0 0-.996 1.09l.637 7a1 1 0 0 0 .995.91H9v1H2.826a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31L.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3h3.982a2 2 0 0 1 1.992 2.181L15.546 8H14.54l.265-2.91A1 1 0 0 0 13.81 4H9.828zm-2.95-1.707L7.587 3H2.19c-.24 0-.47.042-.684.12L1.5 2.98a1 1 0 0 1 1-.98h3.672a1 1 0 0 1 .707.293z" />
-                                                        <path fill-rule="evenodd" d="M13.5 10a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1H13v-1.5a.5.5 0 0 1 .5-.5z" />
-                                                        <path fill-rule="evenodd" d="M13 12.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0v-2z" />
+                                                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-x-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                        <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                                                        <path fill-rule="evenodd" d="M11.854 4.146a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708-.708l7-7a.5.5 0 0 1 .708 0z" />
+                                                        <path fill-rule="evenodd" d="M4.146 4.146a.5.5 0 0 0 0 .708l7 7a.5.5 0 0 0 .708-.708l-7-7a.5.5 0 0 0-.708 0z" />
                                                     </svg>
                                                     <b>&nbsp;&nbsp;&nbsp;&nbsp;Aluno não Transferido</b>
                                                 </a>

@@ -28,14 +28,3 @@ tfoot input {
 
     }
 }
-
-@media (min-width:720px) {
-    #example_filter {
-        float: right;
-        /* color: blue; */
-
-    }
-    #example_paginate{
-        float: right;
-    }
-}

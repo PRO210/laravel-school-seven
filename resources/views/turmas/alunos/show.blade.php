@@ -54,15 +54,17 @@
                             <div class="col-sm-4">
                                 <select name="classificacao_id[]" id="" class=" form-control">
                                     @if($turma->pivot->classificacao_id == 3)
-                                    <option value="3" selected="">TRANSFERIDO </option>
+                                    <option value="3" selected="">TRANSFERIDO</option>
+                                    @elseif($turma->pivot->classificacao_id == 8)
+                                    <option value="8" selected="">ARQUIVADO</option>
                                     @else
-                                        @foreach($classificacoes as $classificacao)
-                                        @if($classificacao->id == $turma->pivot->classificacao_id)
-                                        <option value="{{$classificacao->id}}" selected="">{{$classificacao->STATUS}}</option>
-                                        @else
-                                        <option value="{{$classificacao->id}}">{{$classificacao->STATUS}} </option>
-                                        @endif
-                                        @endforeach
+                                    @foreach($classificacoes as $classificacao)
+                                    @if($classificacao->id == $turma->pivot->classificacao_id)
+                                    <option value="{{$classificacao->id}}" selected="">{{$classificacao->STATUS}}</option>
+                                    @else
+                                    <option value="{{$classificacao->id}}">{{$classificacao->STATUS}} </option>
+                                    @endif
+                                    @endforeach
                                     @endif
                                 </select>
                             </div>
