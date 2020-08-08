@@ -8,6 +8,7 @@ use App\Models\Aluno;
 use App\Models\Classificacao;
 use App\Models\Documento;
 use App\Models\Log;
+use App\Models\Turma;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,11 +18,12 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class AlunoController extends Controller
 {
-    private $repository, $classificacao, $user;
+    private $repository, $classificacao, $user, $turma;
 
-    public function __construct(Aluno $aluno, Classificacao $classificacao, Documento $documento, User $user)
+    public function __construct(Aluno $aluno, Turma $turma, Classificacao $classificacao, Documento $documento, User $user)
     {
         $this->repository = $aluno;
+        $this->turma = $turma;
         $this->classificacao = $classificacao;
         $this->documento = $documento;
         $this->user = $user;
@@ -117,7 +119,7 @@ class AlunoController extends Controller
     {
         $aluno = $this->repository->where('uuid', $uuid)->first();
 
-        $logAlunos= $this->repository->with(['atualizacoes'])->where('id', $aluno->id)->latest()->paginate(5);
+        $logAlunos = $this->repository->with(['atualizacoes'])->where('id', $aluno->id)->latest()->paginate(5);
 
 
         $users = $this->user->all();
@@ -186,13 +188,40 @@ class AlunoController extends Controller
             return Excel::download(new AlunosExport($request->aluno_selecionado), 'Alunos.xlsx');
         }
 
+        if ($request->botao == "update") {
+
+            $alunos = collect([]);
+            foreach ($request->aluno_selecionado as $uuid) {
+                $alunos = $alunos->concat(Aluno::where('uuid', $uuid)->get());
+            }
+
+            $turmas = $this->turma->get();
+            $classificacoes = $this->classificacao->where('ORDEM_III', 'LIKE', 'SIM')->get();
+
+            return view('alunos.editBloco', compact('turmas', 'alunos', 'classificacoes'));
+        }
+
         $filters = $request->except('_token');
 
         $alunos = $this->repository->search($request->filter);
 
-        return view('alunos.index', [
-            'alunos' => $alunos,
-            'filters' => $filters,
-        ]);
+        return view('alunos.index', ['alunos' => $alunos, 'filters' => $filters,]);
     }
+
+    public function upBlocoAttach(Request $request)
+    {
+        $alunos = $this->repository->upBlocoAttach($request);
+
+        return redirect()->route('turmas.alunos')->with('message', 'Operação Realizada com Sucesso!');
+    }
+
+
+
+
+
+
+
+
+    //
+    //
 }

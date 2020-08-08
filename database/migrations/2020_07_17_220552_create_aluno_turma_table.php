@@ -21,7 +21,7 @@ class CreateAlunoTurmaTable extends Migration
             $table->bigInteger('classificacao_id')->unsigned();
 
             $table->date('TURMA_ANO')->nullable();
-            $table->string('OUVINTE')->nullable();
+            $table->string('OUVINTE')->default('NAO');
             $table->string('DECLARACAO')->nullable();
             $table->date('DECLARACAO_DATA')->nullable();
             $table->string('DECLARACAO_RESPONSAVEL')->nullable();

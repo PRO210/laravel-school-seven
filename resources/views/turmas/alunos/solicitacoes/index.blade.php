@@ -165,12 +165,16 @@
                                     </td>
                                     <td>
                                         {{$aluno->solicitacaos[$Key]->pivot->SOLICITANTE}}/
-                                        {{\Carbon\Carbon::parse($aluno->solicitacaos[$Key]->pivot->DATA_SOLICITACAO )->format('d-m-Y')}}
+                                        {{\Carbon\Carbon::parse($aluno->solicitacaos[$Key]->pivot->DATA_SOLICITACAO)->format('d-m-Y')}}
                                     </td>
-                                    <td>{{\Carbon\Carbon::parse($aluno->solicitacaos[$Key]->pivot->DATA_TRANSFERENCIA_STATUS )->format('d-m-Y')}}
+                                    <td>
+                                        @if(!$aluno->solicitacaos[$Key]->pivot->DATA_TRANSFERENCIA_STATUS == '')
+                                        {{\Carbon\Carbon::parse($aluno->solicitacaos[$Key]->pivot->DATA_TRANSFERENCIA_STATUS)->format('d-m-Y')}}
+                                        @endif
+                                    </td>
                                     <td>{{$aluno->solicitacaos[$Key]->pivot->DECLARACAO}}</td>
                                     <td>{{$aluno->solicitacaos[$Key]->pivot->TRANSFERENCIA}}</td>
-                                    </td>
+
                                 </tr>
                                 @endforeach
                             </tbody>

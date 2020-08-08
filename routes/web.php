@@ -20,6 +20,7 @@ Route::prefix('alunos')
 
 
         Route::get('/table', 'AlunoController@dataTable')->name('alunos.table');
+        Route::put('/search/upBlocoAttach', 'AlunoController@upBlocoAttach')->name('alunos.upBlocoAttach');
         Route::get('/{uuid}/destroy', 'AlunoController@destroy')->name('alunos.destroy');
         Route::put('/{uuid}/update', 'AlunoController@update')->name('aluno.update');
         Route::any('/{uuid}/edit', 'AlunoController@edit')->name('alunos.edit');
@@ -64,13 +65,8 @@ Route::prefix('turmas/alunos/solicitações')
 
         Route::get('/{uuid}/arquivo/{turma_id}/destroy', 'SolicitacaoAlunoController@destroy')->name('turmas.aluno.solicicao.destroy');
 
-
-
         Route::get('/{uuid}/arquivo/{turma_id}', 'TurmaAlunoController@arquivar')->name('turmas.aluno.arquivo');
-
         Route::any('/{uuid}/arquivo/{turma_id}', 'SolicitacaoAlunoController@retirar')->name('turmas.aluno.arquivo.retirar');
-
-
 
         Route::post('/solicicao.update', 'SolicitacaoAlunoController@update')->name('turmas.aluno.solicicao.update');
         Route::post('/solicicao.edit', 'SolicitacaoAlunoController@edit')->name('turmas.aluno.solicicao.edit');

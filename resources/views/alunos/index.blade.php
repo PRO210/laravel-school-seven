@@ -29,6 +29,11 @@
         padding: 0px;
     }
 
+    .botao {
+        margin: 6px;
+        min-width: 180px;
+    }
+
     .table td,
     .table th {
         padding: 8px;
@@ -86,7 +91,9 @@
                                     </svg>
                                 </button>
                                 <div class="dropdown-menu">
-                                    &nbsp; &nbsp;<button type="submit" class="btn btn-outline-primary botao" name="botao" value="excel" id="btEditBloc" disabled title="Marque ao menos uma caixinha">Salvar em Excel</button>
+                                    <button type="submit" class="btn btn-outline-success botao" name="botao" value="excel" id="btEditBloc" disabled title="Marque ao menos uma caixinha"><b>Salvar em Excel</b></button>
+                                    <br>
+                                    <button type="submit" class="btn btn-outline-primary botao" name="botao" value="update" id="btEditBloc" disabled title="Marque ao menos uma caixinha"><b>Edição em Bloco</b></button>
                                 </div>
                                 &nbsp;
                                 <span><input type="checkbox" name="" class="checkbox selecionar" id="selecionar"></span>

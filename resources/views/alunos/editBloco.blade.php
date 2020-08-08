@@ -2,7 +2,7 @@
 
 @extends('adminlte::page')
 
-@section('title', 'turmas/alunos')
+@section('title', 'turmas/alunos/edit/bloco')
 
 @section('content_header')
 <nav aria-label="breadcrumb">
@@ -33,18 +33,6 @@
         padding: 3px 5px 3px 7px;
         width: auto;
     }
-
-    #fieldsetTransferencia {
-        border-radius: 4px;
-        margin-bottom: 12px !important;
-        border: solid thin grey !important;
-    }
-
-    #legendTransferencia {
-        border-radius: 4px;
-        margin-bottom: 12px !important;
-        border: solid thin grey !important;
-    }
 </style>
 
 @section('content')
@@ -58,10 +46,17 @@
             $("#divTurmas").toggle(2000);
         });
     });
-    $(document).ready(function() {
-        $("#btnTransferencia").click(function() {
-            $("#divTransferencia").toggle(2000);
-        });
+</script>
+<script>
+    //Valida o botão salvar com excel para não ir vázio
+    $('input[type=checkbox]').on('change', function() {
+        var total = $('input[type=checkbox]:checked').length;
+        if (total > 0) {
+
+            $('#btEditBloc').removeAttr('disabled');
+        } else {
+            $('#btEditBloc').attr('disabled', 'disabled');
+        }
     });
 </script>
 @stop
@@ -69,11 +64,11 @@
 <div class="card">
     <!-- <div class="card-header"></div> -->
     <div class="card-body">
-        <form action="{{ route('turmas.alunos.update') }}" method="POST" class="" id="form">
+        <form action="{{ route('alunos.upBlocoAttach') }}" method="POST" class="" id="form">
             @csrf
             @method('PUT')
             <button type="button" class="btn btn-outline-primary" id="btnTurmas">Turmas</button>
-            <button type="button" class="btn btn-outline-secondary" id="btnTransferencia">Transferência</button>
+            <!-- <button type="button" class="btn btn-outline-secondary">Secondary</button> -->
             <!-- <button type="button" class="btn btn-outline-success">Success</button>
             <button type="button" class="btn btn-outline-danger">Danger</button>
             <button type="button" class="btn btn-outline-warning">Warning</button>
@@ -104,30 +99,12 @@
                             </select>
                         </div>
                     </div><br><br>
-                    <button type="submit" class="btn btn-outline-success btn-block">Salvar</button>
+                    <button type="submit" class="btn btn-outline-success btn-block" id="btEditBloc" >Salvar</button>
                     <br>
                 </fieldset>
             </div>
-            <!--Transferir-->
-            <div class="row justify-content-center" style="margin-top: 12px; display:none" id="divTransferencia">
-                <fieldset class="col-sm-12 col-md-12 px-6" id="fieldsetTransferencia">
-                    <legend id="legendTransferencia">&nbsp;Transferir Todos:</legend>
-                    <div class="row">
-                        <label for="" class="col-sm-2 col-form-label">Solicitante:</label>
-                        <div class="col-sm-4">
-                            <input type="text" class="form-control" name="SOLICITANTE">
-                        </div>
-                        <label for="" class="col-sm-2 col-form-label">Data:</label>
-                        <div class="col-sm-4">
-                            <input type="date" class="form-control" name="DATA_SOLICITACAO">
-                        </div>
-                    </div>
-                    <br>
-                    <button type="submit" name="botao" value="transferencia" class="btn btn-outline-success btn-block">Salvar</button>
-                    <br>
-                </fieldset>
-            </div>
-
+            <!--  <input type="text" name="filter" placeholder="Nome" class="form-control" value="{{ $filters['filter'] ?? '' }}">&nbsp;
+            <button type="submit" class="btn btn-dark" name="botao">Filtrar</button>&nbsp; -->
             <table class="table table-striped table-bordered">
                 <thead>
                     <tr>
@@ -136,30 +113,18 @@
                             <span>NOME</span>
                         </th>
                         <th>NASCIMENTO</th>
-                        <th>TURMA</th>
-                        <th>STATUS</th>
-                        <!-- <th>MÃE</th> -->
+                        <th>MÃE</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($alunos as $aluno)
-                    @foreach ($aluno->turmas as $Key => $turma)
-                    @endforeach
                     <tr>
                         <td>
-                            &nbsp;<span><input type='checkbox' name='aluno_selecionado[]' class='checkbox' value='{{$aluno->uuid}}/{{$turma->id}}/{{$turma->pivot->id}}' checked></span>
+                            &nbsp;<span><input type='checkbox' name='aluno_selecionado[]' class='checkbox' value='{{$aluno->uuid}}' checked></span>
                             &nbsp;<span>{{ $aluno->NOME }}</span>
                         </td>
                         <td>{{\Carbon\Carbon::parse($aluno->NASCIMENTO)->format('d/m/Y')}}</td>
-                        <td>{{$turma->TURMA}} {{$turma->UNICO}} ({{$turma->TURNO}}) - {{\Carbon\Carbon::parse($turma->ANO)->format('Y')}}</td>
-                        <td>
-                            @foreach($classificacoes as $classificacao)
-                            @if($turma->pivot->classificacao_id == "$classificacao->id")
-                            {{$classificacao->STATUS}}
-                            @endif
-                            @endforeach
-                        </td>
-                        <!-- <td>{{$aluno->MAE}}</td> -->
+                        <td>{{$aluno->MAE}}</td>
                     </tr>
                     @endforeach
                 </tbody>
@@ -167,7 +132,6 @@
         </form>
     </div>
     <div class="card-footer">
-
     </div>
     <div style="margin-bottom: 60px;">
         <input type="hidden" id="usuario" value="{{ Auth::user()->name }}">

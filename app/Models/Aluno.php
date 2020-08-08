@@ -32,7 +32,7 @@ class Aluno extends Model
     */
     public function atualizacoes()
     {
-        return $this->belongsToMany(Log::class, 'aluno_log')->withPivot(['ACAO', 'ACAO_DETALHES', 'user_id', 'aluno_id','created_at']);
+        return $this->belongsToMany(Log::class, 'aluno_log')->withPivot(['ACAO', 'ACAO_DETALHES', 'user_id', 'aluno_id', 'created_at']);
     }
 
     public function turmas()
@@ -247,10 +247,86 @@ class Aluno extends Model
         foreach ($request->aluno_selecionado as $value) {
 
             $posionId = explode('/', $value);
+            $aluno_id = $posionId[1];
             $turma_id = $posionId[1];
             $id = $posionId[2];
 
+            if ($request->botao == "transferencia") {
+
+                $solicitacaoAttach = DB::table('aluno_solicitacao')->insert([
+                    'aluno_id' => $aluno_id, 'DATA_SOLICITACAO' => $request->DATA_SOLICITACAO, 'SOLICITANTE' => $request->SOLICITANTE, 'turma_id' => $request->turma_id,
+                    'solicitacao_id' => 1
+                ]);
+                /* LOG DO ALUNO */
+                $usuario = Auth::user()->id;
+                DB::table('aluno_log')->insert(
+                    ['aluno_id' => $aluno_id, 'ACAO' => 'INSERIR', 'ACAO_DETALHES' => 'SOLICITAÇÃO DE TRANSFERÊNCIA', 'log_id' => '1', 'user_id' => $usuario]
+                );
+            }
+
+            //
+            //
             $alunoTurmas = DB::table('aluno_turma')->where('id', $id)->update(['turma_id' => $request->turma_id, 'classificacao_id' => $request->classificacao_id]);
+        }
+    }
+    /*
+    * Coloca os alunos na turma em bloco, pelo update da tabela alunos.index.
+    */
+    public function upBlocoAttach($request)
+    {
+        foreach ($request->aluno_selecionado as $uuid) {
+
+            $aluno = Aluno::where('uuid', $uuid)->first();
+
+            $turma = Turma::find($request->turma_id);
+            $turma_dados = $turma->TURMA . ' ' . $turma->UNICO . '(' . $turma->TURNO . ')' . ' - ' . substr($turma->ANO, 0, 4);
+
+            $alunoTurmas = DB::table('aluno_turma')->where('turma_id', $request->turma_id)->where('aluno_id', $aluno->id)->count();
+
+            if ($alunoTurmas === 0) {
+
+                $alunoTurmas = DB::table('aluno_turma')->insert([
+                    'aluno_id' => $aluno->id, 'turma_id' => $request->turma_id,
+                    'TURMA_ANO' => $turma->ANO, 'classificacao_id' => $request->classificacao_id
+                ]);
+                /* LOG DO ALUNO */
+                $usuario = Auth::user()->id;
+                DB::table('aluno_log')->insert(
+                    ['aluno_id' => $aluno->id, 'ACAO' => 'INSERIR', 'ACAO_DETALHES' => "VINCULADO(A) A : $turma_dados", 'log_id' => '1', 'user_id' => $usuario]
+                );
+            }
+        }
+    }
+    /*
+    * Inseri os pedidos de transferência em bloco, pelo update.
+    */
+    public function upBlocoSolcitacaoAttach($request)
+    {
+        foreach ($request->aluno_selecionado as $value) {
+
+            $posionId = explode('/', $value);
+            $aluno_uuid = $posionId[0];
+            $turma_id = $posionId[1];
+            // $id = $posionId[2];
+
+            $aluno = Aluno::where('uuid', $aluno_uuid)->first();
+
+            $solicitacaoAttachTeste = DB::table('aluno_solicitacao')->where('aluno_id', $aluno->id)->where('turma_id', $turma_id)->where('solicitacao_id', 1)
+                ->where('TRANSFERENCIA_STATUS', 'LIKE', 'PENDENTE')->count();
+
+            if ($solicitacaoAttachTeste == 0) {
+
+                $solicitacaoAttach = DB::table('aluno_solicitacao')->insert([
+                    'aluno_id' => $aluno->id, 'DATA_SOLICITACAO' => $request->DATA_SOLICITACAO, 'SOLICITANTE' => $request->SOLICITANTE, 'turma_id' => $turma_id,
+                    'solicitacao_id' => 1
+                ]);
+
+                /* LOG DO ALUNO */
+                $usuario = Auth::user()->id;
+                DB::table('aluno_log')->insert(
+                    ['aluno_id' => $aluno->id, 'ACAO' => 'INSERIR', 'ACAO_DETALHES' => 'SOLICITAÇÃO DE TRANSFERÊNCIA', 'log_id' => '1', 'user_id' => $usuario]
+                );
+            }
         }
     }
     /*

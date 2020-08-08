@@ -108,10 +108,16 @@ class TurmaAlunoController extends Controller
      */
     public function update(Request $request)
     {
-        $upAttach = $this->aluno->upAttach($request);
+        if ($request->botao == "transferencia") {
 
-        // return redirect()->action('TurmaAlunoController@index')->with('message', 'Operação Realizada com Sucesso!');
+            $upBlocoSolcitacaoAttach = $this->aluno->upBlocoSolcitacaoAttach($request);
+            return redirect()->route('turmas.alunos.solicicaos')->with('message', 'Operação Realizada com Sucesso!');
+
+        }
+
+        $upAttach = $this->aluno->upAttach($request);
         return redirect()->route('turmas.alunos')->with('message', 'Operação Realizada com Sucesso!');
+
     }
 
     /**
