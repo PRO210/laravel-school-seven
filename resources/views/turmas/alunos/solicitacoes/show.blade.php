@@ -26,8 +26,6 @@
     </ul>
 </div>
 
-
-
 @endif
 
 <style>

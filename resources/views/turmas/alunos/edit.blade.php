@@ -64,6 +64,19 @@
         });
     });
 </script>
+<script>
+    //Confirmar se pode salvar
+    function confirmar() {
+        var u = $('#usuario').val();
+        var r = confirm("Já Posso Enviar " + u + "?");
+        if (r == true) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+</script>
+
 @stop
 
 <div class="card">
@@ -72,8 +85,8 @@
         <form action="{{ route('turmas.alunos.update') }}" method="POST" class="" id="form">
             @csrf
             @method('PUT')
-            <button type="button" class="btn btn-outline-primary" id="btnTurmas">Turmas</button>
-            <button type="button" class="btn btn-outline-secondary" id="btnTransferencia">Transferência</button>
+            <button type="button" class="btn btn-outline-primary" id="btnTurmas">Trocar de Turma</button>
+            <button type="button" class="btn btn-outline-secondary" id="btnTransferencia">Solicitação de Transferência</button>
             <!-- <button type="button" class="btn btn-outline-success">Success</button>
             <button type="button" class="btn btn-outline-danger">Danger</button>
             <button type="button" class="btn btn-outline-warning">Warning</button>
@@ -87,7 +100,7 @@
                 <fieldset class="col-sm-12 col-md-12 px-6">
                     <legend>&nbsp;Turmas e Status:</legend>
                     <div class="row">
-                        <label for="" class="col-sm-1 col-form-label">TURMAS:</label>
+                        <label for="" class="col-sm-1 col-form-label"> TURMA:</label>
                         <div class="col-sm-5">
                             <select name="turma_id" id="" class="form-control">
                                 @foreach($turmas as $turma)
@@ -104,7 +117,7 @@
                             </select>
                         </div>
                     </div><br><br>
-                    <button type="submit" class="btn btn-outline-success btn-block">Salvar</button>
+                    <button type="submit" class="btn btn-outline-success btn-block" onclick="return confirmar()">Salvar</button>
                     <br>
                 </fieldset>
             </div>
@@ -123,7 +136,7 @@
                         </div>
                     </div>
                     <br>
-                    <button type="submit" name="botao" value="transferencia" class="btn btn-outline-success btn-block">Salvar</button>
+                    <button type="submit" name="botao" value="transferencia" class="btn btn-outline-success btn-block" onclick="return confirmar()">Salvar</button>
                     <br>
                 </fieldset>
             </div>

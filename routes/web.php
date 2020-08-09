@@ -54,6 +54,7 @@ Route::prefix('turmas/alunos')
         Route::put('/edit', 'TurmaAlunoController@edit')->name('turmas.alunos.edit');
         Route::post('/{uuid}', 'TurmaAlunoController@attachTurmasAluno')->name('turmas.aluno.attach');
         Route::get('/{uuid}/show', 'TurmaAlunoController@show')->name('turmas.aluno.show');
+        Route::get('/desistentes', 'TurmaAlunoController@indexDesistentes')->name('turmas.alunos.desistentes');
         Route::get('', 'TurmaAlunoController@index')->name('turmas.alunos');
     });
     /*

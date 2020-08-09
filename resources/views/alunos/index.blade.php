@@ -9,7 +9,20 @@
     <li class="breadcrumb-item active"><a href="{{ route('alunos.index') }}" class="active">Alunos</a></li>
 </ol>
 
-<h3>Alunos &nbsp;<a href="{{ route('alunos.create') }}" class="btn btn-outline-success ">ADD</a></h3>
+<div class="row">
+    <div class="col-auto">
+        <h4>Alunos &nbsp;<a href="{{ route('alunos.create') }}" class="btn btn-outline-success ">ADD</a></h4>
+    </div>
+    <div class="col-sm-10">
+        @if(\Session::has('message'))
+        <div class="alert alert-success" id="teste" style="display: block;">
+            <ul>
+                <li>{!! \Session::get('message') !!}</li>
+            </ul>
+        </div>
+        @endif
+    </div>
+</div>
 
 @stop
 
@@ -36,7 +49,7 @@
 
     .table td,
     .table th {
-        padding: 8px;
+        padding: 6px;
     }
 
     .checkbox {
@@ -70,6 +83,14 @@
 <script src='{{url("js/dataTables/dataTables.responsive.min.js")}}'></script>
 <script src='{{url("js/dataTables/responsive.bootstrap4.min.js")}}'></script>
 <script src='{{url("js/turmas/alunos/index.js")}}'></script>
+
+<script type='text/javascript'>
+    /*Fecha a message*/
+    $(document).ready(function() {
+        $("#teste").delay(5000).fadeOut("slow");
+    });
+</script>
+
 @stop
 
 <div class="card">

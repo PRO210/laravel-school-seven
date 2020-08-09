@@ -12,8 +12,11 @@
 <!-- jQuery -->
 <!-- <script src="{{url('//oss.maxcdn.com/jquery.mask/1.11.4/jquery.mask.min.js')}}"></script>
 <script src="{{url('/vendor/StatesAndCities/js/blit-states-and-cities.js')}}"></script> -->
+<script src='{{url("js/jquery-3.5.1.js")}}' type="text/javascript"></script>
+
 <script src="{{url('js/alunos/maskedInput.js')}}" type="text/javascript"></script>
 <script src="{{url('js/alunos/create.js')}}" type="text/javascript"></script>
+
 @stop
 
 
@@ -73,7 +76,7 @@
                     <div class="row">
                         <label for="" class="col-sm-1 col-form-label">NOME:</label>
                         <div class="col-sm-6">
-                            <input type="text" name="NOME" id="" class="form-control" placeholder="Nome do Aluno(a)" required>
+                            <input type="text" name="NOME" id="" class="form-control" placeholder="Nome do Aluno(a)" required oninput="handleInput(event)">
                         </div>
                         <label for="" class="col-sm-2 col-form-label">NASCIMENTO:</label>
                         <div class="col-sm-3">
@@ -90,7 +93,7 @@
                         </div>
                         <label for="" class="col-sm-2 col-form-label">Matricula da Certidão:</label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control" name="MATRICULA_CERTIDAO" placeholder="XXXXXXXXXX  XXXX  X  XXXXX  XXX  XXXXXXX  XX">
+                            <input type="text" class="form-control" name="MATRICULA_CERTIDAO" placeholder="XXXXXXXXXX  XXXX  X  XXXXX  XXX  XXXXXXX  XX"  oninput="handleInput(event)">
                         </div>
                     </div>
                     <br>
@@ -104,7 +107,7 @@
                         </div>
                         <label for="" class="col-sm-2 control-label">Dados da Certidão:</label>
                         <div class="col-sm-4" id="">
-                            <input type="text" class="form-control" id="" name="DADOS_CERTIDAO" placeholder="Termo N° XXX,  FLS: xxx,  Livro: xx.">
+                            <input type="text" class="form-control" id="" name="DADOS_CERTIDAO" placeholder="Termo N° XXX,  FLS: xxx,  Livro: xx."  oninput="handleInput(event)">
                         </div>
                     </div>
                     <br>
@@ -156,7 +159,7 @@
                         </div>
                         <label for="" class="col-sm-2 control-label">Orgão Expedidor:</label>
                         <div class="col-sm-2">
-                            <input type="text" class="form-control" id="" name="ORGAO_EXPEDIDOR_RG">
+                            <input type="text" class="form-control" id="" name="ORGAO_EXPEDIDOR_RG"  oninput="handleInput(event)">
                         </div>
                         <label for="" class="col-sm-2 control-label">Expedição:</label>
                         <div class="col-sm-2">
@@ -202,22 +205,22 @@
                     <div class="row">
                         <label for="" class="col-sm-2 control-label">Nome do Pai</label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control" id="" name="PAI" onkeyup="maiuscula(this)">
+                            <input type="text" class="form-control" id="" name="PAI" oninput="handleInput(event)">
                         </div>
                         <label for="" class="col-sm-2 control-label">Profissão do Pai</label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control" id="" name="PROF_PAI" onkeyup="maiuscula(this)">
+                            <input type="text" class="form-control" id="" name="PROF_PAI" oninput="handleInput(event)">
                         </div>
                     </div>
                     <br>
                     <div class="row">
                         <label for="" class="col-sm-2 control-label">Nome da Mãe</label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control" id="" name="MAE" onkeyup="maiuscula(this)">
+                            <input type="text" class="form-control" id="" name="MAE" oninput="handleInput(event)">
                         </div>
                         <label for="" class="col-sm-2 control-label">Profissão da Mãe</label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control" id="" name="PROF_MAE" onkeyup="maiuscula(this)">
+                            <input type="text" class="form-control" id="" name="PROF_MAE" oninput="handleInput(event)">
                         </div>
                     </div>
                 </fieldset>
@@ -230,7 +233,7 @@
                     <div class="row">
                         <label for="" class="col-sm-2 control-label">Endereço:</label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control" id="" name="ENDERECO" onkeyup="maiuscula(this)" placeholder="Nome da Rua/Sítio ou Afins">
+                            <input type="text" class="form-control" id="" name="ENDERECO" placeholder="Nome da Rua/Sítio ou Afins" oninput="handleInput(event)">
                         </div>
                         <label for="FONE" class="col-sm-2 control-label">Fones:</label>
                         <div class="col-sm-2">

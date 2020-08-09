@@ -73,7 +73,7 @@
                         <div class="row">
                             <label for="" class="col-sm-2 control-label">Declaração:</label>
                             <div class="col-sm-4">
-                                <select name="DECLARACAO[]" id="" class=" form-control">
+                                <select name="DECLARACAO[]" id="DECLARACAO" class=" form-control">
                                     @if($turma->pivot->DECLARACAO == "SIM")
                                     <option value="SIM" selected>SIM</option>
                                     <option value="NAO">NÃO</option>
@@ -85,11 +85,11 @@
                             </div>
                             <label for="" class="col-sm-2 control-label">Data:</label>
                             <div class="col-sm-4">
-                                <input type="date" name="DECLARACAO_DATA[]" value="{{$turma->pivot->DECLARACAO_DATA }}" id="" class=" form-control">
+                                <input type="date" name="DECLARACAO_DATA[]" value="{{$turma->pivot->DECLARACAO_DATA }}" id="DECLARACAO_02" class=" form-control">
                             </div>
                         </div>
                         <br>
-                        <div class="row">
+                        <div class="row DECLARACAO">
                             <label for="" class="col-sm-2 control-label">Responsável:</label>
                             <div class="col-sm-10">
                                 <input type="text" name="DECLARACAO_RESPONSAVEL[]" value="{{ $turma->pivot->DECLARACAO_RESPONSAVEL }}" class=" form-control" placeholder="">
@@ -99,7 +99,7 @@
                         <div class="row">
                             <label for="" class="col-sm-2 control-label">Transferência:</label>
                             <div class="col-sm-4">
-                                <select name="TRANSFERENCIA[]" id="" class=" form-control">
+                                <select name="TRANSFERENCIA[]" id="TRANSFERENCIA" class=" form-control">
                                     @if($turma->pivot->TRANSFERENCIA == "SIM")
                                     <option value="SIM" selected>SIM</option>
                                     <option value="NAO">NÃO</option>
@@ -115,7 +115,7 @@
                             </div>
                         </div>
                         <br>
-                        <div class="row">
+                        <div class="row TRANSFERENCIA">
                             <label for="" class="col-sm-2 control-label">Responsável:</label>
                             <div class="col-sm-10">
                                 <input type="text" name="TRANSFERENCIA_RESPONSAVEL[]" value="{{ $turma->pivot->TRANSFERENCIA_RESPONSAVEL }}" class=" form-control" placeholder="">
@@ -226,6 +226,29 @@
         <input type="hidden" id="usuario" value="{{ Auth::user()->name }}">
     </div>
 </form>
+<script>
+    /* Esconder elementod extras do */
+    $(document).ready(function() {
+        $('.DECLARACAO').hide();
+        $('#DECLARACAO').change(function() {
+            if ($('#DECLARACAO').val() == 'SIM') {
+                $('.DECLARACAO').show("slow");
+            } else {
+                $('.DECLARACAO').hide("slow");
+
+            }
+        });
+        $('.TRANSFERENCIA').hide();
+        $('#TRANSFERENCIA').change(function() {
+            if ($('#TRANSFERENCIA').val() == 'SIM') {
+                $('.TRANSFERENCIA').show("slow");
+            } else {
+                $('.TRANSFERENCIA').hide("slow");
+
+            }
+        });
+    });
+</script>
 <script>
     $(document).ready(function() {
         $('.turma').click(function() {

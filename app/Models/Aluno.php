@@ -97,6 +97,44 @@ class Aluno extends Model
         return $alunoTurmas;
     }
     /*
+    Listar os alunos Desistentes
+     */
+    public function indexDesistentes()
+    {
+
+        $alunos = DB::table('aluno_turma')->where('aluno_turma.classificacao_id', '4')
+            ->join('alunos', 'aluno_turma.aluno_id', '=', 'alunos.id')
+            ->join('turmas', 'aluno_turma.turma_id', '=', 'turmas.id')
+            ->select('aluno_turma.aluno_id', 'alunos.NOME', 'aluno_turma.turma_id', 'aluno_turma.classificacao_id')
+            ->orderBy('aluno_turma.turma_id', 'ASC')->orderBy('alunos.NOME', 'ASC')
+            // ->toSql();
+            ->get();
+        //dd($alunos);
+
+        $alunos_id[] = "";
+        $turmas_id[] = "";
+        foreach ($alunos as $dados) {
+            foreach ($dados as $key => $value) {
+                if ($key == "aluno_id") {
+                    array_push($alunos_id, $value);
+                }
+                if ($key == "turma_id") {
+                    array_push($turmas_id, $value);
+                }
+            }
+        }
+        array_shift($alunos_id);
+        array_shift($turmas_id);
+
+        $alunoTurmas = collect([]);
+        foreach ($alunos_id as $key => $nulo) {
+            $alunoTurmas = $alunoTurmas->concat(Aluno::with(['turmas' => function ($query) use ($turmas_id, $key) {
+                $query->where('turma_id', $turmas_id[$key]);
+            }])->where('id', $alunos_id[$key])->get());
+        }
+        return $alunoTurmas;
+    }
+    /*
     Recupera as turmas em que o aluno não está matriculado
     */
     public function turmasAvailable($filter = null)
@@ -240,33 +278,29 @@ class Aluno extends Model
         return $alunoTurmas;
     }
     /*
-    * Atualiza os vínculos das turmas e alunos em bloco, pelo update.
+    * Atualiza os vínculos das turmas e alunos em bloco, pelo update através da tabela turmas.alunos.index;
     */
     public function upAttach($request)
     {
         foreach ($request->aluno_selecionado as $value) {
 
             $posionId = explode('/', $value);
-            $aluno_id = $posionId[1];
+            $aluno_uuid = $posionId[0];
             $turma_id = $posionId[1];
-            $id = $posionId[2];
+            $pivot_id = $posionId[2];
 
-            if ($request->botao == "transferencia") {
+            $aluno = Aluno::where('uuid', $aluno_uuid)->first();
 
-                $solicitacaoAttach = DB::table('aluno_solicitacao')->insert([
-                    'aluno_id' => $aluno_id, 'DATA_SOLICITACAO' => $request->DATA_SOLICITACAO, 'SOLICITANTE' => $request->SOLICITANTE, 'turma_id' => $request->turma_id,
-                    'solicitacao_id' => 1
-                ]);
-                /* LOG DO ALUNO */
-                $usuario = Auth::user()->id;
-                DB::table('aluno_log')->insert(
-                    ['aluno_id' => $aluno_id, 'ACAO' => 'INSERIR', 'ACAO_DETALHES' => 'SOLICITAÇÃO DE TRANSFERÊNCIA', 'log_id' => '1', 'user_id' => $usuario]
-                );
-            }
+            $turma = Turma::find($request->turma_id);
+            $turma_dados = $turma->TURMA . ' ' . $turma->UNICO . '(' . $turma->TURNO . ')' . ' - ' . substr($turma->ANO, 0, 4);
 
-            //
-            //
-            $alunoTurmas = DB::table('aluno_turma')->where('id', $id)->update(['turma_id' => $request->turma_id, 'classificacao_id' => $request->classificacao_id]);
+            /* Atualiza a turma do(s) aluno(s) */
+            $alunoTurmas = DB::table('aluno_turma')->where('id', $pivot_id)->update(['turma_id' => $request->turma_id, 'classificacao_id' => $request->classificacao_id]);
+            /* LOG DO ALUNO */
+            $usuario = Auth::user()->id;
+            DB::table('aluno_log')->insert(
+                ['aluno_id' => $aluno->id, 'ACAO' => 'EDIÇÃO', 'ACAO_DETALHES' => "VINCULADO(A): $turma_dados", 'log_id' => '2', 'user_id' => $usuario]
+            );
         }
     }
     /*
@@ -298,7 +332,7 @@ class Aluno extends Model
         }
     }
     /*
-    * Inseri os pedidos de transferência em bloco, pelo update.
+    * Inseri os pedidos de transferência em bloco, pelo update que veio da tabela turmas.alunos.index
     */
     public function upBlocoSolcitacaoAttach($request)
     {
@@ -330,7 +364,7 @@ class Aluno extends Model
         }
     }
     /*
-    *Coloca a solicitação do aluno na tabela de transferencias
+    *Coloca a solicitação do aluno na tabela de transferencias individualmente
     */
     public function solicitacaoAttach($request, $aluno)
     {

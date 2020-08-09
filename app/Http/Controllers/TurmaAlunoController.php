@@ -34,6 +34,17 @@ class TurmaAlunoController extends Controller
 
         return view('turmas.alunos.index', compact('alunoTurmas', 'classificacoes'));
     }
+    /*
+    *Alunos Desistentes
+     */
+    public function indexDesistentes()
+    {
+        $alunoTurmas = $this->aluno->indexDesistentes();
+
+        $classificacoes = $this->classificacao->get();
+
+        return view('turmas.alunos.indexDesistentes', compact('alunoTurmas', 'classificacoes'));
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -92,7 +103,7 @@ class TurmaAlunoController extends Controller
 
         $turmas = $this->turma->get();
 
-        $classificacoes = $this->classificacao->get();
+        $classificacoes = $this->classificacao->where('ORDEM_I', 'SIM')->get();
 
         return view('turmas.alunos.edit', compact('turmas', 'alunos', 'classificacoes'));
     }
@@ -112,12 +123,10 @@ class TurmaAlunoController extends Controller
 
             $upBlocoSolcitacaoAttach = $this->aluno->upBlocoSolcitacaoAttach($request);
             return redirect()->route('turmas.alunos.solicicaos')->with('message', 'Operação Realizada com Sucesso!');
-
         }
 
         $upAttach = $this->aluno->upAttach($request);
         return redirect()->route('turmas.alunos')->with('message', 'Operação Realizada com Sucesso!');
-
     }
 
     /**
