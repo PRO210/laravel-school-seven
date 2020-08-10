@@ -10,12 +10,12 @@
 
 @section('js')
 <!-- jQuery -->
-<!-- <script src="{{url('//oss.maxcdn.com/jquery.mask/1.11.4/jquery.mask.min.js')}}"></script>
-<script src="{{url('/vendor/StatesAndCities/js/blit-states-and-cities.js')}}"></script> -->
 <script src='{{url("js/jquery-3.5.1.js")}}' type="text/javascript"></script>
-
-<script src="{{url('js/alunos/maskedInput.js')}}" type="text/javascript"></script>
+<!-- <script src="{{url('js/alunos/maskedInput.js')}}" type="text/javascript"></script>-->
 <script src="{{url('js/alunos/create.js')}}" type="text/javascript"></script>
+<script src="{{url('/js/alunos/jquery.mask.js')}}" type="text/javascript"></script>
+<!-- <script src="{{url('//oss.maxcdn.com/jquery.mask/1.11.4/jquery.mask.min.js')}}"></script> -->
+<script src="{{url('/vendor/StatesAndCities/js/blit-states-and-cities.js')}}"></script>
 
 @stop
 
@@ -93,7 +93,7 @@
                         </div>
                         <label for="" class="col-sm-2 col-form-label">Matricula da Certidão:</label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control" name="MATRICULA_CERTIDAO" placeholder="XXXXXXXXXX  XXXX  X  XXXXX  XXX  XXXXXXX  XX"  oninput="handleInput(event)">
+                            <input type="text" class="form-control" name="MATRICULA_CERTIDAO" placeholder="XXXXXXXXXX  XXXX  X  XXXXX  XXX  XXXXXXX  XX" oninput="handleInput(event)">
                         </div>
                     </div>
                     <br>
@@ -107,7 +107,7 @@
                         </div>
                         <label for="" class="col-sm-2 control-label">Dados da Certidão:</label>
                         <div class="col-sm-4" id="">
-                            <input type="text" class="form-control" id="" name="DADOS_CERTIDAO" placeholder="Termo N° XXX,  FLS: xxx,  Livro: xx."  oninput="handleInput(event)">
+                            <input type="text" class="form-control" id="" name="DADOS_CERTIDAO" placeholder="Termo N° XXX,  FLS: xxx,  Livro: xx." oninput="handleInput(event)">
                         </div>
                     </div>
                     <br>
@@ -128,7 +128,7 @@
                 <fieldset class="col-sm-12 col-md-12 px-6">
                     <legend>Dados de Identificação:</legend>
                     <div class="row">
-                        <label for="NIS" class="col-sm-2 control-label">Nis:</label>
+                        <label for="" class="col-sm-2 control-label">Nis:</label>
                         <div class="col-sm-4">
                             <input class="form-control" type="text" id="NIS" name="NIS" placeholder="">
                         </div>
@@ -142,11 +142,11 @@
                     </div>
                     <br>
                     <div class="row">
-                        <label for="SUS" class="col-sm-2 control-label">SUS:</label>
+                        <label for="" class="col-sm-2 control-label">SUS:</label>
                         <div class="col-sm-4">
                             <input type="text" class="form-control" id="SUS" name="SUS">
                         </div>
-                        <label for="CPF" class="col-sm-2 control-label">CPF:</label>
+                        <label for="" class="col-sm-2 control-label">CPF:</label>
                         <div class="col-sm-4">
                             <input type="text" class="form-control" id="CPF" name="CPF">
                         </div>
@@ -159,7 +159,7 @@
                         </div>
                         <label for="" class="col-sm-2 control-label">Orgão Expedidor:</label>
                         <div class="col-sm-2">
-                            <input type="text" class="form-control" id="" name="ORGAO_EXPEDIDOR_RG"  oninput="handleInput(event)">
+                            <input type="text" class="form-control" id="" name="ORGAO_EXPEDIDOR_RG" oninput="handleInput(event)">
                         </div>
                         <label for="" class="col-sm-2 control-label">Expedição:</label>
                         <div class="col-sm-2">
@@ -175,8 +175,8 @@
                     <div class="row">
                         <label for="" class="col-sm-2 control-label">Nacionalidade</label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control" id="" name="NACIONALIDADE">
-                            <!-- <select name="NACIONALIDADE" id="country" class="form-control" data-default="{{ config('states-and-cities.default-country') }}"></select> -->
+                            <!--  <input type="text" class="form-control" id="" name="NACIONALIDADE"> -->
+                            <select name="NACIONALIDADE" id="country" class="form-control" data-default="{{ config('states-and-cities.default-country') }}"></select>
                         </div>
                         <label for="inputSexo" class="col-sm-2  control-label">Sexo</label>
                         <div class="col-sm-4">
@@ -191,13 +191,15 @@
                     <div class="row">
                         <label for="" class="col-sm-2 control-label">Estado</label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control" id="" name="ESTADO">
-                            <!-- <select name="ESTADO" id="state" class="form-control" data-default="{{ config('states-and-cities.default-state') }}"></select> -->
+                            <!-- <input type="text" class="form-control" id="" name="ESTADO"> -->
+                           <!--  <select name="ESTADO" id="state" class="form-control" data-default="{{ config('states-and-cities.default-state') }}"></select> -->
+                            <select name="ESTADO" id="state" class="form-control" data-default="17"></select>
                         </div>
                         <label for="" class="col-sm-2 control-label ">Naturalidade</label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control" id="" name="NATURALIDADE">
-                            <!-- <select name="NATURALIDADE" id="city" class="form-control" data-default="{{ config('states-and-cities.default-city') }}"></select> -->
+                            <!--  <input type="text" class="form-control" id="" name="NATURALIDADE"> -->
+                         <!--    <select name="NATURALIDADE" id="city" class="form-control" data-default="{{ config('states-and-cities.default-city') }}"></select> -->
+                            <select name="NATURALIDADE" id="city" class="form-control" data-default="1472"></select>
                         </div>
                     </div>
                     <br>

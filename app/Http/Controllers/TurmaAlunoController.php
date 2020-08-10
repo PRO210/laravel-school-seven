@@ -10,6 +10,7 @@ use App\Models\Turma;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
+use PhpParser\Node\Stmt\Echo_;
 
 class TurmaAlunoController extends Controller
 {
@@ -163,7 +164,6 @@ class TurmaAlunoController extends Controller
     */
     public function arquivar($uuid, $turma_id)
     {
-
         $aluno = $this->aluno->where('uuid', $uuid)->first();
         $aluno->turmas()->updateExistingPivot($turma_id, ['classificacao_id' => '8', 'updated_at' => NOW()]);
 
@@ -175,4 +175,35 @@ class TurmaAlunoController extends Controller
 
         return redirect()->route('alunos.index')->with('message', 'Operações Realizadas com Sucesso!');
     }
+    /*
+    *Resumo dos alunoa e turmas
+    */
+    public function resumo()
+    {
+        $alunoTurmas = $this->turma->with(['manhaAlunos'])->where('TURNO', 'LIKE', 'MATUTINO')->get();
+
+
+        foreach ($alunoTurmas as $turma) {
+
+            echo $turma->TURMA . ': ';
+
+            $contCur = 0;
+
+            foreach ($turma->manhaAlunos as $key => $aluno) {
+                echo $aluno->NOME . ', ';
+                $contCur += $contCur + 1;
+            }
+
+            echo ' - ' . $contCur;
+            echo "<br>";
+        }
+
+
+
+        dd($alunoTurmas);
+
+        return view('turmas.alunos.resumo', compact('alunoTurmas'));
+    }
+    //
+    //
 }

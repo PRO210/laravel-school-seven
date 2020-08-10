@@ -228,6 +228,7 @@ php artisan migrate:refresh --step=1
 //
 // Cidades e Estados
 https://packagist.org/packages/blitsoftwares/laravel-states-and-cities
+https://github.com/digitalBush/jquery.maskedinput
 //
 //
 https://icons.getbootstrap.com/

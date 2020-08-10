@@ -258,6 +258,12 @@ return [
                     // 'can'  =>  'users',
                     'icon_color' => 'warning',
                 ],
+                [
+                    'text' => 'Quant. de alunos',
+                    'url'  => 'turmas/alunos/resumo',
+                    // 'can'  =>  'users',
+
+                ],
             ],
         ],
         [

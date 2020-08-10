@@ -58,12 +58,11 @@ class Aluno extends Model
     }
     /*
     Listar as turmas do ano corrente
-     */
+    */
     public function correntTurmas()
     {
         $ano = date('Y');
         $alunos = DB::table('aluno_turma')->where('turma_ano', 'LIKE', '%' . "$ano" . '%')
-            ->where('aluno_turma.EXCLUIDO', 'LIKE', 'NAO')
             ->whereIn('aluno_turma.classificacao_id', [1, 2])
             ->join('alunos', 'aluno_turma.aluno_id', '=', 'alunos.id')
             ->join('turmas', 'aluno_turma.turma_id', '=', 'turmas.id')

@@ -46,14 +46,19 @@
 @section('js')
 <!-- jQuery -->
 <script src='{{url("js/jquery-3.5.1.js")}}' type="text/javascript"></script>
-<script src='{{url("js/alunos/maskedInput.js")}}'></script>
-<script src='{{url("/js/alunos/edit.js")}}'></script>
 <!-- DataTable -->
 <script src='{{url("js/dataTables/jquery.dataTables.min.js")}}'></script>
 <script src='{{url("js/dataTables/dataTables.bootstrap4.min.js")}}'></script>
 <script src='{{url("js/dataTables/dataTables.responsive.min.js")}}'></script>
 <script src='{{url("js/dataTables/responsive.bootstrap4.min.js")}}'></script>
 <script src='{{url("js/turmas/alunos/index.js")}}'></script>
+
+<script src='{{url("/js/alunos/edit.js")}}'></script>
+<!-- <script src="{{url('js/alunos/maskedInput.js')}}" type="text/javascript"></script>-->
+<script src="{{url('js/alunos/create.js')}}" type="text/javascript"></script>
+<script src="{{url('/js/alunos/jquery.mask.js')}}" type="text/javascript"></script>
+<!-- <script src="{{url('//oss.maxcdn.com/jquery.mask/1.11.4/jquery.mask.min.js')}}"></script> -->
+<script src="{{url('/vendor/StatesAndCities/js/blit-states-and-cities.js')}}"></script>
 @stop
 
 
@@ -150,11 +155,11 @@
                     </div>
                     <br>
                     <div class="row">
-                        <label for="SUS" class="col-sm-2 control-label">SUS:</label>
+                        <label for="" class="col-sm-2 control-label">SUS:</label>
                         <div class="col-sm-4">
                             <input type="text" class="form-control" value="{{$aluno->SUS}}" id="SUS" name="SUS">
                         </div>
-                        <label for="CPF" class="col-sm-2 control-label">CPF:</label>
+                        <label for="" class="col-sm-2 control-label">CPF:</label>
                         <div class="col-sm-4">
                             <input type="text" class="form-control" value="{{$aluno->CPF}}" id="CPF" name="CPF">
                         </div>
@@ -183,18 +188,21 @@
                     <div class="row">
                         <label for="" class="col-sm-2 control-label ">Naturalidade</label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control" id="" value="{{$aluno->NATURALIDADE}}" name="NATURALIDADE">
+                            <!-- <input type="text" class="form-control" id="" value="{{$aluno->NATURALIDADE}}" name="NATURALIDADE"> -->
+                            <select name="NATURALIDADE" id="city" class="form-control" data-default="{{$aluno->NATURALIDADE}}"></select>
                         </div>
                         <label for="" class="col-sm-2 control-label">Estado</label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control" id="" value="{{$aluno->ESTADO}}" name="ESTADO">
+                            <!-- <input type="text" class="form-control" id="" value="{{$aluno->ESTADO}}" name="ESTADO"> -->
+                            <select name="ESTADO" id="state" class="form-control" data-default="{{$aluno->ESTADO}}"></select>
                         </div>
                     </div>
                     <br>
                     <div class="row">
                         <label for="" class="col-sm-2 control-label">Nacionalidade</label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control" id="" value="{{$aluno->NACIONALIDADE}}" name="NACIONALIDADE">
+                            <!-- <input type="text" class="form-control" id="" value="{{$aluno->NACIONALIDADE}}" name="NACIONALIDADE"> -->
+                            <select name="NACIONALIDADE" id="country" class="form-control" data-default="{{ config('states-and-cities.default-country') }}"></select>
                         </div>
                         <label for="inputSexo" class="col-sm-2  control-label">Sexo</label>
                         <div class="col-sm-4">

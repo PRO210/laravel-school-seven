@@ -21,8 +21,17 @@ class Turma extends Model
     public function alunos()
     {
         return $this->belongsToMany(Aluno::class, 'aluno_turma')->withPivot([
-            'OUVINTE', 'classificacao_id', 'turma_id', 'aluno_id', 'DECLARACAO',
+            'OUVINTE', 'classificacao_id', 'turma_id', 'aluno_id', 'DECLARACAO', 'id',
             'DECLARACAO_DATA', 'DECLARACAO_RESPONSAVEL', 'TRANSFERENCIA', 'TRANSFERENCIA_DATA', 'TRANSFERENCIA_RESPONSAVEL'
         ]);
+
+    }
+    public function manhaAlunos()
+    {
+        return $this->belongsToMany(Aluno::class, 'aluno_turma')->wherePivot('classificacao_id', 1)->withPivot([
+            'OUVINTE', 'classificacao_id', 'turma_id', 'aluno_id', 'DECLARACAO', 'id',
+            'DECLARACAO_DATA', 'DECLARACAO_RESPONSAVEL', 'TRANSFERENCIA', 'TRANSFERENCIA_DATA', 'TRANSFERENCIA_RESPONSAVEL'
+        ]);
+
     }
 }

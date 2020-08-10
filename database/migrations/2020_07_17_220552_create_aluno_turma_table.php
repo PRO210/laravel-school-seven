@@ -28,7 +28,6 @@ class CreateAlunoTurmaTable extends Migration
             $table->string('TRANSFERENCIA')->nullable();
             $table->date('TRANSFERENCIA_DATA')->nullable();
             $table->string('TRANSFERENCIA_RESPONSAVEL')->nullable();
-            $table->string('EXCLUIDO')->default('NAO');
             $table->string('EXCLUIDO_PASTA')->nullable();
             $table->string('ATA')->nullable();
             $table->timestamps();

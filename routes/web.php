@@ -49,6 +49,7 @@ Route::prefix('turma')
 Route::prefix('turmas/alunos')
     ->group(function () {
 
+        Route::get('/resumo', 'TurmaAlunoController@resumo')->name('turmas.alunos.resumo');
         Route::get('/{uuid}/solicitações/create/{turma_id}', 'SolicitacaoAlunoController@create')->name('turmas.aluno.solicitacao');
         Route::put('/update', 'TurmaAlunoController@update')->name('turmas.alunos.update');
         Route::put('/edit', 'TurmaAlunoController@edit')->name('turmas.alunos.edit');

@@ -61,9 +61,6 @@ class CreateAlunosTable extends Migration
             $table->string('MOTORISTA')->nullable();
             $table->string('MOTORISTA_II')->nullable();
             $table->string('OBSERVACOES')->nullable();
-            $table->string('EXCLUIDO')->default('NAO');
-            $table->string('EXCLUIDO_PASTA')->nullable();
-            $table->text('ATUALIZACAO')->nullable();
             $table->timestamps();
         });
     }
