@@ -521,4 +521,102 @@ class Aluno extends Model
             'ACAO_DETALHES' => 'ARQUIVADO', 'log_id' => '1', 'user_id' => $usuario,
         ]);
     }
+    /*
+   Cont as turmas e os alunos do ano corrente
+    */
+    public function contCorrentTurmas()
+    {
+        $ano = date('Y');
+        $turmasManha = Turma::where('ANO', 'LIKE', '%' . "$ano" . '%')->where('TURNO', 'LIKE', 'MATUTINO')->orderBy('TURMA', 'ASC')->get();
+        $arrayTotalManha[] = '';
+        $arrayManha[] = '';
+
+        foreach ($turmasManha as $turma) {
+
+            $turmaDados = '';
+            $alunosContManha = DB::table('aluno_turma')
+                ->where('turma_ano', 'LIKE', '%' . "$ano" . '%')
+                ->where('aluno_turma.turma_id', '=', $turma->id)
+                ->whereIn('aluno_turma.classificacao_id', [1, 2])
+                ->count();
+
+            array_push($arrayTotalManha, $alunosContManha);
+
+            $turmaDados = $turma->TURMA . '  -  ' . $turma->UNICO;
+            array_push($arrayManha, $turmaDados);
+        }
+
+        array_shift($arrayTotalManha);
+        array_shift($arrayManha);
+
+        $alunoTurmas = array_combine($arrayManha, $arrayTotalManha);
+
+        return $alunoTurmas;
+    }
+    /*
+    *Cont as turmas e os alunos do ano corrente Vespertino
+    */
+    public function alunoTurmasVesp()
+    {
+        $ano = date('Y');
+        $alunoTurmasVesp = Turma::where('ANO', 'LIKE', '%' . "$ano" . '%')->where('TURNO', 'LIKE', 'VESPERTINO')->orderBy('TURMA', 'ASC')->get();
+        $arrayTotalManha[] = '';
+        $arrayManha[] = '';
+
+        foreach ($alunoTurmasVesp as $turma) {
+
+            $turmaDados = '';
+            $alunosContManha = DB::table('aluno_turma')
+                ->where('turma_ano', 'LIKE', '%' . "$ano" . '%')
+                ->where('aluno_turma.turma_id', '=', $turma->id)
+                ->whereIn('aluno_turma.classificacao_id', [1, 2])
+                ->count();
+
+            array_push($arrayTotalManha, $alunosContManha);
+
+            $turmaDados = $turma->TURMA . '  -  ' . $turma->UNICO;
+            array_push($arrayManha, $turmaDados);
+        }
+
+        array_shift($arrayTotalManha);
+        array_shift($arrayManha);
+
+        $alunoTurmasVesp = array_combine($arrayManha, $arrayTotalManha);
+
+        return $alunoTurmasVesp;
+    }
+    /*
+    *Cont as turmas e os alunos do ano corrente Noturno
+    */
+    public function alunoTurmasNoturno()
+    {
+        $ano = date('Y');
+        $alunoTurmasNoturno = Turma::where('ANO', 'LIKE', '%' . "$ano" . '%')->where('TURNO', 'LIKE', 'NOTURNO')->orderBy('TURMA', 'ASC')->get();
+        $arrayTotalManha[] = '';
+        $arrayManha[] = '';
+
+        foreach ($alunoTurmasNoturno as $turma) {
+
+            $turmaDados = '';
+            $alunosContManha = DB::table('aluno_turma')
+                ->where('turma_ano', 'LIKE', '%' . "$ano" . '%')
+                ->where('aluno_turma.turma_id', '=', $turma->id)
+                ->whereIn('aluno_turma.classificacao_id', [1, 2])
+                ->count();
+
+            array_push($arrayTotalManha, $alunosContManha);
+
+            $turmaDados = $turma->TURMA . '  -  ' . $turma->UNICO;
+            array_push($arrayManha, $turmaDados);
+        }
+
+        array_shift($arrayTotalManha);
+        array_shift($arrayManha);
+
+        $alunoTurmasNoturno = array_combine($arrayManha, $arrayTotalManha);
+
+        return $alunoTurmasNoturno;
+    }
 }
+/* https://www.schoolofnet.com/forum/topico/laravel-count-de-registro-11117
+ */

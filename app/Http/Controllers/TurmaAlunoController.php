@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use PhpParser\Node\Stmt\Echo_;
 
+use function Composer\Autoload\includeFile;
+
 class TurmaAlunoController extends Controller
 {
     private $aluno, $turma;
@@ -176,33 +178,19 @@ class TurmaAlunoController extends Controller
         return redirect()->route('alunos.index')->with('message', 'Operações Realizadas com Sucesso!');
     }
     /*
-    *Resumo dos alunoa e turmas
+    *Resumo dos alunos e turmas
     */
-    public function resumo()
+    public function contCorrentTurmas()
     {
-        $alunoTurmas = $this->turma->with(['manhaAlunos'])->where('TURNO', 'LIKE', 'MATUTINO')->get();
+        $alunoTurmas = $this->aluno->contCorrentTurmas();
+        $alunoTurmasVesp = $this->aluno->alunoTurmasVesp();
+        $alunoTurmasNoturno = $this->aluno->alunoTurmasNoturno();
 
+        $totalManha = 0;
+        $totalVespertino = 0;
+        $totalNoturno = 0;
 
-        foreach ($alunoTurmas as $turma) {
-
-            echo $turma->TURMA . ': ';
-
-            $contCur = 0;
-
-            foreach ($turma->manhaAlunos as $key => $aluno) {
-                echo $aluno->NOME . ', ';
-                $contCur += $contCur + 1;
-            }
-
-            echo ' - ' . $contCur;
-            echo "<br>";
-        }
-
-
-
-        dd($alunoTurmas);
-
-        return view('turmas.alunos.resumo', compact('alunoTurmas'));
+        return view('turmas.alunos.resumo', compact('alunoTurmas', 'totalManha','alunoTurmasVesp', 'totalVespertino','alunoTurmasNoturno','totalNoturno'));
     }
     //
     //
