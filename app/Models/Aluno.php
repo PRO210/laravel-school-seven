@@ -526,6 +526,8 @@ class Aluno extends Model
     */
     public function contCorrentTurmas()
     {
+        include '../app/Http/Controllers/contCorrentTurmas.php';
+
         $ano = date('Y');
         $turmasManha = Turma::where('ANO', 'LIKE', '%' . "$ano" . '%')->where('TURNO', 'LIKE', 'MATUTINO')->orderBy('TURMA', 'ASC')->get();
         $arrayTotalManha[] = '';
@@ -617,6 +619,71 @@ class Aluno extends Model
 
         return $alunoTurmasNoturno;
     }
+    /*
+    *Gerar Relatório
+    */
+    public function gerarRelatorios($request)
+    {
+        //Tratamento dos dados do Status
+        if (!empty($request->classificacao_id)) {
+            $status = $request->classificacao_id;
+        } else {
+            $status = ['1', '2', '3', '4', '8', '9', '10'];
+        }
+
+        $alunos_id[] = "";
+        $turmas_id[] = "";
+
+        foreach ($request->turma_id as $key => $turma_id) {
+
+            $alunos = DB::table('aluno_turma')->where('OUVINTE', 'LIKE', "%$request->OUVINTE%")
+                ->join('alunos', 'aluno_turma.aluno_id', '=', 'alunos.id')
+                ->where('alunos.TRANSPORTE', 'LIKE', "%$request->TRANSPORTE%")->where('alunos.URBANO', 'LIKE', "%$request->URBANO%")
+                ->where('alunos.NECESSIDADES_ESPECIAIS', 'LIKE', "%$request->NECESSIDADES_ESPECIAIS%")
+                ->where('alunos.SEXO', 'LIKE', "%$request->SEXO%")
+                ->join('turmas', 'aluno_turma.turma_id', '=', 'turmas.id')->where('turmas.id', $turma_id)
+                ->join('classificacaos', 'aluno_turma.classificacao_id', '=', 'classificacaos.id')->whereIn('classificacao_id', $status)
+                ->select('aluno_turma.id', 'aluno_id',  'turma_id', 'classificacao_id')
+                ->orderBy('turmas.ANO', 'ASC')->orderBy('alunos.NOME', 'ASC')
+                ->get();
+
+            foreach ($alunos as $dados) {
+                foreach ($dados as $key => $value) {
+                    if ($key == "aluno_id") {
+                        array_push($alunos_id, $value);
+                    }
+                    if ($key == "turma_id") {
+                        array_push($turmas_id, $value);
+                    }
+                }
+            }
+        }
+
+
+
+
+        array_shift($alunos_id);
+        array_shift($turmas_id);
+
+
+        $gerarRelatorios = collect([]);
+
+        foreach ($alunos_id as $key => $nulo) {
+            $gerarRelatorios = $gerarRelatorios->concat(Aluno::with(['turmas' => function ($query) use ($turmas_id, $key) {
+                $query->where('turma_id', $turmas_id[$key]);
+            }])->where('id', $alunos_id[$key])->get());
+        }
+        // dd($gerarRelatorios);
+        return $gerarRelatorios;
+    }
+
+
+
+
+    //
+    //
 }
-/* https://www.schoolofnet.com/forum/topico/laravel-count-de-registro-11117
+
+/*
+ *https://www.schoolofnet.com/forum/topico/laravel-count-de-registro-11117
  */

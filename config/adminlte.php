@@ -258,12 +258,24 @@ return [
                     // 'can'  =>  'users',
                     'icon_color' => 'warning',
                 ],
-                [
-                    'text' => 'Quant. de alunos',
-                    'url'  => 'turmas/alunos/resumo',
-                    // 'can'  =>  'users',
 
+                [
+                    'text'    => 'Relatórios',
+                    'url'     => '#',
+                    'submenu' => [
+                        [
+                            'text' => 'Quant. de alunos',
+                            'url'  => 'turmas/alunos/resumo',
+                            // 'can'  =>  'users',
+                        ],
+                        [
+                            'text' => 'Gerar Relatório',
+                            'url'  => 'turmas/alunos/relatorios',
+                        ],
+                    ],
                 ],
+
+
             ],
         ],
         [

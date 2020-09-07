@@ -182,6 +182,8 @@ class TurmaAlunoController extends Controller
     */
     public function contCorrentTurmas()
     {
+        include 'contCorrentTurmas.php';
+
         $alunoTurmas = $this->aluno->contCorrentTurmas();
         $alunoTurmasVesp = $this->aluno->alunoTurmasVesp();
         $alunoTurmasNoturno = $this->aluno->alunoTurmasNoturno();
@@ -190,7 +192,29 @@ class TurmaAlunoController extends Controller
         $totalVespertino = 0;
         $totalNoturno = 0;
 
-        return view('turmas.alunos.resumo', compact('alunoTurmas', 'totalManha','alunoTurmasVesp', 'totalVespertino','alunoTurmasNoturno','totalNoturno'));
+        return view('turmas.alunos.resumo', compact('alunoTurmas', 'totalManha', 'alunoTurmasVesp', 'totalVespertino', 'alunoTurmasNoturno', 'totalNoturno'));
+    }
+    /*
+     *Gera os Relatórios dos alunos
+     */
+    public function relatorios()
+    {
+        $turmas = $this->turma->get();
+
+        $classificacoes = $this->classificacao->where('ORDEM_I', 'SIM')->get();
+
+        return view('turmas.alunos.relatorios', compact('classificacoes','turmas'));
+    }
+    /*
+     *Relatórios dos Gerados
+     */
+    public function gerarRelatorios(Request $request)
+    {
+        $gerarRelatorios = $this->aluno->gerarRelatorios($request);
+
+        $classificacoes = $this->classificacao->get();
+
+        return view('turmas.alunos.relatorioGerado', compact('gerarRelatorios','classificacoes'));
     }
     //
     //

@@ -49,6 +49,8 @@ Route::prefix('turma')
 Route::prefix('turmas/alunos')
     ->group(function () {
 
+        Route::post('/relatorios/gerados', 'TurmaAlunoController@gerarRelatorios')->name('turmas.alunos.relatorios.gerados');
+        Route::get('/relatorios', 'TurmaAlunoController@relatorios')->name('turmas.alunos.relatorios');
         Route::get('/resumo', 'TurmaAlunoController@contCorrentTurmas')->name('turmas.alunos.resumo');
         Route::get('/{uuid}/solicitações/create/{turma_id}', 'SolicitacaoAlunoController@create')->name('turmas.aluno.solicitacao');
         Route::put('/update', 'TurmaAlunoController@update')->name('turmas.alunos.update');
