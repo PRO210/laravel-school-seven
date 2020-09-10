@@ -7,6 +7,16 @@ Route::prefix('admin')
     ->namespace('Admin')
     ->middleware('auth')
     ->group(function () {
+        //
+        //Planos        //Planos        //Planos
+        Route::put('/plans/{url}/', 'PlanController@update')->name('plans.update');
+        Route::any('/plans/{url}/edit', 'PlanController@edit')->name('plans.edit');
+        Route::any('/search', 'PlanController@search')->name('plans.search');
+        Route::get('/plans', 'PlanController@index'  )->name('plans.index');
+        Route::post('/plans', 'PlanController@store'  )->name('plans.store');
+        Route::get('/plans/create/', 'PlanController@create' )->name('plans.create');
+        Route::get('/plans/{url}','PlanController@show'     )->name('plans.show');
+        Route::delete('/plans/{url}','PlanController@delete')->name('plans.delete');
         /**
          * Home Dashboard
          */

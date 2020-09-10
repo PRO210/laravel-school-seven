@@ -75,8 +75,10 @@ php artisan adminlte:install
 //
 //Plan          //Plan        //Plan
 php artisan make:model Models\\Plan -m
-php artisan make:request StoreUpdateDetailPlan
+php artisan make:request StoreUpdatePlan
 php artisan make:observer PlanObserver --model=Models\\Plan
+php artisan make:controller Admin\\PlanController --resource
+Os Observers são chamados através do AppServiceProvider
 //
 //
 php artisan make:model Models\\DetailPlan -m

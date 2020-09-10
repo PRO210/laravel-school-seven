@@ -3,11 +3,14 @@
 namespace App\Providers;
 
 use \App\Models\{
-    Aluno
+    Aluno,
+    Plan
 };
 
 use \App\Observers\{
-    AlunoObserver
+    AlunoObserver,
+    PlanObserver
+
 };
 
 use Illuminate\Support\ServiceProvider;
@@ -32,5 +35,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Aluno::observe(AlunoObserver::class);
+        Plan::observe(PlanObserver::class);
     }
 }

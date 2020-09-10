@@ -232,6 +232,13 @@ return [
 
     'menu' => [
         [
+            'text' => 'Planos',
+            'url'  => 'admin/plans',
+            'icon'  => 'fas fa-list-alt',
+           // 'can'  =>  'plans',
+//
+        ],
+        [
             'text'    => 'Alunos',
             'icon'  => 'fas fas fa',
             'submenu' => [
