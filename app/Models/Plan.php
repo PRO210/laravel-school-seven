@@ -8,10 +8,10 @@ class Plan extends Model
 {
     protected  $fillable = ['name', 'url', 'price' ,'description'];
     //
-    // public function details()
-    // {
-    //     return $this->hasMany(DetailPlan::class);
-    // }
+    public function details()
+    {
+        return $this->hasMany(DetailPlan::class);
+    }
 
     // public function profiles()
     // {
@@ -30,7 +30,6 @@ class Plan extends Model
         $results = $this->where('name', 'LIKE', "%{$filter}%")
                         ->orWhere('description', 'LIKE', "%{$filter}%")
                         ->paginate(15);
-
         return $results;
     }
     //

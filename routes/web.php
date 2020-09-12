@@ -8,20 +8,36 @@ Route::prefix('admin')
     ->middleware('auth')
     ->group(function () {
         //
+        // Router Profiles      // Router Profiles      // Router Profiles
+        Route::any('profiles/search', 'ACL\ProfileController@search')->name('profiles.search');
+        Route::resource('profiles', 'ACL\ProfileController');
+        //
+        //
+        //Routes Details Plan       //Routes Details Plan       //Routes Details Plan
+        Route::delete('/plans/{url}/details/{idDetail}', 'DetailPlanController@destroy')->name('details.plan.destroy');
+        Route::put('/plans/{url}/details/{idDetail}', 'DetailPlanController@update')->name('details.plan.update');
+        Route::get('/plans/{url}/details/{idPlan}/edit', 'DetailPlanController@edit')->name('details.plan.edit');
+        Route::get('/plans/{url}/details', 'DetailPlanController@index')->name('details.plan.index');
+        Route::post('/plans/{url}/details/', 'DetailPlanController@store')->name('details.plan.store');
+        Route::get('plans/{url}/details/create', 'DetailPlanController@create')->name('details.plan.create');
+        Route::get('/plans/{url}/details/{idDetail}', 'DetailPlanController@show')->name('details.plan.show');
+        //
         //Planos        //Planos        //Planos
         Route::put('/plans/{url}/', 'PlanController@update')->name('plans.update');
         Route::any('/plans/{url}/edit', 'PlanController@edit')->name('plans.edit');
         Route::any('/search', 'PlanController@search')->name('plans.search');
-        Route::get('/plans', 'PlanController@index'  )->name('plans.index');
-        Route::post('/plans', 'PlanController@store'  )->name('plans.store');
-        Route::get('/plans/create/', 'PlanController@create' )->name('plans.create');
-        Route::get('/plans/{url}','PlanController@show'     )->name('plans.show');
-        Route::delete('/plans/{url}','PlanController@delete')->name('plans.delete');
+        Route::get('/plans', 'PlanController@index')->name('plans.index');
+        Route::post('/plans', 'PlanController@store')->name('plans.store');
+        Route::get('/plans/create/', 'PlanController@create')->name('plans.create');
+        Route::get('/plans/{url}', 'PlanController@show')->name('plans.show');
+        Route::delete('/plans/{url}', 'PlanController@delete')->name('plans.delete');
         /**
          * Home Dashboard
          */
         Route::get('/', 'DashboardController@home')->name('admin.index');
     });
+
+
 /*
          *Alunos
          */
@@ -70,7 +86,7 @@ Route::prefix('turmas/alunos')
         Route::get('/desistentes', 'TurmaAlunoController@indexDesistentes')->name('turmas.alunos.desistentes');
         Route::get('', 'TurmaAlunoController@index')->name('turmas.alunos');
     });
-    /*
+/*
     Turmas Alunos Solicitalções
     */
 Route::prefix('turmas/alunos/solicitações')
@@ -87,7 +103,6 @@ Route::prefix('turmas/alunos/solicitações')
         Route::get('/{uuid}/show', 'SolicitacaoAlunoController@show')->name('turmas.aluno.solicicao.show');
         Route::post('/store', 'SolicitacaoAlunoController@store')->name('turmas.aluno.solicicao.store');
         Route::get('', 'SolicitacaoAlunoController@index')->name('turmas.alunos.solicicaos');
-
     });
 
 

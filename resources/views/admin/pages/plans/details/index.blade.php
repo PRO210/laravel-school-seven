@@ -19,12 +19,12 @@
 @section('content')
     <div class="card">
         <div class="card-body">
-            @include('admin.includes.alerts')
+            @include('alerts')
             <table class="table table-condensed">
                 <thead>
                     <tr>
                         <th>Nome</th>
-                        <th width="150">Ações</th>
+                        <th width="250">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -33,7 +33,7 @@
                             <td>
                                 {{ $detail->name }}
                             </td>
-                            <td style="width=10px;">
+                            <td>
                                 <a href="{{ route('details.plan.edit', [$plan->url, $detail->id]) }}" class="btn btn-info">Edit</a>
                                 <a href="{{ route('details.plan.show', [$plan->url, $detail->id]) }}" class="btn btn-warning">VER</a>
                             </td>

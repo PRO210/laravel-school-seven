@@ -239,6 +239,13 @@ return [
 //
         ],
         [
+            'text' => 'Perfis',
+            'url'  => 'admin/profiles',
+            'icon'  => 'fas fa-address-book',
+//            'can'  =>  'profiles',
+//
+        ],
+        [
             'text'    => 'Alunos',
             'icon'  => 'fas fas fa',
             'submenu' => [

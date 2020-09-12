@@ -20,7 +20,7 @@ class PlanController extends Controller
     public function index()
     {
         $plans = $this->repository->latest()->paginate();
-       /*  <a href="{{ route('details.plan.index', $plan->url) }}" class="btn btn-primary">Detalhes</a>
+       /*
         <a href="{{ route('plans.profiles', $plan->id) }}" class="btn btn-warning"><i class="fas fa-address-book"></i></a> */
 
         return view('admin.pages.plans.index', ['plans' => $plans]);
