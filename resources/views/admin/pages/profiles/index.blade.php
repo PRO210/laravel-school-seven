@@ -13,9 +13,11 @@
         <li class="breadcrumb-item active"><a href="{{ route('profiles.index') }}" class="active">Perfis</a></li>
     </ol>
 
-    <h1>Perfis<a href="{{ route('profiles.create') }}" class="btn btn-dark">ADD</a></h1>
+    <h1>Perfis &nbsp;<a href="{{ route('profiles.create') }}" class="btn btn-dark">ADD</a></h1>
 @stop
+
 @section('content')
+
     <div class="card">
         <div class="card-header">
             <form action="{{ route('profiles.search') }}" method="POST" class="form form-inline">
@@ -38,7 +40,7 @@
                             <td>
                                 {{ $profile->name }}
                             </td>
-                            <td style="width=10px;">
+                            <td>
                                 <a href="{{ route('profiles.edit', $profile->id) }}" class="btn btn-info">Edit</a>
                                 <a href="{{ route('profiles.show', $profile->id) }}" class="btn btn-warning">VER</a>
                                 <a href="{{ route('profiles.permissions', $profile->id) }}" class="btn btn-warning"><i class="fas fa-lock"></i></a>

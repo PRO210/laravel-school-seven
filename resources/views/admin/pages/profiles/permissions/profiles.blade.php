@@ -1,5 +1,4 @@
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
- @include('admin.includes.alerts')
+ @include('alerts')
 
 @extends('adminlte::page')
 
@@ -9,7 +8,7 @@
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">Dashboard</a></li>
         <li class="breadcrumb-item active"><a href="{{ route('profiles.index') }}" class="active">Perfis</a></li>
-        
+
     </ol>
     <h1>Permissões do Perfil <strong>{{ $profile->name }}</strong>
         <a href="{{ route('profiles.permissions.available', $profile->id ) }}" class="btn btn-outline-primary">ADD NOVA PERMISSÃO </a>
@@ -23,7 +22,7 @@
                 <thead>
                     <tr>
                         <th>Nome</th>
-                        <th width="50">Ações</th>
+                        <th width="100">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -32,7 +31,7 @@
                             <td>
                                 {{ $permission->name }}
                             </td>
-                            <td style="width=10px;">
+                            <td>
                                 <a href="{{ route('profiles.permission.detach', [$profile->id, $permission->id]) }}" class="btn btn-danger">DESVINCULAR</a>
                             </td>
                         </tr>

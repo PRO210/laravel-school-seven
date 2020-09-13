@@ -12,15 +12,15 @@ class Profile extends Model
      * Get Permissions
      */
 
-    /* public function permissions()
+    public function permissions()
     {
         return $this->belongsToMany(Permission::class);
-    } */
+    }
 
     //
     // Permissões não vínculadas ao perfil
 
-    /* public function permissionsAvailable($filter = null)
+    public function permissionsAvailable($filter = null)
     {
             $permissions = Permission::whereNotIn('id',function($query){
             $query->select('permission_profile.permission_id');
@@ -35,7 +35,7 @@ class Profile extends Model
 
         return $permissions ;
 
-    } */
+    }
 
 
 }

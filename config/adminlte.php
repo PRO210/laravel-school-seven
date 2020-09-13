@@ -246,6 +246,12 @@ return [
 //
         ],
         [
+            'text' => 'Permissões',
+            'url'  => 'admin/permissions',
+            'icon' => 'fas fa-lock',
+    //        'can'  =>  'permissions',
+        ],
+        [
             'text'    => 'Alunos',
             'icon'  => 'fas fas fa',
             'submenu' => [

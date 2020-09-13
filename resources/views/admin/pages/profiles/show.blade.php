@@ -7,6 +7,9 @@
 @stop
 
 @section('content')
+
+@include('alerts')
+
     <div class="card">
         <div class="card-body">
             <ul>
@@ -17,9 +20,6 @@
                     <strong>Descrição: </strong> {{ $profile->description }}
                 </li>
             </ul>
-
-            @include('admin.includes.alerts')
-
             <form action="{{ route('profiles.destroy', $profile->id) }}" method="POST">
                 @csrf
                 @method('DELETE')

@@ -20,8 +20,6 @@ class PlanController extends Controller
     public function index()
     {
         $plans = $this->repository->latest()->paginate();
-       /*
-        <a href="{{ route('plans.profiles', $plan->id) }}" class="btn btn-warning"><i class="fas fa-address-book"></i></a> */
 
         return view('admin.pages.plans.index', ['plans' => $plans]);
     }
@@ -30,7 +28,6 @@ class PlanController extends Controller
     {
         return view('admin.pages.plans.create');
     }
-    //
     //
     public function store(StoreUpdatePlan $request)
     {

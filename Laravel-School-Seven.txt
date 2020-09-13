@@ -95,7 +95,11 @@ php artisan make:request StoreUpdateProfile
 php artisan make:controller Admin\\ACL\\PlanProfileController --resource
 php artisan make:migration create_plan_profile_table
 //
-// O CRUD de Permissões - Speed Code.Obs: Cria também a tabela pivot.
+// O CRUD de Permissões -
+php artisan make:model Models\\Permission -m
+php artisan make:controller Admin\\ACL\\PermissionController --resource
+php artisan make:request StoreUpdatePermission
+// Tabela pivot.
 php artisan make:migration create_permission_profile_table
 php artisan make:controller Admin\\ACL\\PermissionProfileController --resource
 //
