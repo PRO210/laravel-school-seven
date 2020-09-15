@@ -103,6 +103,12 @@ php artisan make:request StoreUpdatePermission
 php artisan make:migration create_permission_profile_table
 php artisan make:controller Admin\\ACL\\PermissionProfileController --resource
 //
+// Tabela pivot.
+php artisan make:migration create_plan_profile_table
+php artisan make:controller Admin\\ACL\\PlanProfileController --resource
+php artisan make:controller Admin\\ACL\\PlanProfileController --resource
+//
+//
 //Debugar o projeto
 https://github.com/barryvdh/laravel-debugbar
 composer require barryvdh/laravel-debugbar --dev

@@ -14,13 +14,22 @@
 
 @stop
 
+@section('js')
+<script type='text/javascript'>
+    /*Fecha a message*/
+    $(document).ready(function() {
+        $("#teste").delay(5000).fadeOut("slow");
+    });
+</script>
+@stop
+
 @section('content')
     <div class="card">
         <div class="card-header">
             <form action="{{ route('plans.profiles.available', $plan->id) }}" method="POST" class="form form-inline">
                 @csrf
                 <input type="text" name="filter" placeholder="Filtro" class="form-control" value="{{ $filters['filter'] ?? '' }}">
-                <button type="submit" class="btn btn-dark">Filtrar</button>
+                &nbsp; <button type="submit" class="btn btn-dark">Filtrar</button>
             </form>
         </div>
         <div class="card-body">
@@ -48,7 +57,7 @@
 
                         <tr>
                             <td colspan="500">
-                                @include('admin.includes.alerts')
+                                @include('alerts')
 
                                 <button type="submit" class="btn btn-success">Vincular</button>
                             </td>

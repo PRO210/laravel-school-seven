@@ -88,10 +88,8 @@
 
 
 @if(session('info'))
-<div class="alert alert-warning">
+<div class="alert alert-warning" id="teste">
     {{ session('info') }}
-
-
-
 </div>
+
 @endif

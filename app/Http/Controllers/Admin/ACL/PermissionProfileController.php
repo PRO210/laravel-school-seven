@@ -26,7 +26,6 @@ class PermissionProfileController extends Controller
         if (!$profile) {
             return redirect()->back();
         }
-
         $permissions = $profile->permissions()->paginate();
 
         return view('admin.pages.profiles.permissions.profiles', compact('profile', 'permissions'));
