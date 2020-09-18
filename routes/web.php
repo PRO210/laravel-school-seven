@@ -133,9 +133,14 @@ Route::prefix('turmas/alunos/solicitações')
 
 
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+/**
+ * Site
+ */
+Route::get('/plan/{url}', 'Site\SiteController@plan')->name('plan.subscription');
+Route::get('/', 'Site\SiteController@index')->name('site.home');
 
 Route::get('/home', function () {
     return view('admin/pages/home/home');
