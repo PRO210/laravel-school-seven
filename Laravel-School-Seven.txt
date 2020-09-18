@@ -20,6 +20,7 @@ sudo code /etc/hosts
 
 //
 // No caso de alterar algum arquivos
+//
 composer dumpautoload
 composer update
 ll public
@@ -27,7 +28,7 @@ php artisan key:generate
 php artisan storage:link
 //DB::enableQueryLog();
 // dd(DB::getQueryLog());
-
+//
 //
 php artisan migrate
 
