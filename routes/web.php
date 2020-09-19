@@ -10,7 +10,11 @@ Route::prefix('admin')
 
 
 
-
+        /**
+         * Routes Users
+         */
+        Route::any('users/search', 'UserController@search')->name('users.search');
+        Route::resource('users', 'UserController');
         /**
          * Plan x Profile
          */

@@ -252,6 +252,12 @@ return [
     //        'can'  =>  'permissions',
         ],
         [
+            'text' => 'Usuários',
+            'url'  => 'admin/users',
+            'icon' => 'fas fa-users',
+        //    'can'  =>  'users',
+        ],
+        [
             'text'    => 'Alunos',
             'icon'  => 'fas fas fa',
             'submenu' => [
