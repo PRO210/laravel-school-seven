@@ -130,9 +130,6 @@ https://fontawesome.com/icons
 https://icons.getbootstrap.com/
 //
 //
-php artisan make:controller Site\\SiteController --resource
-
-//
 php artisan migrate
 php artisan migrate:refresh
 php artisan migrate:refresh --seed
@@ -149,6 +146,13 @@ php artisan make:controller Site\\SiteController
 //
 // Usuários     // Usuários     // Usuários
 php artisan make:controller Admin\\UserController
+//
+//Tenant          //Tenant        //Tenant
+php artisan make:model Models\\Tenant -m
+php artisan make:request Tenant
+php artisan make:controller Admin\\PlanController --resource
+php artisan make:observer TenantObserver --model=Models\\Tenant
+Os Observers são chamados através do AppServiceProvider
 //
 // Cargos       Cargos      Cargos
 php artisan make:model Models\\Role -m

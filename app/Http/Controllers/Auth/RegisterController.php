@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
+use App\Services\TenantService;
 use App\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
@@ -29,7 +30,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo =' /admin';
+    protected $redirectTo = '/admin';
     // protected $redirectTo = RouteServiceProvider::HOME;
 
     /**
@@ -51,9 +52,11 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'name' => ['required', 'string', 'min:3', 'max:255'],
+            'email' => ['required', 'string', 'email', 'min:3', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'max:16', 'confirmed'],
+            'empresa' => ['required', 'string', 'min:3', 'max:255', 'unique:tenants,name'],
+            'cnpj' => ['required', 'numeric', 'digits:14', 'unique:tenants'],
         ]);
     }
 
@@ -65,10 +68,28 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        if (!$plan = session('plan')) {
+            return redirect()->route('site.home');
+        }
+       /*  $tenant = $plan->tenants()->create([
+            'cnpj' => $data['cnpj'],
+            'name' => $data['empresa'],
+            'email' => $data['email'],
+        ]);
+
+        $user = $tenant->users()->create([
             'name' => $data['name'],
             'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
+            'password' => bcrypt($data['password']),
+            // 'password' => Hash::make($data['password']),
+        ]); */
+
+        $tenantService = app(TenantService::class);
+        $user = $tenantService->make($plan, $data);
+
+        //event(new TenantCreated($user));
+
+        return $user;
+
     }
 }

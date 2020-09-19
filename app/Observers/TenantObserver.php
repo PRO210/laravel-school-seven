@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 
 class TenantObserver
 {
-    /**
+/**
      * Handle the tenant "created" event.
      *
      * @param  \App\Models\Tenant  $tenant
@@ -16,11 +16,8 @@ class TenantObserver
      */
     public function creating(Tenant $tenant)
     {
-        dd($tenant);
         $tenant->uuid = Str::uuid();
-
         $tenant->url = Str::kebab($tenant->name);
-
 
     }
     /**

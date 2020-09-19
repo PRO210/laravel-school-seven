@@ -7,7 +7,7 @@ use App\Repositories\Contracts\TenantRepositoryInterface;
 
 class TenantService
 {
-    // private $plan, $data = [];
+    private $plan, $data = [];
     // private $repository;
 
     // public function __construct(TenantRepositoryInterface $repository)
