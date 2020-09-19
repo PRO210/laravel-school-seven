@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUpdateUser;
 use App\User;
+use Illuminate\Auth\Access\Gate;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -14,7 +15,7 @@ class UserController extends Controller
     public function __construct(User $user)
     {
         $this->repository = $user;
-
+        // Usar o Gate em todo Controller
         //$this->middleware(['can:users']);
     }
 
@@ -25,6 +26,8 @@ class UserController extends Controller
      */
     public function index()
     {
+       /*  Usando o Gate para uma ação especifica de um metodo
+        Gate::allows('Users'); */
         $users = $this->repository->latest()->tenantUser()->paginate();
 
         return view('admin.pages.users.index', compact('users'));

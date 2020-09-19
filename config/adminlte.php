@@ -235,27 +235,27 @@ return [
             'text' => 'Planos',
             'url'  => 'admin/plans',
             'icon'  => 'fas fa-list-alt',
-           // 'can'  =>  'plans',
-//
+            //         'can'  =>  'Plans',
+            //
         ],
         [
             'text' => 'Perfis',
             'url'  => 'admin/profiles',
             'icon'  => 'fas fa-address-book',
-//            'can'  =>  'profiles',
-//
+            //      'can'  =>  'Profiles',
+            //
         ],
         [
             'text' => 'Permissões',
             'url'  => 'admin/permissions',
             'icon' => 'fas fa-lock',
-    //        'can'  =>  'permissions',
+            'can'  =>  'Permissions',
         ],
         [
             'text' => 'Usuários',
             'url'  => 'admin/users',
             'icon' => 'fas fa-users',
-        //    'can'  =>  'users',
+            'can'  =>  'Users',
         ],
         [
             'text'    => 'Alunos',
@@ -264,24 +264,24 @@ return [
                 [
                     'text' => 'Cadastrados',
                     'url'  => 'alunos',
-                    // 'can'  =>  'users',
+                    'can'  =>  'Users',
                 ],
                 [
                     'text' => 'Cursando',
                     'url'  => 'turmas/alunos',
-                    // 'can'  =>  'users',
+                    'can'  =>  'Users',
                     'icon_color' => 'success',
                 ],
                 [
                     'text' => 'Transferidos',
                     'url'  => 'turmas/alunos/solicitações',
-                    // 'can'  =>  'users',
+                    'can'  =>  'Users',
                     'icon_color' => 'red',
                 ],
                 [
                     'text' => 'Desistentes',
                     'url'  => 'turmas/alunos/desistentes',
-                    // 'can'  =>  'users',
+                    'can'  =>  'Users',
                     'icon_color' => 'warning',
                 ],
 
@@ -292,7 +292,7 @@ return [
                         [
                             'text' => 'Quant. de alunos',
                             'url'  => 'turmas/alunos/resumo',
-                            // 'can'  =>  'users',
+                            'can'  =>  'Users',
                         ],
                         [
                             'text' => 'Gerar Relatório',
@@ -311,12 +311,12 @@ return [
                 [
                     'text' => 'Cadastradas',
                     'url'  => 'turma',
-                    // 'can'  =>  'users',
+                    'can'  =>  'users',
                 ],
                 [
                     'text' => 'Cursando',
                     'url'  => 'turmas/alunos',
-                    // 'can'  =>  'users',
+                    'can'  =>  'users',
                 ],
             ],
         ],

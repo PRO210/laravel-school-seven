@@ -15,6 +15,8 @@ Route::prefix('admin')
          */
         Route::any('users/search', 'UserController@search')->name('users.search');
         Route::resource('users', 'UserController');
+        // Aplicar o Gate direto na rota
+        // Route::resource('users', 'UserController')->middleware('can:Users');
         /**
          * Plan x Profile
          */
