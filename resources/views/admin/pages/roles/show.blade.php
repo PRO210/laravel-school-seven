@@ -18,7 +18,7 @@
                 </li>
             </ul>
 
-            @include('admin.includes.alerts')
+            @include('alerts')
 
             <form action="{{ route('roles.destroy', $role->id) }}" method="POST">
                 @csrf

@@ -154,19 +154,17 @@ php artisan make:controller Admin\\PlanController --resource
 php artisan make:observer TenantObserver --model=Models\\Tenant
 Os Observers são chamados através do AppServiceProvider
 //
-
-
-
-
-
-
-
-
 //
 // Cargos       Cargos      Cargos
 php artisan make:model Models\\Role -m
 php artisan make:controller Admin\\ACL\\RoleController
 php artisan make:request StoreUpdateRole
+php artisan make:controller Admin\\ACL\\PermissionRoleController
+php artisan make:controller Admin\\ACL\\RoleUserController
+php artisan make:migration create_role_user_table
+
+
+
 //
 // Cria um evento para criar um cargo ao se cadastrar em um plano
 php artisan make:event TenantCreated

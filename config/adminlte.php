@@ -235,15 +235,21 @@ return [
             'text' => 'Planos',
             'url'  => 'admin/plans',
             'icon'  => 'fas fa-list-alt',
-            //         'can'  =>  'Plans',
+            'can'  =>  'Plans',
             //
         ],
         [
             'text' => 'Perfis',
             'url'  => 'admin/profiles',
             'icon'  => 'fas fa-address-book',
-            //      'can'  =>  'Profiles',
+             'can'  =>  'Profiles',
             //
+        ],
+        [
+            'text' => 'Cargos',
+            'url'  => 'admin/roles',
+            'icon' => 'fas fa-address-card',
+            'can'  =>  'roles',
         ],
         [
             'text' => 'Permissões',

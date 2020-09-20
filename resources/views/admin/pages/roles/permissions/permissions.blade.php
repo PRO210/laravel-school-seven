@@ -21,7 +21,7 @@
                 <thead>
                     <tr>
                         <th>Nome</th>
-                        <th width="50">Ações</th>
+                        <th width="330">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -30,7 +30,7 @@
                             <td>
                                 {{ $permission->name }}
                             </td>
-                            <td style="width=10px;">
+                            <td style="width:330px;">
                                 <a href="{{ route('roles.permission.detach', [$role->id, $permission->id]) }}" class="btn btn-danger">DESVINCULAR</a>
                             </td>
                         </tr>

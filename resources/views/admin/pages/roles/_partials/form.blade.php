@@ -1,4 +1,4 @@
-@include('admin.includes.alerts')
+@include('alerts')
 
 @csrf
 

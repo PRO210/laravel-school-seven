@@ -2,28 +2,28 @@
 
 namespace App\Models;
 
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 
-class Permission extends Model
+class Role extends Model
 {
     protected $fillable = ['name', 'description'];
 
     /**
-     * Get Profiles
+     * Get Permissions
      */
-    public function profiles()
+    public function permissions()
     {
-        return $this->belongsToMany(Profile::class);
+        return $this->belongsToMany(Permission::class);
     }
-
     /**
-     * Get Roles
+     * Get Users
      */
-    public function roles()
+    public function users()
     {
-        return $this->belongsToMany(Role::class);
+        return $this->belongsToMany(User::class);
     }
-     /**
+    /**
      * Permission not linked with this profile
      */
     public function permissionsAvailable($filter = null)

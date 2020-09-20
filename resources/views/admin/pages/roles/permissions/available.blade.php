@@ -46,7 +46,7 @@
 
                         <tr>
                             <td colspan="500">
-                                @include('admin.includes.alerts')
+                                @include('alerts')
 
                                 <button type="submit" class="btn btn-success">Vincular</button>
                             </td>

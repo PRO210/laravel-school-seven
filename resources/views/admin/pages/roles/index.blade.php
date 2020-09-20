@@ -17,7 +17,7 @@
             <form action="{{ route('roles.search') }}" method="POST" class="form form-inline">
                 @csrf
                 <input type="text" name="filter" placeholder="Filtro" class="form-control" value="{{ $filters['filter'] ?? '' }}">
-                <button type="submit" class="btn btn-dark">Filtrar</button>
+                &nbsp;<button type="submit" class="btn btn-dark">Filtrar</button>
             </form>
         </div>
         <div class="card-body">
@@ -25,7 +25,7 @@
                 <thead>
                     <tr>
                         <th>Nome</th>
-                        <th width="200">Ações</th>
+                        <th width="330">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -34,7 +34,7 @@
                             <td>
                                 {{ $role->name }}
                             </td>
-                            <td style="width=10px;">
+                            <td style="width:20px;">
                                 <a href="{{ route('roles.edit', $role->id) }}" class="btn btn-info">Edit</a>
                                 <a href="{{ route('roles.show', $role->id) }}" class="btn btn-warning">VER</a>
                                 <a href="{{ route('roles.permissions', $role->id) }}" class="btn btn-warning"><i class="fas fa-lock"></i></a>
