@@ -23,6 +23,10 @@ sudo code /etc/hosts
 //
 composer dumpautoload
 composer update
+Para upar imagens no diretorio storage altere para
+'default' => env('FILESYSTEM_DRIVER', 'public'),
+e depois  para visualizar na view
+php artisan storage:link
 ll public
 php artisan key:generate
 php artisan storage:link
@@ -149,8 +153,8 @@ php artisan make:controller Admin\\UserController
 //
 //Tenant          //Tenant        //Tenant
 php artisan make:model Models\\Tenant -m
-php artisan make:request Tenant
-php artisan make:controller Admin\\PlanController --resource
+php artisan make:request StoreUpdateTenant
+php artisan make:controller Admin\\TenantController --resource
 php artisan make:observer TenantObserver --model=Models\\Tenant
 Os Observers são chamados através do AppServiceProvider
 //
@@ -162,9 +166,7 @@ php artisan make:request StoreUpdateRole
 php artisan make:controller Admin\\ACL\\PermissionRoleController
 php artisan make:controller Admin\\ACL\\RoleUserController
 php artisan make:migration create_role_user_table
-
-
-
+//
 //
 // Cria um evento para criar um cargo ao se cadastrar em um plano
 php artisan make:event TenantCreated

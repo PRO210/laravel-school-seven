@@ -232,17 +232,23 @@ return [
 
     'menu' => [
         [
+            'text' => 'Empresas',
+            'url'  => 'admin/tenants',
+            'icon' => 'fas fa-building',
+            'can'  =>  'tenants',
+        ],
+        [
             'text' => 'Planos',
             'url'  => 'admin/plans',
             'icon'  => 'fas fa-list-alt',
-            'can'  =>  'Plans',
+            'can'  =>  'plans',
             //
         ],
         [
             'text' => 'Perfis',
             'url'  => 'admin/profiles',
             'icon'  => 'fas fa-address-book',
-             'can'  =>  'Profiles',
+             'can'  =>  'profiles',
             //
         ],
         [
@@ -255,13 +261,13 @@ return [
             'text' => 'Permissões',
             'url'  => 'admin/permissions',
             'icon' => 'fas fa-lock',
-            'can'  =>  'Permissions',
+            'can'  =>  'permissions',
         ],
         [
             'text' => 'Usuários',
             'url'  => 'admin/users',
             'icon' => 'fas fa-users',
-            'can'  =>  'Users',
+            'can'  =>  'users',
         ],
         [
             'text'    => 'Alunos',
@@ -270,7 +276,7 @@ return [
                 [
                     'text' => 'Cadastrados',
                     'url'  => 'alunos',
-                    'can'  =>  'Users',
+                    'can'  =>  'users',
                 ],
                 [
                     'text' => 'Cursando',
@@ -281,13 +287,13 @@ return [
                 [
                     'text' => 'Transferidos',
                     'url'  => 'turmas/alunos/solicitações',
-                    'can'  =>  'Users',
+                    'can'  =>  'users',
                     'icon_color' => 'red',
                 ],
                 [
                     'text' => 'Desistentes',
                     'url'  => 'turmas/alunos/desistentes',
-                    'can'  =>  'Users',
+                    'can'  =>  'users',
                     'icon_color' => 'warning',
                 ],
 
@@ -298,7 +304,7 @@ return [
                         [
                             'text' => 'Quant. de alunos',
                             'url'  => 'turmas/alunos/resumo',
-                            'can'  =>  'Users',
+                            'can'  =>  'users',
                         ],
                         [
                             'text' => 'Gerar Relatório',

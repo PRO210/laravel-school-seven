@@ -17,7 +17,7 @@
             <form action="{{ route('tenants.search') }}" method="POST" class="form form-inline">
                 @csrf
                 <input type="text" name="filter" placeholder="Filtrar:" class="form-control" value="{{ $filters['filter'] ?? '' }}">
-                <button type="submit" class="btn btn-dark">Filtrar</button>
+               &nbsp; <button type="submit" class="btn btn-dark">Filtrar</button>
             </form>
         </div>
         <div class="card-body">
@@ -26,7 +26,7 @@
                     <tr>
                         <th width="100">Imagem</th>
                         <th>Nome</th>
-                        <th width="150">Ações</th>
+                        <th width="330">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
