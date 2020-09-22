@@ -17,11 +17,12 @@ class DatabaseSeeder extends Seeder
             PlansTableSeeder::class,
             TenantsTableSeeder::class,
             UsersTableSeeder::class,
-            // CategoriesTableSeeder::class,
-            // DocumentosTableSeeder::class,
-            // ShiftsTableSeeder::class,
-            // TurmaTableSeeder::class,
-            // SolicitacaosTableSeeder::class,
+            CategoriesTableSeeder::class,
+            DocumentosTableSeeder::class,
+            ShiftsTableSeeder::class,
+            TurmaTableSeeder::class,
+            SolicitacaosTableSeeder::class,
+            LogTableSeeder::class,
         ]);
     }
 }

@@ -3,7 +3,7 @@ sudo service docker stop
 sudo service docker restart
 //
 cd /home/casa/Workspace/laradock/
-docker-compose up -d nginx mysql phpmyadmin (Subindo)
+docker-compose up -d nginx mysql phpmyadmin
 docker-compose down (Baixando)
 //Entrando do Contaniners
 docker container exec -it laradock_workspace_1 bash
@@ -11,6 +11,8 @@ docker container exec -it laradock_workspace_1 bash
 Ctrl + p + q
 //
 cd /home/casa/Workspace/laravel-school-seven/
+sudo chmod -R 777 storage
+sudo chmod -R 777 bootstrap
 
 composer create-project --prefer-dist laravel/laravel laravel-school-seven
 http://laravel-school-seven:
@@ -26,6 +28,7 @@ composer update
 Para upar imagens no diretorio storage altere para
 'default' => env('FILESYSTEM_DRIVER', 'public'),
 e depois  para visualizar na view
+Rodar como Sudo para ser dono da pasta:)
 php artisan storage:link
 ll public
 php artisan key:generate
@@ -242,6 +245,8 @@ php artisan make:controller SolicitacaoAlunoController --resource
 
 //
 php artisan make:migration create_aluno_log_table
+php artisan make:seeder LogTableSeeder
+
 //
 //
 php artisan make:model Models\\Documento -m

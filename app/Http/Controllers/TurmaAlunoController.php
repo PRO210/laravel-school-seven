@@ -172,7 +172,7 @@ class TurmaAlunoController extends Controller
         /* LOG DOS ALUNOS */
         $usuario = Auth::user()->id;
         DB::table('aluno_log')->insert(
-            ['aluno_id' => $aluno->id, 'ACAO' => 'DELETE', 'log_id' => '3', 'ACAO_DETALHES' => 'ARQUIVADO', 'user_id' => $usuario,]
+            ['aluno_id' => $aluno->id, 'ACAO' => 'DELETAR', 'log_id' => '3', 'ACAO_DETALHES' => 'ARQUIVADO', 'user_id' => $usuario,]
         );
 
         return redirect()->route('alunos.index')->with('message', 'Operações Realizadas com Sucesso!');
